@@ -1,5 +1,29 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-5873865554527416419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/BattleBGM/Achieved Combo X10
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: Achieved Combo X10
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2948150844
+    data2: 1448605027
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
 --- !u!114 &-199553037799384223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15,11 +39,39 @@ MonoBehaviour:
   Path: ../../FMOD/Funk Punked/FunkPunk_FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638947737225359320
+  lastModified: 638947780548855058
   FileSizes:
   - Name: Desktop
-    Value: 712
+    Value: 818
   Exists: 1
+--- !u!114 &-111203243007935327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BattleBGM
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/BattleBGM
+  Guid:
+    Data1: -1710128373
+    Data2: 1316643875
+    Data3: -2026572670
+    Data4: -922745321
+  Banks:
+  - {fileID: 450539101136993072}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: -5873865554527416419}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 132000
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35,13 +87,14 @@ MonoBehaviour:
   EditorBanks:
   - {fileID: -199553037799384223}
   - {fileID: 450539101136993072}
-  EditorEvents: []
+  EditorEvents:
+  - {fileID: -111203243007935327}
   EditorParameters: []
   MasterBanks:
   - {fileID: 450539101136993072}
   StringsBanks:
   - {fileID: -199553037799384223}
-  cacheTime: 638947737225359320
+  cacheTime: 638947780548855058
   cacheVersion: 131632
 --- !u!114 &450539101136993072
 MonoBehaviour:
@@ -58,8 +111,8 @@ MonoBehaviour:
   Path: ../../FMOD/Funk Punked/FunkPunk_FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638947737225339265
+  lastModified: 638947780548845034
   FileSizes:
   - Name: Desktop
-    Value: 1036
+    Value: 2804416
   Exists: 1
