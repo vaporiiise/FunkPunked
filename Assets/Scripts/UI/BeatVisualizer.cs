@@ -1,31 +1,110 @@
 using UnityEngine;
-using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class BeatVisualizer : MonoBehaviour
 {
-    [Header("Beat Settings")]
-    public RectTransform spawnPoint;   // Where circles spawn (e.g. left side)
-    public RectTransform hitZone;      // Where circles should line up
-    public GameObject beatCirclePrefab;
-    public float travelTime = 1f;      // Seconds it takes to move to hit zone
+    [Header("References")]
+    public RectTransform hitWindow;   // UI window where beat should align
+    public RectTransform spawnPoint;  // where circles start
+    public RectTransform endPoint;    // where circles exit
+    public GameObject beatCirclePrefab; // circle prefab
 
-    private void OnEnable()
+    [Header("Settings")]
+    public int beatsAhead = 4; // how many beats we queue at once
+    public float despawnAfter = 0.2f; // seconds after window to destroy
+
+    private List<BeatCircle> activeCircles = new List<BeatCircle>();
+    private Queue<int> beatQueue = new Queue<int>();
+
+    private BeatManager beatManager;
+
+    private void Start()
     {
-        BeatManager.OnBeat += SpawnBeatCircle;
+        beatManager = FindObjectOfType<BeatManager>();
+
+        // Subscribe to BeatManager beats
+        BeatManager.OnBeat += HandleBeat;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        BeatManager.OnBeat -= SpawnBeatCircle;
+        BeatManager.OnBeat -= HandleBeat;
     }
 
-    private void SpawnBeatCircle(int beatIndex)
+    private void Update()
     {
-        GameObject circle = Instantiate(beatCirclePrefab, spawnPoint.position, Quaternion.identity, transform);
-        RectTransform circleRT = circle.GetComponent<RectTransform>();
+        if (beatManager == null || beatManager.BeatInterval <= 0) return;
 
-        // Animate movement
-        BeatCircle mover = circle.AddComponent<BeatCircle>();
-        mover.Init(circleRT, spawnPoint.position, hitZone.position, travelTime);
+        double now = AudioSettings.dspTime;
+
+        // Move active circles
+        for (int i = activeCircles.Count - 1; i >= 0; i--)
+        {
+            BeatCircle circle = activeCircles[i];
+
+            // Check if the object was already destroyed
+            if (circle.rect == null)
+            {
+                activeCircles.RemoveAt(i);
+                continue;
+            }
+
+            float progress = (float)((now - circle.spawnDSPTime) / circle.travelTime);
+            circle.rect.anchoredPosition = Vector2.Lerp(
+                spawnPoint.anchoredPosition,
+                endPoint.anchoredPosition,
+                progress
+            );
+
+            // Despawn after going past end
+            if (progress >= 1f + (despawnAfter / (float)circle.travelTime))
+            {
+                Destroy(circle.rect.gameObject);
+                activeCircles.RemoveAt(i);
+            }
+        }
+
+        // Spawn queued beats ahead of time
+        while (beatQueue.Count > 0 && beatQueue.Peek() <= beatManager.LastBeatDSPTime + (beatManager.BeatInterval * beatsAhead))
+        {
+            SpawnCircle(beatQueue.Dequeue());
+        }
+    }
+
+    private void HandleBeat(int beatIndex)
+    {
+        // Calculate when the NEXT beats will land and queue them
+        double beatTime = beatManager.LastBeatDSPTime;
+        double interval = beatManager.BeatInterval;
+
+        for (int i = 1; i <= beatsAhead; i++)
+        {
+            double futureTime = beatTime + interval * i;
+            beatQueue.Enqueue((int)futureTime);
+        }
+    }
+
+    private void SpawnCircle(int beatIndex)
+    {
+        GameObject obj = Instantiate(beatCirclePrefab, transform);
+        RectTransform rect = obj.GetComponent<RectTransform>();
+
+        BeatCircle circle = new BeatCircle
+        {
+            rect = rect,
+            spawnDSPTime = AudioSettings.dspTime,
+            travelTime = beatManager.BeatInterval * beatsAhead
+        };
+
+        rect.anchoredPosition = spawnPoint.anchoredPosition;
+        activeCircles.Add(circle);
+    }
+
+    // Struct to track circle state
+    private class BeatCircle
+    {
+        public RectTransform rect;
+        public double spawnDSPTime;
+        public double travelTime;
     }
 }

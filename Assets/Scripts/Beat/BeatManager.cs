@@ -7,17 +7,20 @@ using System.Runtime.InteropServices;
 public class BeatManager : MonoBehaviour
 {
     [Header("FMOD Settings")]
-    public EventReference musicEvent;
+    public EventReference musicEvent; // FMOD event with constant timeline markers
 
-    [Header("Beat Settings")]
-    [Tooltip("Allowed timing window in seconds (e.g. 0.15 = 150ms)")]
+    [Header("Hit Settings")]
+    [Tooltip("How much delay tolerance (in seconds) around the beat for a HIT")]
     public float hitWindow = 0.15f;
 
     private EventInstance musicInstance;
     private GCHandle timelineHandle;
     private TimelineInfo timelineInfo;
 
-    public static event Action<int> OnBeat; // notify listeners
+    // Public beat data
+    public static event Action<int> OnBeat;
+    public double BeatInterval { get; private set; } = 0.75f; // fallback = 80 BPM
+    public double LastBeatDSPTime => timelineInfo.lastBeatDSPTime;
 
     private void Start()
     {
@@ -27,6 +30,7 @@ public class BeatManager : MonoBehaviour
         musicInstance = RuntimeManager.CreateInstance(musicEvent);
         musicInstance.setUserData(GCHandle.ToIntPtr(timelineHandle));
 
+        // Only listen for markers (beats)
         musicInstance.setCallback(BeatEventCallback,
             EVENT_CALLBACK_TYPE.TIMELINE_MARKER);
 
@@ -53,16 +57,15 @@ public class BeatManager : MonoBehaviour
             timelineHandle.Free();
     }
 
-    // --- Public check: did player hit close enough to the last beat? ---
+    // ✅ Call this to check if player input is on beat (within window)
     public bool IsOnBeat()
     {
         double now = AudioSettings.dspTime;
         double timeSinceBeat = now - timelineInfo.lastBeatDSPTime;
-
         return Math.Abs(timeSinceBeat) <= hitWindow;
     }
 
-    // --- FMOD Callback for beat markers ---
+    // ✅ FMOD Callback for markers
     [AOT.MonoPInvokeCallback(typeof(EVENT_CALLBACK))]
     private static FMOD.RESULT BeatEventCallback(EVENT_CALLBACK_TYPE type, IntPtr instancePtr, IntPtr parameterPtr)
     {
@@ -70,29 +73,44 @@ public class BeatManager : MonoBehaviour
 
         if (type == EVENT_CALLBACK_TYPE.TIMELINE_MARKER)
         {
-            var parameter = (TIMELINE_MARKER_PROPERTIES)Marshal.PtrToStructure(parameterPtr, typeof(TIMELINE_MARKER_PROPERTIES));
-
             IntPtr timelineInfoPtr;
             instance.getUserData(out timelineInfoPtr);
+
             if (timelineInfoPtr != IntPtr.Zero)
             {
                 var handle = GCHandle.FromIntPtr(timelineInfoPtr);
                 var info = (TimelineInfo)handle.Target;
 
-                info.beatIndex++;
-                info.lastBeatDSPTime = AudioSettings.dspTime;
+                double now = AudioSettings.dspTime;
 
+                // Calculate beat interval
+                if (info.lastBeatDSPTime > 0)
+                {
+                    info.beatInterval = now - info.lastBeatDSPTime;
+                }
+                info.lastBeatDSPTime = now;
+
+                // Update public BeatInterval
+                BeatManager beatManager = FindObjectOfType<BeatManager>();
+                if (beatManager != null)
+                    beatManager.BeatInterval = info.beatInterval;
+
+                // Beat index count
+                info.beatIndex++;
+
+                // Fire event
                 OnBeat?.Invoke(info.beatIndex);
             }
         }
         return FMOD.RESULT.OK;
     }
 
-    // --- Helper Struct ---
+    // Helper struct
     class TimelineInfo
     {
         public int timelinePosition = 0;
         public int beatIndex = 0;
         public double lastBeatDSPTime = 0;
+        public double beatInterval = 0.75; // default
     }
 }
