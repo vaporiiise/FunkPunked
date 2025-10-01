@@ -6,11 +6,14 @@ using System.Runtime.InteropServices;
 
 public class BeatManager : MonoBehaviour
 {
+    public static BeatManager Instance { get; private set; }
+
     [Header("FMOD Settings")]
-    public EventReference musicEvent; // FMOD event with constant timeline markers
+    [Tooltip("FMOD event that has constant timeline markers (for beats)")]
+    public EventReference musicEvent;
 
     [Header("Hit Settings")]
-    [Tooltip("How much delay tolerance (in seconds) around the beat for a HIT")]
+    [Tooltip("Delay tolerance (in seconds) around the beat for a HIT")]
     public float hitWindow = 0.15f;
 
     private EventInstance musicInstance;
@@ -22,6 +25,17 @@ public class BeatManager : MonoBehaviour
     public double BeatInterval { get; private set; } = 0.75f; // fallback = 80 BPM
     public double LastBeatDSPTime => timelineInfo.lastBeatDSPTime;
 
+    private void Awake()
+    {
+        // 🔑 Singleton pattern
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
     private void Start()
     {
         timelineInfo = new TimelineInfo();
@@ -30,11 +44,12 @@ public class BeatManager : MonoBehaviour
         musicInstance = RuntimeManager.CreateInstance(musicEvent);
         musicInstance.setUserData(GCHandle.ToIntPtr(timelineHandle));
 
-        // Only listen for markers (beats)
-        musicInstance.setCallback(BeatEventCallback,
-            EVENT_CALLBACK_TYPE.TIMELINE_MARKER);
+        // Listen for timeline markers
+        musicInstance.setCallback(BeatEventCallback, EVENT_CALLBACK_TYPE.TIMELINE_MARKER);
 
         musicInstance.start();
+
+        Debug.Log("[BeatManager] Started FMOD music event: " + musicEvent.Path);
     }
 
     private void Update()
@@ -57,7 +72,7 @@ public class BeatManager : MonoBehaviour
             timelineHandle.Free();
     }
 
-    // ✅ Call this to check if player input is on beat (within window)
+    // ✅ Call this to check if player input is on beat (within tolerance window)
     public bool IsOnBeat()
     {
         double now = AudioSettings.dspTime;
@@ -91,9 +106,8 @@ public class BeatManager : MonoBehaviour
                 info.lastBeatDSPTime = now;
 
                 // Update public BeatInterval
-                BeatManager beatManager = FindObjectOfType<BeatManager>();
-                if (beatManager != null)
-                    beatManager.BeatInterval = info.beatInterval;
+                if (Instance != null)
+                    Instance.BeatInterval = info.beatInterval;
 
                 // Beat index count
                 info.beatIndex++;
@@ -105,12 +119,24 @@ public class BeatManager : MonoBehaviour
         return FMOD.RESULT.OK;
     }
 
-    // Helper struct
+    // Helper struct to hold timeline info
     class TimelineInfo
     {
         public int timelinePosition = 0;
         public int beatIndex = 0;
         public double lastBeatDSPTime = 0;
         public double beatInterval = 0.75; // default
+    }
+    public void SetMusicParameter(string paramName, float value)
+    {
+        if (musicInstance.isValid())
+        {
+            var result = musicInstance.setParameterByName(paramName, value);
+            Debug.Log($"[FMOD] Set {paramName} = {value}, Result = {result}");
+        }
+        else
+        {
+            Debug.LogWarning("[FMOD] Music instance is not valid!");
+        }
     }
 }
