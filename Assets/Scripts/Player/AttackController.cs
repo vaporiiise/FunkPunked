@@ -28,7 +28,6 @@ public class AttackController : MonoBehaviour
         {
             if (onBeat)
             {
-                // ✅ Enemy + OnBeat = HIT
                 foreach (var hit in hits)
                 {
                     Enemy enemy = hit.GetComponent<Enemy>();
@@ -46,7 +45,6 @@ public class AttackController : MonoBehaviour
             }
             else
             {
-                // ❌ Enemy but OffBeat = MISS
                 if (ComboManager.Instance != null)
                     ComboManager.Instance.ResetCombo();
 
@@ -56,7 +54,6 @@ public class AttackController : MonoBehaviour
         }
         else
         {
-            // ❌ No enemy hit at all = MISS
             if (ComboManager.Instance != null)
                 ComboManager.Instance.ResetCombo();
 

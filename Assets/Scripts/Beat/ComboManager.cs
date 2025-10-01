@@ -19,7 +19,7 @@ public class ComboManager : MonoBehaviour
 
         if (comboStep == 10)
         {
-            Debug.Log("🔥 Combo 10 reached! Activating music layer...");
+            Debug.Log("Combo 10 reached! Activating music layer...");
             if (BeatManager.Instance != null)
                 BeatManager.Instance.SetMusicParameter("ComboLevel", 1f);
         }

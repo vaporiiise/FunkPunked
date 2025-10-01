@@ -72,7 +72,6 @@ public class BeatManager : MonoBehaviour
             timelineHandle.Free();
     }
 
-    // ✅ Call this to check if player input is on beat (within tolerance window)
     public bool IsOnBeat()
     {
         double now = AudioSettings.dspTime;
@@ -80,7 +79,6 @@ public class BeatManager : MonoBehaviour
         return Math.Abs(timeSinceBeat) <= hitWindow;
     }
 
-    // ✅ FMOD Callback for markers
     [AOT.MonoPInvokeCallback(typeof(EVENT_CALLBACK))]
     private static FMOD.RESULT BeatEventCallback(EVENT_CALLBACK_TYPE type, IntPtr instancePtr, IntPtr parameterPtr)
     {
@@ -98,28 +96,24 @@ public class BeatManager : MonoBehaviour
 
                 double now = AudioSettings.dspTime;
 
-                // Calculate beat interval
                 if (info.lastBeatDSPTime > 0)
                 {
                     info.beatInterval = now - info.lastBeatDSPTime;
                 }
                 info.lastBeatDSPTime = now;
 
-                // Update public BeatInterval
                 if (Instance != null)
                     Instance.BeatInterval = info.beatInterval;
 
-                // Beat index count
                 info.beatIndex++;
 
-                // Fire event
+         
                 OnBeat?.Invoke(info.beatIndex);
             }
         }
         return FMOD.RESULT.OK;
     }
 
-    // Helper struct to hold timeline info
     class TimelineInfo
     {
         public int timelinePosition = 0;

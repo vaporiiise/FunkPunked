@@ -26,7 +26,6 @@ public class BeatVisualizer : MonoBehaviour
         leftPos = barArea.position + Vector3.left * (width / 2f);
         rightPos = barArea.position + Vector3.right * (width / 2f);
 
-        // Subscribe to FMOD beat events
         BeatManager.OnBeat += OnBeat;
     }
 
@@ -48,7 +47,6 @@ public class BeatVisualizer : MonoBehaviour
 
     private void OnBeat(int beatIndex)
     {
-        // Reset timer every beat
         timer = 0f;
         movingRight = !movingRight; // switch direction cleanly
     }
