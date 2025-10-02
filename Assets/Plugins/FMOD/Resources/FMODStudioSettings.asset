@@ -383,7 +383,7 @@ MonoBehaviour:
   sourceProjectPath: ../../FMOD/Funk Punked/FunkPunk_FMOD/FunkPunk_FMOD.fspro
   sourceBankPath: ../../FMOD/Funk Punked/FunkPunk_FMOD/Build
   sourceBankPathUnformatted: 
-  BankRefreshCooldown: 5
+  BankRefreshCooldown: 1
   ShowBankRefreshWindow: 1
   AutomaticEventLoading: 1
   BankLoadType: 0
@@ -391,7 +391,7 @@ MonoBehaviour:
   EncryptionKey: 
   ImportType: 0
   TargetAssetPath: FMODBanks
-  TargetBankFolder: 
+  TargetBankFolder: Assets/StreamingAssets
   EventLinkage: 0
   LoggingLevel: 2
   SpeakerModeSettings: []
@@ -404,6 +404,7 @@ MonoBehaviour:
   Plugins: []
   MasterBanks:
   - Master
+  - Desktop/Master
   Banks: []
   BanksToLoad: []
   LiveUpdatePort: 9264
