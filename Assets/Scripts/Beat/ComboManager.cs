@@ -1,39 +1,45 @@
 using UnityEngine;
+using FMODUnity;
+using FMOD.Studio;
 
 public class ComboManager : MonoBehaviour
 {
-    public static ComboManager Instance;
+    public int comboCount = 0;
+    public int comboThreshold = 10; // when FMOD should change
+    public string fmodEvent = "event:/YourMusic"; 
+    public string parameterName = "ComboLevel";
 
-    private int comboStep = 0;
+    private EventInstance musicInstance;
 
-    private void Awake()
+    void Start()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        // Start FMOD event (make sure only ONE instance exists)
+        musicInstance = RuntimeManager.CreateInstance(fmodEvent);
+        musicInstance.start();
     }
 
     public void AddCombo()
     {
-        comboStep++;
-        Debug.Log($"Combo Step: {comboStep}");
+        comboCount++;
+        Debug.Log("Combo: " + comboCount);
 
-        if (comboStep == 10)
+        if (comboCount >= comboThreshold)
         {
-            Debug.Log("Combo 10 reached! Activating music layer...");
-            if (BeatManager.Instance != null)
-                BeatManager.Instance.SetMusicParameter("ComboLevel", 1f);
+            // Set FMOD parameter
+            musicInstance.setParameterByName(parameterName, 1f);
+            Debug.Log("FMOD ComboLevel activated!");
         }
     }
 
     public void ResetCombo()
     {
-        if (comboStep > 0)
-            Debug.Log("Combo Reset!");
+        comboCount = 0;
+        musicInstance.setParameterByName(parameterName, 0f);
+    }
 
-        comboStep = 0;
-
-        // Reset FMOD parameter
-        if (BeatManager.Instance != null)
-            BeatManager.Instance.SetMusicParameter("ComboLevel", 0f);
+    private void OnDestroy()
+    {
+        musicInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        musicInstance.release();
     }
 }
