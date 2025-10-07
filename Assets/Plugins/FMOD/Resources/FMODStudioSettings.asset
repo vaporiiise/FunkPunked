@@ -380,8 +380,8 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: ../../FMOD/Funk Punked/FunkPunk_FMOD/FunkPunk_FMOD.fspro
-  sourceBankPath: ../../FMOD/Funk Punked/FunkPunk_FMOD/Build
+  sourceProjectPath: Assets/FMOD/FunkPunk_FMOD/FunkPunk_FMOD.fspro
+  sourceBankPath: Assets/FMOD/FunkPunk_FMOD/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 1
   ShowBankRefreshWindow: 1
@@ -402,9 +402,7 @@ MonoBehaviour:
   VirtualChannelSettings: []
   RealChannelSettings: []
   Plugins: []
-  MasterBanks:
-  - Master
-  - Desktop/Master
+  MasterBanks: []
   Banks: []
   BanksToLoad: []
   LiveUpdatePort: 9264
