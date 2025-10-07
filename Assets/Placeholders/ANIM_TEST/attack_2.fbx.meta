@@ -17,19 +17,71 @@ ModelImporter:
     removeConstantScaleCurves: 0
     motionNodeName: 
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
+      might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'Psylocke2_rig:Hip_R' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:HipPart2_R'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:KneePart1_R'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:Ankle_R'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:RootPart2_M'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:Scapula_R'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:ShoulderPart2_R'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:ElbowPart1_R'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:Wrist_R'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:Neck_M'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:NeckPart1_M'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:Head_M'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:Scapula_L'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:ShoulderPart2_L'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:ElbowPart1_L'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:Wrist_L'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:metacarpal3_L'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:Hip_L'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:HipPart2_L'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:KneePart1_L'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Psylocke2_rig:Ankle_L'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: atk2
+      takeName: Take 001
+      internalID: 1827226128182048838
+      firstFrame: 21
+      lastFrame: 36
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []
@@ -82,8 +134,2348 @@ ModelImporter:
   importAnimation: 1
   humanDescription:
     serializedVersion: 3
-    human: []
-    skeleton: []
+    human:
+    - boneName: Psylocke2_rig:Root_M
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:HipPart1_L
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:HipPart1_R
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:Knee_L
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:Knee_R
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:KneePart2_L
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:KneePart2_R
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:RootPart1_M
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:Spine1_M
+      humanName: Chest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:NeckPart2_M
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:Face_M
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:Shoulder_L
+      humanName: LeftShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:Shoulder_R
+      humanName: RightShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:ShoulderPart1_L
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:ShoulderPart1_R
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:Elbow_L
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:Elbow_R
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:ElbowPart2_L
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:ElbowPart2_R
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:Toes_L
+      humanName: LeftToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:Toes_R
+      humanName: RightToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:Eye_L
+      humanName: LeftEye
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:Eye_R
+      humanName: RightEye
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:JawJoint_M
+      humanName: Jaw
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:ThumbFinger1_L
+      humanName: Left Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:ThumbFinger2_L
+      humanName: Left Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:ThumbFinger3_L
+      humanName: Left Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:IndexFinger1_L
+      humanName: Left Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:IndexFinger2_L
+      humanName: Left Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:IndexFinger3_L
+      humanName: Left Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:MiddleFinger1_L
+      humanName: Left Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:MiddleFinger2_L
+      humanName: Left Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:MiddleFinger3_L
+      humanName: Left Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:RingFinger1_L
+      humanName: Left Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:RingFinger2_L
+      humanName: Left Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:RingFinger3_L
+      humanName: Left Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:PinkyFinger1_L
+      humanName: Left Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:PinkyFinger2_L
+      humanName: Left Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:PinkyFinger3_L
+      humanName: Left Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:ThumbFinger1_R
+      humanName: Right Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:ThumbFinger2_R
+      humanName: Right Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:ThumbFinger3_R
+      humanName: Right Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:IndexFinger1_R
+      humanName: Right Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:IndexFinger2_R
+      humanName: Right Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:IndexFinger3_R
+      humanName: Right Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:MiddleFinger1_R
+      humanName: Right Middle Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:MiddleFinger2_R
+      humanName: Right Middle Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:MiddleFinger3_R
+      humanName: Right Middle Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:RingFinger1_R
+      humanName: Right Ring Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:RingFinger2_R
+      humanName: Right Ring Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:RingFinger3_R
+      humanName: Right Ring Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:PinkyFinger1_R
+      humanName: Right Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:PinkyFinger2_R
+      humanName: Right Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:PinkyFinger3_R
+      humanName: Right Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: Psylocke2_rig:Chest_M
+      humanName: UpperChest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: attack_2(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:Group
+      parentName: attack_2(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:Main
+      parentName: Psylocke2_rig:Group
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:DeformationSystem
+      parentName: Psylocke2_rig:Main
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:Root_M
+      parentName: Psylocke2_rig:DeformationSystem
+      position: {x: -0.000000014901161, y: 1.0486697, z: 0.01133433}
+      rotation: {x: 0.5058446, y: -0.4940863, z: -0.5058446, w: 0.49408633}
+      scale: {x: 1.0000007, y: 1.0000006, z: 1.0000001}
+    - name: Psylocke2_rig:Hip_L
+      parentName: Psylocke2_rig:Root_M
+      position: {x: 0.06930497, y: -0.009524984, z: 0.07294852}
+      rotation: {x: -0.99984616, y: -0.0110975355, z: 0.012630075, w: -0.005007133}
+      scale: {x: 1.0000011, y: 1.0000008, z: 1.0000007}
+    - name: Psylocke2_rig:bootCtrl_1_L
+      parentName: Psylocke2_rig:Hip_L
+      position: {x: 0.3373513, y: -0.049495935, z: 0.002679074}
+      rotation: {x: 0.005756998, y: -0.0062299576, z: 0.61464494, w: -0.78875834}
+      scale: {x: 1.0000004, y: 1.0000007, z: 1.0000002}
+    - name: Psylocke2_rig:bootCtrl__L
+      parentName: Psylocke2_rig:Hip_L
+      position: {x: 0.24186318, y: -0.07490417, z: 0.004817568}
+      rotation: {x: 0.008367288, y: -0.008256895, z: 0.60870206, w: -0.7933118}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    - name: Psylocke2_rig:HipPart1_L
+      parentName: Psylocke2_rig:Hip_L
+      position: {x: 0.1263281, y: -2.1316282e-16, z: 0}
+      rotation: {x: -0, y: 0.000000059604645, z: -0.000000029802322, w: 1}
+      scale: {x: 1.0000006, y: 1.0000006, z: 1.0000006}
+    - name: Psylocke2_rig:HipPart2_L
+      parentName: Psylocke2_rig:HipPart1_L
+      position: {x: 0.1263281, y: -1.4210854e-16, z: -1.4210854e-16}
+      rotation: {x: 1.7763568e-15, y: -0.000000059604645, z: -0, w: 1}
+      scale: {x: 0.9999997, y: 0.9999996, z: 0.99999994}
+    - name: Psylocke2_rig:Knee_L
+      parentName: Psylocke2_rig:HipPart2_L
+      position: {x: 0.1263281, y: -2.842171e-16, z: -2.753353e-16}
+      rotation: {x: -0, y: 0.000000029802322, z: 0.04597473, w: 0.9989426}
+      scale: {x: 1.0000011, y: 1.0000017, z: 1.0000018}
+    - name: Psylocke2_rig:bootCtrl_2_L
+      parentName: Psylocke2_rig:Knee_L
+      position: {x: 0.028998928, y: -0.028098091, z: -0.00064113905}
+      rotation: {x: 0.006988924, y: -0.0080030095, z: 0.6661312, w: -0.74575895}
+      scale: {x: 1.0000005, y: 1.000001, z: 1.0000006}
+    - name: Psylocke2_rig:KneePart1_L
+      parentName: Psylocke2_rig:Knee_L
+      position: {x: 0.16895866, y: -1.0835777e-15, z: -1.64313e-15}
+      rotation: {x: 0.000000051566172, y: 0.000000046798714, z: -0.000000029802315, w: 1}
+      scale: {x: 1.0000002, y: 1, z: 1.0000004}
+    - name: Psylocke2_rig:KneePart2_L
+      parentName: Psylocke2_rig:KneePart1_L
+      position: {x: 0.16895866, y: 6.217249e-16, z: -1.2079227e-15}
+      rotation: {x: 0.0000000278716, y: -0.000000032507774, z: -0.00000002235174, w: 1}
+      scale: {x: 0.99999994, y: 0.99999994, z: 0.9999998}
+    - name: Psylocke2_rig:Ankle_L
+      parentName: Psylocke2_rig:KneePart2_L
+      position: {x: 0.16895866, y: -3.7303492e-16, z: -1.9539926e-15}
+      rotation: {x: 0.1664379, y: 0.0047687674, z: -0.04802709, w: 0.9848701}
+      scale: {x: 1.0000008, y: 1.0000005, z: 0.99999994}
+    - name: Psylocke2_rig:Toes_L
+      parentName: Psylocke2_rig:Ankle_L
+      position: {x: 0.071374536, y: -0.12636831, z: 5.062617e-16}
+      rotation: {x: -0.026107434, y: 0.017071191, z: 0.60292256, w: -0.7971897}
+      scale: {x: 1.0000005, y: 1.000001, z: 0.9999998}
+    - name: Psylocke2_rig:pantFixBack_L
+      parentName: Psylocke2_rig:Root_M
+      position: {x: 0.03820962, y: -0.09675129, z: 0.04068488}
+      rotation: {x: -0.36045253, y: 0.90516675, z: 0.10284406, w: -0.20042498}
+      scale: {x: 1.0000006, y: 1, z: 1.0000007}
+    - name: Psylocke2_rig:HipFix_L
+      parentName: Psylocke2_rig:Root_M
+      position: {x: 0.08015035, y: -0.06347092, z: 0.07170835}
+      rotation: {x: 0.00000003188433, y: -0.000000008134446, z: -0.6987436, w: 0.7153723}
+      scale: {x: 1.0000011, y: 1.0000024, z: 1.0000013}
+    - name: Psylocke2_rig:pantFixSide_L
+      parentName: Psylocke2_rig:Root_M
+      position: {x: -0.0049177175, y: 0.004295347, z: 0.08965031}
+      rotation: {x: 0.04177087, y: 0.85301834, z: 0.08002975, w: -0.51401365}
+      scale: {x: 1.0000004, y: 1.0000001, z: 0.99999994}
+    - name: Psylocke2_rig:pantFixFront_L
+      parentName: Psylocke2_rig:Root_M
+      position: {x: 0.082520805, y: 0.06921892, z: 0.048193406}
+      rotation: {x: 0.6650505, y: 0.70873713, z: -0.09625326, w: -0.21479012}
+      scale: {x: 1.0000002, y: 0.9999998, z: 1.0000002}
+    - name: Psylocke2_rig:beltFix2_L
+      parentName: Psylocke2_rig:Root_M
+      position: {x: -0.048629902, y: 0.0011735772, z: 0.07900442}
+      rotation: {x: 0.4940863, y: 0.5058446, z: 0.49408633, w: -0.5058446}
+      scale: {x: 1.0000005, y: 1.0000001, z: 0.99999994}
+    - name: Psylocke2_rig:pantFixBack_R
+      parentName: Psylocke2_rig:Root_M
+      position: {x: 0.03820962, y: -0.09675129, z: -0.04068488}
+      rotation: {x: 0.90516686, y: 0.3604524, z: 0.20042506, w: 0.10284409}
+      scale: {x: 1.000001, y: 1.0000011, z: 1.000001}
+    - name: Psylocke2_rig:pantFixSide_R
+      parentName: Psylocke2_rig:Root_M
+      position: {x: -0.0049177175, y: 0.004295347, z: -0.08965031}
+      rotation: {x: -0.8530184, y: 0.041770857, z: -0.5140137, w: -0.08002975}
+      scale: {x: 1.0000015, y: 1.0000008, z: 1.0000011}
+    - name: Psylocke2_rig:Hip_R
+      parentName: Psylocke2_rig:Root_M
+      position: {x: 0.06930497, y: -0.009524984, z: -0.07294852}
+      rotation: {x: -0.011097462, y: 0.99984616, z: 0.0050071483, w: 0.012630031}
+      scale: {x: 1.0000018, y: 1.0000019, z: 1.0000013}
+    - name: Psylocke2_rig:bootCtrl_1_R
+      parentName: Psylocke2_rig:Hip_R
+      position: {x: -0.3386081, y: 0.041683845, z: 0.026721172}
+      rotation: {x: -0.0057297926, y: 0.0062223547, z: -0.61474, w: 0.7886844}
+      scale: {x: 1.0000006, y: 1, z: 1.0000004}
+    - name: Psylocke2_rig:bootCtrl__R
+      parentName: Psylocke2_rig:Hip_R
+      position: {x: -0.24063513, y: 0.06989999, z: 0.027231153}
+      rotation: {x: -0.008361035, y: 0.008265982, z: -0.60869944, w: 0.79331374}
+      scale: {x: 1.0000006, y: 1.0000001, z: 1.0000005}
+    - name: Psylocke2_rig:HipPart1_R
+      parentName: Psylocke2_rig:Hip_R
+      position: {x: -0.1263281, y: 3.5527136e-17, z: 4.2632563e-16}
+      rotation: {x: -0, y: -0, z: -0.00000004470348, w: 1}
+      scale: {x: 0.9999996, y: 0.99999994, z: 1}
+    - name: Psylocke2_rig:HipPart2_R
+      parentName: Psylocke2_rig:HipPart1_R
+      position: {x: -0.1263281, y: 1.4210854e-16, z: 0}
+      rotation: {x: -0.000000028521752, y: -0.000000030733645, z: 0.00000011920929, w: 1}
+      scale: {x: 1.0000007, y: 1.0000002, z: 0.99999994}
+    - name: Psylocke2_rig:Knee_R
+      parentName: Psylocke2_rig:HipPart2_R
+      position: {x: -0.1263281, y: 2.842171e-16, z: 4.2632563e-16}
+      rotation: {x: 0.000000017797369, y: 0.000000018214, z: 0.045974545, w: 0.9989427}
+      scale: {x: 0.99999946, y: 1.0000008, z: 0.9999998}
+    - name: Psylocke2_rig:bootCtrl_2_R
+      parentName: Psylocke2_rig:Knee_R
+      position: {x: -0.027202897, y: 0.027796282, z: -0.00062543096}
+      rotation: {x: -0.0069855736, y: 0.008003497, z: -0.66613126, w: 0.7457589}
+      scale: {x: 1.0000004, y: 1.0000002, z: 1.0000004}
+    - name: Psylocke2_rig:KneePart1_R
+      parentName: Psylocke2_rig:Knee_R
+      position: {x: -0.16895866, y: -1.847411e-15, z: 1.2789769e-15}
+      rotation: {x: 0.00000003042867, y: 0.000000028433442, z: -0.000000029802319, w: 1}
+      scale: {x: 1, y: 1, z: 1.0000002}
+    - name: Psylocke2_rig:KneePart2_R
+      parentName: Psylocke2_rig:KneePart1_R
+      position: {x: -0.16895866, y: -1.4210854e-15, z: 1.3500312e-15}
+      rotation: {x: -0.000000015396044, y: -0.00000001420836, z: -4.3285035e-16, w: 1}
+      scale: {x: 1.0000004, y: 1.0000002, z: 1}
+    - name: Psylocke2_rig:Ankle_R
+      parentName: Psylocke2_rig:KneePart2_R
+      position: {x: -0.16895866, y: -1.7053025e-15, z: 1.4921397e-15}
+      rotation: {x: 0.16643806, y: 0.00476869, z: -0.04802704, w: 0.9848701}
+      scale: {x: 0.99999946, y: 0.9999997, z: 0.99999994}
+    - name: Psylocke2_rig:Toes_R
+      parentName: Psylocke2_rig:Ankle_R
+      position: {x: -0.071374536, y: 0.12636831, z: -1.4210854e-16}
+      rotation: {x: 0.026107386, y: -0.017071174, z: -0.6029226, w: 0.79718965}
+      scale: {x: 1.0000006, y: 1, z: 1.0000014}
+    - name: Psylocke2_rig:HipFix_R
+      parentName: Psylocke2_rig:Root_M
+      position: {x: 0.08015035, y: -0.06347092, z: -0.07170835}
+      rotation: {x: -0, y: -0.000000029802322, z: 0.7153723, w: 0.6987436}
+      scale: {x: 1.0000008, y: 0.99999994, z: 1.000001}
+    - name: Psylocke2_rig:pantFixBottom_M
+      parentName: Psylocke2_rig:Root_M
+      position: {x: 0.14847268, y: -0.023867296, z: 2.4868996e-16}
+      rotation: {x: 0.000000029802322, y: 0.000000014901161, z: -0.9999309, w: 0.011758283}
+      scale: {x: 1.0000008, y: 1.0000007, z: 1.0000011}
+    - name: Psylocke2_rig:pantFixFront_R
+      parentName: Psylocke2_rig:Root_M
+      position: {x: 0.082520805, y: 0.06921892, z: -0.048193406}
+      rotation: {x: -0.70873713, y: 0.6650505, z: -0.21479025, w: 0.096253306}
+      scale: {x: 1.0000013, y: 1.0000001, z: 1.000002}
+    - name: Psylocke2_rig:RootPart1_M
+      parentName: Psylocke2_rig:Root_M
+      position: {x: -0.038406655, y: -3.5527136e-17, z: -1.0658141e-16}
+      rotation: {x: 0.000000014901161, y: -0.000000014901161, z: -0, w: 1}
+      scale: {x: 1.0000004, y: 1.0000005, z: 1.0000002}
+    - name: Psylocke2_rig:RootPart2_M
+      parentName: Psylocke2_rig:RootPart1_M
+      position: {x: -0.038406655, y: 3.5527136e-17, z: 1.4210854e-16}
+      rotation: {x: 0.000000014901161, y: 0.000000044703484, z: -0.000000014901161, w: -1}
+      scale: {x: 1.0000004, y: 1.0000007, z: 1.0000004}
+    - name: Psylocke2_rig:Spine1_M
+      parentName: Psylocke2_rig:RootPart2_M
+      position: {x: -0.038406655, y: 0, z: -2.4868996e-16}
+      rotation: {x: -0.00000009784359, y: -0.000000029202235, z: -0.14154299, w: -0.9899322}
+      scale: {x: 1.0000013, y: 1.000001, z: 1.0000011}
+    - name: Psylocke2_rig:breast1_R
+      parentName: Psylocke2_rig:Spine1_M
+      position: {x: -0.04767682, y: 0.055124607, z: -0.07611683}
+      rotation: {x: -0.6333943, y: 0.7459667, z: -0.14133471, w: -0.14956576}
+      scale: {x: 1.000001, y: 0.9999979, z: 1.0000011}
+    - name: Psylocke2_rig:breast2_1_R
+      parentName: Psylocke2_rig:breast1_R
+      position: {x: -0.033260677, y: 5.684342e-16, z: 1.7763567e-16}
+      rotation: {x: -0.0050290073, y: -0.0012059956, z: -0.025305089, w: 0.9996664}
+      scale: {x: 0.9999996, y: 0.9999998, z: 0.99999994}
+    - name: Psylocke2_rig:breast1_L
+      parentName: Psylocke2_rig:Spine1_M
+      position: {x: -0.04767682, y: 0.055124607, z: 0.07611683}
+      rotation: {x: 0.74596673, y: 0.6333943, z: 0.14956562, w: -0.14133465}
+      scale: {x: 1.0000004, y: 1.0000007, z: 0.9999998}
+    - name: Psylocke2_rig:breast2_1_L
+      parentName: Psylocke2_rig:breast1_L
+      position: {x: 0.033260677, y: 1.4210854e-16, z: 1.9539925e-16}
+      rotation: {x: -0.0050289743, y: -0.0012059741, z: -0.025305089, w: 0.99966645}
+      scale: {x: 1.0000024, y: 1.0000031, z: 1.0000008}
+    - name: Psylocke2_rig:Chest_M
+      parentName: Psylocke2_rig:Spine1_M
+      position: {x: -0.099000216, y: -2.1316282e-16, z: -1.5987211e-16}
+      rotation: {x: -0.0000000524652, y: 0.000000019541506, z: 0.13642476, w: 0.9906504}
+      scale: {x: 0.999999, y: 0.9999996, z: 1}
+    - name: Psylocke2_rig:Scapula_L
+      parentName: Psylocke2_rig:Chest_M
+      position: {x: -0.08446496, y: -0.018329436, z: 0.015695078}
+      rotation: {x: -0.6526251, y: 0.19209856, z: -0.70876837, w: -0.18661737}
+      scale: {x: 1.0000021, y: 1.0000002, z: 1.000001}
+    - name: Psylocke2_rig:Shoulder_L
+      parentName: Psylocke2_rig:Scapula_L
+      position: {x: 0.103525884, y: 1.847411e-15, z: -8.526512e-15}
+      rotation: {x: 0.0017489637, y: -0.18922086, z: -0.011152056, w: 0.98186964}
+      scale: {x: 1.0000005, y: 1.0000017, z: 1.0000007}
+    - name: Psylocke2_rig:ShoulderPart1_L
+      parentName: Psylocke2_rig:Shoulder_L
+      position: {x: 0.08333714, y: -1.5543122e-16, z: -8.171241e-16}
+      rotation: {x: 0.000000029103823, y: 0.11691763, z: -0.0027065668, w: 0.99313796}
+      scale: {x: 0.9999996, y: 0.9999992, z: 0.99999887}
+    - name: Psylocke2_rig:ShoulderPart2_L
+      parentName: Psylocke2_rig:ShoulderPart1_L
+      position: {x: 0.08333715, y: -1.2212454e-16, z: 1.4210854e-16}
+      rotation: {x: 0.000000029802317, y: 0.0000000745058, z: -0.00000004470348, w: 1}
+      scale: {x: 1.0000011, y: 1.0000002, z: 1.0000004}
+    - name: Psylocke2_rig:Elbow_L
+      parentName: Psylocke2_rig:ShoulderPart2_L
+      position: {x: 0.08333714, y: -2.1094237e-16, z: -2.4868996e-16}
+      rotation: {x: -0.00865919, y: -0.03191917, z: 0.030968681, w: -0.998973}
+      scale: {x: 1.0000005, y: 1.0000006, z: 1.0000007}
+    - name: Psylocke2_rig:ElbowPart1_L
+      parentName: Psylocke2_rig:Elbow_L
+      position: {x: 0.06859355, y: -9.947598e-16, z: 1.9895197e-15}
+      rotation: {x: 0.000000027762969, y: 0.00000006929073, z: -0.000000059604645, w: 1}
+      scale: {x: 1.000001, y: 1, z: 1.0000004}
+    - name: Psylocke2_rig:ElbowPart2_L
+      parentName: Psylocke2_rig:ElbowPart1_L
+      position: {x: 0.06859355, y: 7.105427e-16, z: 1.811884e-15}
+      rotation: {x: -0.00000006716496, y: 0.000000105297175, z: 0.000000029802322, w: 1}
+      scale: {x: 1.0000014, y: 1.0000008, z: 1.0000001}
+    - name: Psylocke2_rig:Wrist_L
+      parentName: Psylocke2_rig:ElbowPart2_L
+      position: {x: 0.06859355, y: 1.6342482e-15, z: 7.105427e-16}
+      rotation: {x: -0.033135656, y: 0.0037636273, z: 0.0027320385, w: 0.99944013}
+      scale: {x: 0.99999946, y: 1.0000002, z: 1.0000004}
+    - name: Psylocke2_rig:metacarpal1_L
+      parentName: Psylocke2_rig:Wrist_L
+      position: {x: 0.029414427, y: -0.0074485634, z: 0.0014333491}
+      rotation: {x: 0.15919448, y: -0.00014771962, z: 0.11230333, w: -0.980839}
+      scale: {x: 1.000001, y: 1.0000011, z: 1.0000007}
+    - name: Psylocke2_rig:IndexFinger1_L
+      parentName: Psylocke2_rig:metacarpal1_L
+      position: {x: 0.06527032, y: 1.1457501e-15, z: -1.2789769e-15}
+      rotation: {x: 0.028712563, y: -0.036349144, z: 0.19833194, w: 0.9790397}
+      scale: {x: 1.0000004, y: 1.0000005, z: 1.0000013}
+    - name: Psylocke2_rig:IndexFinger2_L
+      parentName: Psylocke2_rig:IndexFinger1_L
+      position: {x: 0.040696815, y: -1.2434498e-16, z: -1.7053025e-15}
+      rotation: {x: -0.00008344273, y: -0.038834892, z: 0.00039980514, w: 0.9992456}
+      scale: {x: 1, y: 1.0000004, z: 1.0000004}
+    - name: Psylocke2_rig:IndexFinger3_L
+      parentName: Psylocke2_rig:IndexFinger2_L
+      position: {x: 0.023134839, y: -7.638334e-16, z: 1.2789769e-15}
+      rotation: {x: -0.014191982, y: -0.016746862, z: 0.0008902443, w: 0.99975866}
+      scale: {x: 1.0000035, y: 1.0000012, z: 1.0000017}
+    - name: Psylocke2_rig:ThumbFinger1_L
+      parentName: Psylocke2_rig:Wrist_L
+      position: {x: 0.021581192, y: -0.030320255, z: 0.016557304}
+      rotation: {x: 0.49326473, y: -0.14243415, z: 0.28507882, w: -0.8094025}
+      scale: {x: 1.0000002, y: 0.9999992, z: 1.0000006}
+    - name: Psylocke2_rig:ThumbFinger2_L
+      parentName: Psylocke2_rig:ThumbFinger1_L
+      position: {x: 0.043911647, y: -3.459847e-10, z: 3.5527135e-16}
+      rotation: {x: -0.00000017881389, y: -0.03454546, z: -0.0000016093251, w: 0.9994032}
+      scale: {x: 1.0000018, y: 1.0000012, z: 1.0000038}
+    - name: Psylocke2_rig:ThumbFinger3_L
+      parentName: Psylocke2_rig:ThumbFinger2_L
+      position: {x: 0.030920953, y: -1.9854695e-12, z: -4.2632563e-16}
+      rotation: {x: 0.000000026077032, y: -0.054575734, z: 0.00000014901161, w: 0.9985097}
+      scale: {x: 1.0000005, y: 1.0000011, z: 1.0000011}
+    - name: Psylocke2_rig:metacarpal2_L
+      parentName: Psylocke2_rig:Wrist_L
+      position: {x: 0.030454509, y: 0.0029919164, z: -0.00011636048}
+      rotation: {x: -0.0774185, y: 0.03612011, z: 0.032071456, w: 0.9958279}
+      scale: {x: 1.0000008, y: 1.0000004, z: 1.0000005}
+    - name: Psylocke2_rig:MiddleFinger1_L
+      parentName: Psylocke2_rig:metacarpal2_L
+      position: {x: 0.059004433, y: 2.1316282e-16, z: -1.2789769e-15}
+      rotation: {x: -0.029609032, y: 0.03639346, z: -0.06726516, w: -0.9966315}
+      scale: {x: 0.99999875, y: 0.9999996, z: 0.9999996}
+    - name: Psylocke2_rig:MiddleFinger2_L
+      parentName: Psylocke2_rig:MiddleFinger1_L
+      position: {x: 0.03859034, y: -3.7081448e-16, z: 5.684342e-16}
+      rotation: {x: 0.000318283, y: -0.04100269, z: -0.00001559848, w: 0.999159}
+      scale: {x: 1, y: 1, z: 1.0000004}
+    - name: Psylocke2_rig:MiddleFinger3_L
+      parentName: Psylocke2_rig:MiddleFinger2_L
+      position: {x: 0.031085726, y: -5.551115e-17, z: 8.5265126e-16}
+      rotation: {x: 0.00046417158, y: -0.022516353, z: -0.00002019255, w: 0.99974644}
+      scale: {x: 1.000003, y: 1.0000015, z: 1.0000017}
+    - name: Psylocke2_rig:metacarpal3_L
+      parentName: Psylocke2_rig:Wrist_L
+      position: {x: 0.02861754, y: 0.010945048, z: -0.0013913932}
+      rotation: {x: 0.024701929, y: -0.0050537144, z: -0.1813793, w: -0.9830899}
+      scale: {x: 1.0000017, y: 1.0000018, z: 1.0000017}
+    - name: Psylocke2_rig:RingFinger1_L
+      parentName: Psylocke2_rig:metacarpal3_L
+      position: {x: 0.054344527, y: 2.842171e-16, z: 7.105427e-16}
+      rotation: {x: -0.096313044, y: 0.009416872, z: 0.08268641, w: -0.991866}
+      scale: {x: 1.0000004, y: 1.0000001, z: 0.99999887}
+    - name: Psylocke2_rig:RingFinger2_L
+      parentName: Psylocke2_rig:RingFinger1_L
+      position: {x: 0.039214984, y: -4.6185276e-16, z: -5.1159075e-15}
+      rotation: {x: -0.002459265, y: -0.04309683, z: 0.00010046548, w: 0.99906784}
+      scale: {x: 1, y: 1, z: 0.99999994}
+    - name: Psylocke2_rig:RingFinger3_L
+      parentName: Psylocke2_rig:RingFinger2_L
+      position: {x: 0.026512517, y: 3.5527135e-16, z: 3.694822e-15}
+      rotation: {x: 0.0049311966, y: -0.05231674, z: -0.0003309399, w: 0.99861836}
+      scale: {x: 0.99999994, y: 1.0000001, z: 1.0000001}
+    - name: Psylocke2_rig:metacarpal4_L
+      parentName: Psylocke2_rig:Wrist_L
+      position: {x: 0.023505451, y: 0.018667657, z: 0.0028844182}
+      rotation: {x: 0.22889969, y: 0.020023959, z: 0.31002232, w: 0.92254543}
+      scale: {x: 1.0000008, y: 1.000002, z: 1.0000008}
+    - name: Psylocke2_rig:PinkyFinger1_L
+      parentName: Psylocke2_rig:metacarpal4_L
+      position: {x: 0.058159173, y: -8.5265126e-16, z: -1.065814e-15}
+      rotation: {x: -0.14917274, y: -0.015918193, z: -0.22090574, w: 0.9636882}
+      scale: {x: 1.0000008, y: 1.000001, z: 0.99999994}
+    - name: Psylocke2_rig:PinkyFinger2_L
+      parentName: Psylocke2_rig:PinkyFinger1_L
+      position: {x: 0.024737451, y: 7.105427e-16, z: -9.947598e-16}
+      rotation: {x: 0.0023536817, y: -0.037558913, z: -0.00005472355, w: 0.99929166}
+      scale: {x: 0.9999984, y: 0.9999991, z: 0.9999991}
+    - name: Psylocke2_rig:PinkyFinger3_L
+      parentName: Psylocke2_rig:PinkyFinger2_L
+      position: {x: 0.023804897, y: 7.105427e-17, z: -9.947598e-16}
+      rotation: {x: 0.018732235, y: -0.03198293, z: -0.00042741, w: 0.9993128}
+      scale: {x: 1.0000027, y: 1.0000017, z: 1.0000013}
+    - name: Psylocke2_rig:Neck_M
+      parentName: Psylocke2_rig:Chest_M
+      position: {x: -0.1297407, y: 1.7763568e-15, z: 5.8619773e-16}
+      rotation: {x: 0.000000014901163, y: 0.00000005960465, z: 0.40408185, w: -0.91472286}
+      scale: {x: 0.9999991, y: 1.000001, z: 1.0000005}
+    - name: Psylocke2_rig:NeckPart1_M
+      parentName: Psylocke2_rig:Neck_M
+      position: {x: -0.029478773, y: -1.2789769e-15, z: -1.7763567e-16}
+      rotation: {x: -0.000000037715587, y: 0.000000048500446, z: -0, w: 1}
+      scale: {x: 0.99999994, y: 0.99999934, z: 0.99999875}
+    - name: Psylocke2_rig:NeckPart2_M
+      parentName: Psylocke2_rig:NeckPart1_M
+      position: {x: -0.029478773, y: 4.2632563e-16, z: 7.105427e-17}
+      rotation: {x: 0.00000007498967, y: 0.000000065652934, z: 0.18451275, w: 0.98283017}
+      scale: {x: 1.0000004, y: 1.0000001, z: 1.0000005}
+    - name: Psylocke2_rig:Head_M
+      parentName: Psylocke2_rig:NeckPart2_M
+      position: {x: -0.029478773, y: -4.973799e-16, z: -1.7763567e-16}
+      rotation: {x: 0.000000029802326, y: 0.000000029802326, z: 0.14779367, w: 0.98901826}
+      scale: {x: 1.0000013, y: 1.0000005, z: 1.0000021}
+    - name: Psylocke2_rig:Face_M
+      parentName: Psylocke2_rig:Head_M
+      position: {x: -0.000024742612, y: 0.023572015, z: -4.4804294e-17}
+      rotation: {x: 0.5002623, y: -0.49973753, z: -0.5002623, w: -0.49973753}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:CreaseJoint_R
+      parentName: Psylocke2_rig:Face_M
+      position: {x: 0.02462101, y: 0.0062510804, z: 0.064201616}
+      rotation: {x: 1, y: 0.000000029802319, z: -0.000000029802319, w: 0.000000029802319}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:upperCreaseBJoint_R
+      parentName: Psylocke2_rig:Face_M
+      position: {x: 0.021958463, y: 0.016705183, z: 0.0680437}
+      rotation: {x: 1, y: 0.000000029802319, z: -0.000000029802319, w: 0.000000029802319}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:upperCreaseAJoint_R
+      parentName: Psylocke2_rig:Face_M
+      position: {x: 0.01562036, y: 0.021734478, z: 0.07052127}
+      rotation: {x: 1, y: 0.000000029802319, z: -0.000000029802319, w: 0.000000029802319}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:upperCreaseAJoint_L
+      parentName: Psylocke2_rig:Face_M
+      position: {x: -0.01562036, y: 0.021734478, z: 0.07052127}
+      rotation: {x: -0.000000119209275, y: 0.000000029802319, z: 0.00000008940696, w: 1}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:upperCreaseBJoint_L
+      parentName: Psylocke2_rig:Face_M
+      position: {x: -0.021958463, y: 0.016705183, z: 0.0680437}
+      rotation: {x: -0.000000119209275, y: 0.000000029802319, z: 0.00000008940696, w: 1}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:CreaseJoint_L
+      parentName: Psylocke2_rig:Face_M
+      position: {x: -0.02462101, y: 0.0062510804, z: 0.064201616}
+      rotation: {x: -0.000000119209275, y: 0.000000029802319, z: 0.00000008940696, w: 1}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:lowerCreaseBJoint_R
+      parentName: Psylocke2_rig:Face_M
+      position: {x: 0.015503558, y: -0.005345599, z: 0.06282008}
+      rotation: {x: 1, y: 0.000000029802319, z: -0.000000029802319, w: 0.000000029802319}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:lowerCreaseAJoint_R
+      parentName: Psylocke2_rig:Face_M
+      position: {x: 0.008216628, y: -0.0090367, z: 0.06568681}
+      rotation: {x: 1, y: 0.000000029802319, z: -0.000000029802319, w: 0.000000029802319}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:lowerCreaseJoint_M
+      parentName: Psylocke2_rig:Face_M
+      position: {x: 3.5527136e-17, y: -0.010589434, z: 0.06638339}
+      rotation: {x: -0.000000119209275, y: 0.000000029802319, z: 0.00000008940696, w: 1}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:lowerCreaseAJoint_L
+      parentName: Psylocke2_rig:Face_M
+      position: {x: -0.008216628, y: -0.0090367, z: 0.06568681}
+      rotation: {x: -0.000000119209275, y: 0.000000029802319, z: 0.00000008940696, w: 1}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:lowerCreaseBJoint_L
+      parentName: Psylocke2_rig:Face_M
+      position: {x: -0.015503558, y: -0.005345599, z: 0.06282008}
+      rotation: {x: -0.000000119209275, y: 0.000000029802319, z: 0.00000008940696, w: 1}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:SmileFoldJoint_R
+      parentName: Psylocke2_rig:Face_M
+      position: {x: 0.034767456, y: 0.010145124, z: 0.055671267}
+      rotation: {x: 1, y: 0.000000029802319, z: -0.000000029802319, w: 0.000000029802319}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:SmileFoldJoint_L
+      parentName: Psylocke2_rig:Face_M
+      position: {x: -0.034767456, y: 0.010145124, z: 0.055671267}
+      rotation: {x: -0.000000119209275, y: 0.000000029802319, z: 0.00000008940696, w: 1}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:upperSmileFoldJoint_R
+      parentName: Psylocke2_rig:Face_M
+      position: {x: 0.02808117, y: 0.023150494, z: 0.064903826}
+      rotation: {x: 1, y: 0.000000029802319, z: -0.000000029802319, w: 0.000000029802319}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:upperSmileFoldJoint_L
+      parentName: Psylocke2_rig:Face_M
+      position: {x: -0.02808117, y: 0.023150494, z: 0.064903826}
+      rotation: {x: -0.000000119209275, y: 0.000000029802319, z: 0.00000008940696, w: 1}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:upperFaceJoint_M
+      parentName: Psylocke2_rig:Face_M
+      position: {x: 7.105427e-17, y: 0.062300887, z: -0.0021144268}
+      rotation: {x: -0.00000008940696, y: 0.000000029802319, z: 0.00000008940696, w: 1}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000002}
+    - name: Psylocke2_rig:LidJoints_R
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: 0.031184675, y: 0.011242191, z: 0.034341335}
+      rotation: {x: 1, y: -0.00000008940695, z: -0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidMain0_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.014355248, y: 0.009615299, z: -0.015204204}
+      rotation: {x: 0.08465966, y: -0.38674936, z: -0.19636469, w: 0.8970499}
+      scale: {x: 1, y: 1.0000006, z: 1.0000005}
+    - name: Psylocke2_rig:lowerLidMain18_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.019757707, y: -0.0018461879, z: -0.007101734}
+      rotation: {x: 0.043189034, y: 0.9842063, z: -0.007526343, w: -0.17151073}
+      scale: {x: 1.0000005, y: 1.0000002, z: 1.0000002}
+    - name: Psylocke2_rig:lowerLidDroopy0_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.017135512, y: 0.01092847, z: -0.019752834}
+      rotation: {x: -1, y: 0.000000059604638, z: -8.881784e-16, w: -0.00000008940696}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLidDroopy6_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.0058131567, y: 0.022335941, z: -0.022665622}
+      rotation: {x: -1, y: 0.000000059604638, z: -8.881784e-16, w: -0.00000008940696}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLidDroopy13_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.025472943, y: 0.002174198, z: 0.00068612024}
+      rotation: {x: -1, y: 0.000000059604638, z: -8.881784e-16, w: -0.00000008940696}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLidDroopy14_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.026781023, y: -0.003254879, z: 0.0013234441}
+      rotation: {x: -1, y: 0.000000059604638, z: -8.881784e-16, w: -0.00000008940696}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLidDroopy15_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.026325852, y: -0.0062138634, z: -0.001613148}
+      rotation: {x: -1, y: 0.000000059604638, z: -8.881784e-16, w: -0.00000008940696}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLidDroopy17_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.025122143, y: -0.009067257, z: -0.006882425}
+      rotation: {x: -1, y: 0.000000059604638, z: -8.881784e-16, w: -0.00000008940696}
+      scale: {x: 1, y: 1, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLidMain5_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.0075079994, y: 0.012484867, z: -0.015955571}
+      rotation: {x: 0.16245903, y: -0.5106077, z: -0.25599268, w: 0.8045835}
+      scale: {x: 1.0000006, y: 1.000001, z: 1.0000007}
+    - name: Psylocke2_rig:lowerLidMain6_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.003594802, y: 0.012284672, z: -0.016525716}
+      rotation: {x: 0.19386786, y: -0.5967719, z: -0.240573, w: 0.7405425}
+      scale: {x: 1.0000008, y: 1.0000011, z: 1.000001}
+    - name: Psylocke2_rig:lowerLidMain7_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.0006431362, y: 0.01207227, z: -0.016715536}
+      rotation: {x: -0.22157656, y: 0.6856584, z: 0.21321528, w: -0.6597847}
+      scale: {x: 1.0000005, y: 1.0000013, z: 1.0000002}
+    - name: Psylocke2_rig:lowerLidMain8_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.00449495, y: 0.011747561, z: -0.016340777}
+      rotation: {x: -0.23737298, y: 0.759122, z: 0.18089429, w: -0.5785024}
+      scale: {x: 1.0000005, y: 1.0000013, z: 1.0000005}
+    - name: Psylocke2_rig:lowerLidMain9_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.007727372, y: 0.01124219, z: -0.015274722}
+      rotation: {x: -0.2440476, y: 0.81617916, z: 0.15003774, w: -0.50177795}
+      scale: {x: 1.0000018, y: 1.0000018, z: 1.0000004}
+    - name: Psylocke2_rig:lowerLidMain10_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.010107134, y: 0.010487796, z: -0.013390644}
+      rotation: {x: -0.24680774, y: 0.86041164, z: 0.12293229, w: -0.4285621}
+      scale: {x: 1.0000015, y: 1.0000017, z: 1.0000007}
+    - name: Psylocke2_rig:upperLidMain0_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.014355248, y: 0.009615299, z: -0.015204204}
+      rotation: {x: 0.08465963, y: -0.38674933, z: -0.19636476, w: 0.89704996}
+      scale: {x: 0.99999994, y: 1.0000006, z: 1.0000004}
+    - name: Psylocke2_rig:upperLidMain1_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.0139324665, y: 0.008553287, z: -0.015360911}
+      rotation: {x: 0.07872568, y: -0.39735168, z: -0.17768936, w: 0.8968502}
+      scale: {x: 1.0000005, y: 1.0000011, z: 1.0000007}
+    - name: Psylocke2_rig:upperLidMain2_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.013394912, y: 0.0069428748, z: -0.016235493}
+      rotation: {x: 0.067639925, y: -0.42098033, z: -0.14349473, w: 0.89308995}
+      scale: {x: 1.0000007, y: 1.0000014, z: 1.0000011}
+    - name: Psylocke2_rig:upperLidMain3_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.012614272, y: 0.0049262727, z: -0.017496783}
+      rotation: {x: 0.051044866, y: -0.45275694, z: -0.09972797, w: 0.8845677}
+      scale: {x: 1.0000008, y: 1.0000023, z: 1.0000018}
+    - name: Psylocke2_rig:upperLidMain4_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.011462234, y: 0.0026459997, z: -0.018813618}
+      rotation: {x: 0.029253535, y: -0.48887366, z: -0.05207794, w: 0.8703073}
+      scale: {x: 1.0000002, y: 1.0000008, z: 1.0000011}
+    - name: Psylocke2_rig:upperLidMain5_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.009457571, y: 0.0002827184, z: -0.019957187}
+      rotation: {x: 0.0034221252, y: -0.5346663, z: -0.005408704, w: 0.84503907}
+      scale: {x: 1.0000004, y: 1.0000007, z: 1.0000006}
+    - name: Psylocke2_rig:upperLidMain6_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.0061190636, y: -0.0019829066, z: -0.02069869}
+      rotation: {x: -0.027406784, y: -0.5979133, z: 0.036681797, w: 0.8002518}
+      scale: {x: 1.0000011, y: 1.0000029, z: 1.0000018}
+    - name: Psylocke2_rig:upperLidMain7_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.0016151265, y: -0.003823727, z: -0.0208866}
+      rotation: {x: -0.061236754, y: -0.67653596, z: 0.06615505, w: 0.73087114}
+      scale: {x: 1.000001, y: 1.0000024, z: 1.0000014}
+    - name: Psylocke2_rig:upperLidMain8_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.0038858196, y: -0.004912594, z: -0.020369407}
+      rotation: {x: 0.089414656, y: 0.76530993, z: -0.073969774, w: -0.6331148}
+      scale: {x: 1.0000005, y: 1.0000011, z: 1}
+    - name: Psylocke2_rig:upperLidMain9_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.009267976, y: -0.0053203087, z: -0.018933099}
+      rotation: {x: 0.10460995, y: 0.84195465, z: -0.06526308, w: -0.5252713}
+      scale: {x: 1.0000015, y: 1.0000023, z: 1.0000011}
+    - name: Psylocke2_rig:upperLidMain10_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.013415543, y: -0.005117672, z: -0.01636367}
+      rotation: {x: 0.106993705, y: 0.8975269, z: -0.05063718, w: -0.42477494}
+      scale: {x: 1.000001, y: 1.0000018, z: 1.0000006}
+    - name: Psylocke2_rig:upperLidMain11_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.016418086, y: -0.0045219692, z: -0.0134169655}
+      rotation: {x: 0.0987744, y: 0.9367002, z: -0.03522623, w: -0.33405903}
+      scale: {x: 1.0000019, y: 1.0000023, z: 1.0000004}
+    - name: Psylocke2_rig:upperLidMain12_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.018365186, y: -0.003750485, z: -0.010848835}
+      rotation: {x: 0.08384069, y: 0.9609725, z: -0.022913782, w: -0.26263595}
+      scale: {x: 1.0000015, y: 1.0000019, z: 1.0000002}
+    - name: Psylocke2_rig:upperLidMain13_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.019423, y: -0.0028447227, z: -0.00872264}
+      rotation: {x: 0.06488905, y: 0.9756565, z: -0.0139017105, w: -0.2090228}
+      scale: {x: 1.000002, y: 1.0000025, z: 1.0000008}
+    - name: Psylocke2_rig:upperLidMain14_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.019757707, y: -0.0018461879, z: -0.007101734}
+      rotation: {x: 0.043189105, y: 0.9842064, z: -0.00752634, w: -0.17151082}
+      scale: {x: 1.0000019, y: 1.0000026, z: 0.99999994}
+    - name: Psylocke2_rig:lowerLidMain1_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.014028824, y: 0.010535709, z: -0.014702037}
+      rotation: {x: 0.093206525, y: -0.38228026, z: -0.21776997, w: 0.8931688}
+      scale: {x: 1.0000012, y: 1.000003, z: 1.0000023}
+    - name: Psylocke2_rig:lowerLidMain2_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.013450148, y: 0.011747562, z: -0.014450825}
+      rotation: {x: 0.10585522, y: -0.38489032, z: -0.24313678, w: 0.8840468}
+      scale: {x: 1.0000008, y: 1.0000018, z: 1.0000021}
+    - name: Psylocke2_rig:lowerLidMain3_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.012331603, y: 0.01268262, z: -0.014572589}
+      rotation: {x: 0.121598974, y: -0.4027755, z: -0.26219347, w: 0.8684701}
+      scale: {x: 1.0000007, y: 1.000002, z: 1.0000013}
+    - name: Psylocke2_rig:lowerLidMain4_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.010385578, y: 0.012772952, z: -0.01518935}
+      rotation: {x: 0.13942823, y: -0.44536486, z: -0.2642367, w: 0.84403133}
+      scale: {x: 1.0000006, y: 1.0000007, z: 1.000001}
+    - name: Psylocke2_rig:lowerLidMain11_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.011905915, y: 0.009418461, z: -0.011141728}
+      rotation: {x: -0.24081147, y: 0.8983793, z: 0.095103264, w: -0.3547956}
+      scale: {x: 1.0000008, y: 1.000001, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLidMain12_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.013395401, y: 0.007968265, z: -0.008981157}
+      rotation: {x: -0.21759558, y: 0.93163705, z: 0.06619461, w: -0.28341275}
+      scale: {x: 1.0000008, y: 1.0000001, z: 1.0000007}
+    - name: Psylocke2_rig:lowerLidMain13_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.014763732, y: 0.0062397495, z: -0.007168756}
+      rotation: {x: -0.17606461, y: 0.958531, z: 0.04048524, w: -0.22040987}
+      scale: {x: 1.0000011, y: 1.0000011, z: 1.0000002}
+    - name: Psylocke2_rig:lowerLidMain14_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.016199052, y: 0.004335453, z: -0.005964344}
+      rotation: {x: -0.12081759, y: 0.97704124, z: 0.021535339, w: -0.17415418}
+      scale: {x: 1.0000024, y: 1.0000021, z: 1.0000006}
+    - name: Psylocke2_rig:lowerLidMain15_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.017558534, y: 0.0024482457, z: -0.005372725}
+      rotation: {x: -0.065497465, y: 0.9868272, z: 0.009796653, w: -0.14760168}
+      scale: {x: 1.0000033, y: 1.0000033, z: 1}
+    - name: Psylocke2_rig:lowerLidMain16_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.018699355, y: 0.00077099964, z: -0.0053987033}
+      rotation: {x: -0.019599926, y: 0.9899474, z: 0.0027727191, w: -0.14004429}
+      scale: {x: 1.000002, y: 1.0000015, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLidMain17_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.019479692, y: -0.00066943, z: -0.0059918487}
+      rotation: {x: 0.01623447, y: 0.9887563, z: -0.0024404828, w: -0.14863192}
+      scale: {x: 1.0000021, y: 1.0000017, z: 1.0000004}
+    - name: Psylocke2_rig:upperLidDroopy0_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.017135512, y: 0.01092847, z: -0.019752834}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy1_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.017188625, y: 0.00905225, z: -0.019681767}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy2_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.016778111, y: 0.007111942, z: -0.019988984}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy3_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.016070783, y: 0.0051386757, z: -0.020751178}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy4_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.014895384, y: 0.0028260534, z: -0.021975849}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy5_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.013080652, y: -0.00013232067, z: -0.023670485}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy6_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.010265378, y: -0.0032176476, z: -0.025293967}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy7_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.006088355, y: -0.005911129, z: -0.026305148}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy8_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.00070735253, y: -0.008166988, z: -0.02619395}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy9_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.005719847, y: -0.009939449, z: -0.024450295}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy10_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.012139241, y: -0.011080197, z: -0.021444123}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy11_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.017496811, y: -0.011440915, z: -0.017545383}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy12_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.021527631, y: -0.011180905, z: -0.0134433545}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy13_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.023966767, y: -0.01045947, z: -0.009827294}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy14_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.025122143, y: -0.009067257, z: -0.006882425}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy1_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.016303027, y: 0.014721194, z: -0.023365771}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy2_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.016015327, y: 0.017469302, z: -0.027010638}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy3_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.013454127, y: 0.020209935, z: -0.028301813}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy4_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.0069159153, y: 0.021615727, z: -0.026851032}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy5_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: -0.0005184487, y: 0.02221082, z: -0.025055854}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy7_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.0114197135, y: 0.02191724, z: -0.019574877}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy8_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.01564203, y: 0.020880863, z: -0.015678165}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy9_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.018727109, y: 0.018971682, z: -0.011431857}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy10_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.020921953, y: 0.015934573, z: -0.0072923186}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy11_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.022589032, y: 0.011981326, z: -0.0036757262}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy12_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.02409082, y: 0.007323734, z: -0.000998257}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy16_R
+      parentName: Psylocke2_rig:LidJoints_R
+      position: {x: 0.025301682, y: -0.006794918, z: -0.004793957}
+      rotation: {x: -1, y: 0.00000008940695, z: 0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:LidJoints_L
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: -0.031184675, y: 0.011242191, z: 0.034341335}
+      rotation: {x: -0.00000004470348, y: 0.000000014901167, z: -0.00000004470348, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidMain0_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.014355248, y: -0.009615299, z: 0.015204204}
+      rotation: {x: 0.19636483, y: 0.89704996, z: 0.084659725, w: 0.3867493}
+      scale: {x: 0.99999994, y: 1, z: 0.9999998}
+    - name: Psylocke2_rig:lowerLidMain18_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.019757707, y: 0.0018461879, z: 0.007101734}
+      rotation: {x: -0.0075261337, y: 0.17151074, z: -0.043188877, w: 0.9842064}
+      scale: {x: 0.99999994, y: 1.0000001, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy0_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.017135512, y: -0.01092847, z: 0.019752834}
+      rotation: {x: -0, y: -0, z: -8.881782e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy6_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.0058131567, y: -0.022335941, z: 0.022665622}
+      rotation: {x: -0, y: -0, z: -8.881782e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy13_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.025472943, y: -0.002174198, z: -0.00068612024}
+      rotation: {x: -0, y: -0, z: -8.881782e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy14_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.026781023, y: 0.003254879, z: -0.0013234441}
+      rotation: {x: -0, y: -0, z: -8.881782e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy15_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.026325852, y: 0.0062138634, z: 0.001613148}
+      rotation: {x: -0, y: -0, z: -8.881782e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy17_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.025122143, y: 0.009067257, z: 0.006882425}
+      rotation: {x: -0, y: -0, z: -8.881782e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidMain5_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.0075079994, y: -0.012484867, z: 0.015955571}
+      rotation: {x: 0.25599286, y: 0.8045834, z: 0.16245906, w: 0.5106078}
+      scale: {x: 1.0000013, y: 1.0000002, z: 1.0000013}
+    - name: Psylocke2_rig:lowerLidMain6_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.003594802, y: -0.012284672, z: 0.016525716}
+      rotation: {x: 0.24057338, y: 0.74054235, z: 0.19386783, w: 0.59677196}
+      scale: {x: 1.0000002, y: 1.0000005, z: 1.0000004}
+    - name: Psylocke2_rig:lowerLidMain7_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.0006431362, y: -0.01207227, z: 0.016715536}
+      rotation: {x: 0.2132155, y: 0.6597846, z: 0.22157662, w: 0.6856582}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000005}
+    - name: Psylocke2_rig:lowerLidMain8_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.00449495, y: -0.011747561, z: 0.016340777}
+      rotation: {x: 0.18089455, y: 0.5785024, z: 0.237373, w: 0.759122}
+      scale: {x: 1, y: 1.0000005, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLidMain9_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.007727372, y: -0.01124219, z: 0.015274722}
+      rotation: {x: 0.15003794, y: 0.5017779, z: 0.24404758, w: 0.81617916}
+      scale: {x: 1.0000006, y: 1.0000002, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLidMain10_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.010107134, y: -0.010487796, z: 0.013390644}
+      rotation: {x: 0.12293241, y: 0.428562, z: 0.24680771, w: 0.8604117}
+      scale: {x: 1.0000005, y: 1.0000002, z: 1.0000004}
+    - name: Psylocke2_rig:upperLidMain0_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.014355248, y: -0.009615299, z: 0.015204204}
+      rotation: {x: 0.19636478, y: 0.89704996, z: 0.08465976, w: 0.38674924}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000001}
+    - name: Psylocke2_rig:upperLidMain1_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.0139324665, y: -0.008553287, z: 0.015360911}
+      rotation: {x: 0.17768931, y: 0.89685017, z: 0.07872581, w: 0.39735177}
+      scale: {x: 0.99999994, y: 1.0000006, z: 1.0000002}
+    - name: Psylocke2_rig:upperLidMain2_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.013394912, y: -0.0069428748, z: 0.016235493}
+      rotation: {x: 0.143495, y: 0.8930899, z: 0.06764007, w: 0.4209803}
+      scale: {x: 1.0000012, y: 1.0000002, z: 1.000001}
+    - name: Psylocke2_rig:upperLidMain3_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.012614272, y: -0.0049262727, z: 0.017496783}
+      rotation: {x: 0.09972816, y: 0.8845676, z: 0.051044945, w: 0.452757}
+      scale: {x: 1.0000004, y: 0.99999994, z: 1.0000008}
+    - name: Psylocke2_rig:upperLidMain4_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.011462234, y: -0.0026459997, z: 0.018813618}
+      rotation: {x: 0.052077983, y: 0.87030727, z: 0.029253634, w: 0.48887357}
+      scale: {x: 1.0000019, y: 1.0000002, z: 1.0000027}
+    - name: Psylocke2_rig:upperLidMain5_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.009457571, y: -0.0002827184, z: 0.019957187}
+      rotation: {x: 0.0054087765, y: 0.84503907, z: 0.003422201, w: 0.5346663}
+      scale: {x: 1.000001, y: 1, z: 1.000001}
+    - name: Psylocke2_rig:upperLidMain6_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.0061190636, y: 0.0019829066, z: 0.02069869}
+      rotation: {x: -0.036681585, y: 0.80025196, z: -0.027406907, w: 0.59791315}
+      scale: {x: 1.0000023, y: 1.0000001, z: 1.0000015}
+    - name: Psylocke2_rig:upperLidMain7_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.0016151265, y: 0.003823727, z: 0.0208866}
+      rotation: {x: -0.06615486, y: 0.73087114, z: -0.061236754, w: 0.676536}
+      scale: {x: 1.000002, y: 1, z: 1.0000015}
+    - name: Psylocke2_rig:upperLidMain8_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.0038858196, y: 0.004912594, z: 0.020369407}
+      rotation: {x: -0.07396958, y: 0.63311493, z: -0.0894146, w: 0.7653098}
+      scale: {x: 1.0000013, y: 0.9999997, z: 1.0000011}
+    - name: Psylocke2_rig:upperLidMain9_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.009267976, y: 0.0053203087, z: 0.018933099}
+      rotation: {x: -0.06526305, y: 0.52527136, z: -0.10460986, w: 0.8419546}
+      scale: {x: 1.0000008, y: 1, z: 1.0000004}
+    - name: Psylocke2_rig:upperLidMain10_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.013415543, y: 0.005117672, z: 0.01636367}
+      rotation: {x: -0.050636895, y: 0.42477494, z: -0.10699364, w: 0.897527}
+      scale: {x: 1.0000004, y: 0.99999994, z: 1.0000007}
+    - name: Psylocke2_rig:upperLidMain11_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.016418086, y: 0.0045219692, z: 0.0134169655}
+      rotation: {x: -0.03522605, y: 0.334059, z: -0.09877432, w: 0.9367002}
+      scale: {x: 1.0000008, y: 0.9999998, z: 0.99999994}
+    - name: Psylocke2_rig:upperLidMain12_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.018365186, y: 0.003750485, z: 0.010848835}
+      rotation: {x: -0.0229137, y: 0.26263583, z: -0.083840646, w: 0.96097255}
+      scale: {x: 0.99999994, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidMain13_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.019423, y: 0.0028447227, z: 0.00872264}
+      rotation: {x: -0.013901537, y: 0.20902267, z: -0.064889, w: 0.9756566}
+      scale: {x: 1.0000006, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidMain14_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.019757707, y: 0.0018461879, z: 0.007101734}
+      rotation: {x: -0.007526122, y: 0.17151074, z: -0.043188922, w: 0.9842064}
+      scale: {x: 1, y: 1.0000006, z: 1.0000004}
+    - name: Psylocke2_rig:lowerLidMain1_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.014028824, y: -0.010535709, z: 0.014702037}
+      rotation: {x: 0.21777003, y: 0.89316887, z: 0.09320665, w: 0.38228023}
+      scale: {x: 1.0000007, y: 1, z: 1.0000011}
+    - name: Psylocke2_rig:lowerLidMain2_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.013450148, y: -0.011747562, z: 0.014450825}
+      rotation: {x: 0.24313678, y: 0.88404673, z: 0.10585536, w: 0.38489038}
+      scale: {x: 1.0000001, y: 1, z: 1.0000008}
+    - name: Psylocke2_rig:lowerLidMain3_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.012331603, y: -0.01268262, z: 0.014572589}
+      rotation: {x: 0.26219353, y: 0.86846995, z: 0.12159908, w: 0.4027755}
+      scale: {x: 1.0000015, y: 1.0000002, z: 1.0000023}
+    - name: Psylocke2_rig:lowerLidMain4_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.010385578, y: -0.012772952, z: 0.01518935}
+      rotation: {x: 0.26423666, y: 0.84403133, z: 0.13942826, w: 0.4453649}
+      scale: {x: 0.99999934, y: 1, z: 0.99999934}
+    - name: Psylocke2_rig:lowerLidMain11_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.011905915, y: -0.009418461, z: 0.011141728}
+      rotation: {x: 0.095103465, y: 0.35479558, z: 0.24081133, w: 0.8983793}
+      scale: {x: 1, y: 1.0000002, z: 1.0000005}
+    - name: Psylocke2_rig:lowerLidMain12_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.013395401, y: -0.007968265, z: 0.008981157}
+      rotation: {x: 0.06619484, y: 0.2834126, z: 0.21759546, w: 0.93163717}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLidMain13_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.014763732, y: -0.0062397495, z: 0.007168756}
+      rotation: {x: 0.040485468, y: 0.22040991, z: 0.17606463, w: 0.958531}
+      scale: {x: 0.9999998, y: 1.0000002, z: 1.0000002}
+    - name: Psylocke2_rig:lowerLidMain14_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.016199052, y: -0.004335453, z: 0.005964344}
+      rotation: {x: 0.021535512, y: 0.17415409, z: 0.12081746, w: 0.97704136}
+      scale: {x: 1, y: 1.0000005, z: 0.99999994}
+    - name: Psylocke2_rig:lowerLidMain15_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.017558534, y: -0.0024482457, z: 0.005372725}
+      rotation: {x: 0.009796665, y: 0.14760171, z: 0.06549764, w: 0.98682714}
+      scale: {x: 1, y: 1.0000005, z: 1}
+    - name: Psylocke2_rig:lowerLidMain16_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.018699355, y: -0.00077099964, z: 0.0053987033}
+      rotation: {x: 0.0027728565, y: 0.1400442, z: 0.019599976, w: 0.98994744}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Psylocke2_rig:lowerLidMain17_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.019479692, y: 0.00066943, z: 0.0059918487}
+      rotation: {x: -0.0024402377, y: 0.14863186, z: -0.016234389, w: 0.9887563}
+      scale: {x: 1, y: 1.0000005, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy0_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.017135512, y: -0.01092847, z: 0.019752834}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy1_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.017188625, y: -0.00905225, z: 0.019681767}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy2_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.016778111, y: -0.007111942, z: 0.019988984}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy3_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.016070783, y: -0.0051386757, z: 0.020751178}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy4_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.014895384, y: -0.0028260534, z: 0.021975849}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy5_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.013080652, y: 0.00013232067, z: 0.023670485}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy6_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.010265378, y: 0.0032176476, z: 0.025293967}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy7_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.006088355, y: 0.005911129, z: 0.026305148}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy8_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.00070735253, y: 0.008166988, z: 0.02619395}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy9_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.005719847, y: 0.009939449, z: 0.024450295}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy10_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.012139241, y: 0.011080197, z: 0.021444123}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy11_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.017496811, y: 0.011440915, z: 0.017545383}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy12_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.021527631, y: 0.011180905, z: 0.0134433545}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy13_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.023966767, y: 0.01045947, z: 0.009827294}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLidDroopy14_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.025122143, y: 0.009067257, z: 0.006882425}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy1_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.016303027, y: -0.014721194, z: 0.023365771}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy2_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.016015327, y: -0.017469302, z: 0.027010638}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy3_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.013454127, y: -0.020209935, z: 0.028301813}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy4_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.0069159153, y: -0.021615727, z: 0.026851032}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy5_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: 0.0005184487, y: -0.02221082, z: 0.025055854}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy7_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.0114197135, y: -0.02191724, z: 0.019574877}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy8_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.01564203, y: -0.020880863, z: 0.015678165}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy9_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.018727109, y: -0.018971682, z: 0.011431857}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy10_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.020921953, y: -0.015934573, z: 0.0072923186}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy11_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.022589032, y: -0.011981326, z: 0.0036757262}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy12_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.02409082, y: -0.007323734, z: 0.000998257}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLidDroopy16_L
+      parentName: Psylocke2_rig:LidJoints_L
+      position: {x: -0.025301682, y: 0.006794918, z: 0.004793957}
+      rotation: {x: -0, y: -0, z: 6.66134e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:EyeBrowInnerJoint_R
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: 0.01931418, y: 0.020051269, z: 0.06520215}
+      rotation: {x: 1, y: -0.00000008940695, z: -0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:EyeBrowOuterJoint_R
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: 0.05911148, y: 0.024604492, z: 0.03531053}
+      rotation: {x: 1, y: -0.00000008940695, z: -0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:EyeBrowMid1Joint_R
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: 0.030455703, y: 0.025596924, z: 0.06421867}
+      rotation: {x: 1, y: -0.00000007450579, z: -0.00000005960465, w: -0.000000014901161}
+      scale: {x: 1.3000002, y: 1.3000001, z: 1.3000001}
+    - name: Psylocke2_rig:EyeBrowMid2Joint_R
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: 0.044631805, y: 0.02970337, z: 0.056905583}
+      rotation: {x: 1, y: -0.00000008940695, z: -0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:EyeBrowMid3Joint_R
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: 0.055090655, y: 0.031469114, z: 0.04692032}
+      rotation: {x: 1, y: -0.00000008940695, z: -0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:EyeBrowMiddleJoint_M
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: 0.000060436276, y: 0.022766113, z: 0.06796879}
+      rotation: {x: -0, y: -0, z: 2.6645348e-15, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:EyeBrowInnerJoint_L
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: -0.01931418, y: 0.020051269, z: 0.06520215}
+      rotation: {x: -0, y: -0, z: 2.6645348e-15, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:EyeBrowOuterJoint_L
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: -0.05911148, y: 0.024604492, z: 0.035310525}
+      rotation: {x: -0, y: -0, z: 2.6645348e-15, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:EyeBrowMid1Joint_L
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: -0.030455703, y: 0.025596924, z: 0.06421867}
+      rotation: {x: -0.0000000745058, y: 0.000000044703484, z: -0.000000014901159, w: 1}
+      scale: {x: 1.3000002, y: 1.3000001, z: 1.3000001}
+    - name: Psylocke2_rig:EyeBrowMid2Joint_L
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: -0.044631805, y: 0.02970337, z: 0.056905583}
+      rotation: {x: -0, y: -0, z: 2.6645348e-15, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:EyeBrowMid3Joint_L
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: -0.055090655, y: 0.031469114, z: 0.04692032}
+      rotation: {x: -0, y: -0, z: 2.6645348e-15, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:NoseMiddleJoint_M
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: 0.000060441045, y: -0.013017578, z: 0.07436604}
+      rotation: {x: -0, y: -0, z: 2.6645348e-15, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:Eye_R
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: 0.031184675, y: 0.011242191, z: 0.034341335}
+      rotation: {x: 0.7071068, y: 0.000000059604645, z: -0.7071068, w: -0.00000019790481}
+      scale: {x: 1.0000002, y: 1.0000005, z: 1.0000001}
+    - name: Psylocke2_rig:Eye_L
+      parentName: Psylocke2_rig:upperFaceJoint_M
+      position: {x: -0.031184675, y: 0.011242191, z: 0.034341335}
+      rotation: {x: 0.7071068, y: 0.000000059604645, z: -0.7071068, w: -0.00000019790481}
+      scale: {x: 1.0000001, y: 1.0000002, z: 1.0000001}
+    - name: Psylocke2_rig:middleFaceJoint_M
+      parentName: Psylocke2_rig:Face_M
+      position: {x: 1.4210854e-16, y: 0.046586197, z: -0.0021144268}
+      rotation: {x: -0.00000008940696, y: 0.000000029802319, z: 0.00000008940696, w: 1}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000002}
+    - name: Psylocke2_rig:NoseRegionJoint_M
+      parentName: Psylocke2_rig:middleFaceJoint_M
+      position: {x: -7.105427e-17, y: -0.013816563, z: 0.09063794}
+      rotation: {x: -0, y: -0, z: 2.6645348e-15, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:NoseJoint_M
+      parentName: Psylocke2_rig:NoseRegionJoint_M
+      position: {x: -3.5527136e-17, y: 5.684342e-16, z: 3.9968027e-17}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:NoseUnderJoint_M
+      parentName: Psylocke2_rig:NoseRegionJoint_M
+      position: {x: -1.0658141e-16, y: -0.011421204, z: -0.014039688}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:NostrilJoint_R
+      parentName: Psylocke2_rig:NoseRegionJoint_M
+      position: {x: 0.0051148795, y: -0.0034135436, z: -0.0128967045}
+      rotation: {x: 1, y: -0.000000044703476, z: -0.000000029802333, w: 0.000000014901172}
+      scale: {x: 1.2000002, y: 1.2, z: 1.2000002}
+    - name: Psylocke2_rig:NostrilJoint_L
+      parentName: Psylocke2_rig:NoseRegionJoint_M
+      position: {x: -0.0051148795, y: -0.0034135436, z: -0.0128967045}
+      rotation: {x: -0.000000059604638, y: 0.000000059604645, z: -1.2705493e-21, w: 1}
+      scale: {x: 1.2000002, y: 1.2, z: 1.2000002}
+    - name: Psylocke2_rig:NoseSideJoint_R
+      parentName: Psylocke2_rig:NoseRegionJoint_M
+      position: {x: 0.011541649, y: 0.0028085327, z: -0.016351366}
+      rotation: {x: 1, y: -0.000000059604638, z: 8.881784e-16, w: -0.00000008940696}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:NoseSideJoint_L
+      parentName: Psylocke2_rig:NoseRegionJoint_M
+      position: {x: -0.011541649, y: 0.0028085327, z: -0.016351366}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerFaceJoint_M
+      parentName: Psylocke2_rig:Face_M
+      position: {x: 2.1316282e-16, y: 0.030871512, z: -0.0021144268}
+      rotation: {x: -0.00000008940696, y: 0.000000029802319, z: 0.00000008940696, w: 1}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000002}
+    - name: Psylocke2_rig:Tongue0Joint_M
+      parentName: Psylocke2_rig:lowerFaceJoint_M
+      position: {x: -3.5527136e-17, y: -0.042661615, z: -0.005876263}
+      rotation: {x: -0.16245982, y: 0.68819094, z: -0.16245988, w: 0.68819106}
+      scale: {x: 1.0000006, y: 1.0000002, z: 1.0000004}
+    - name: Psylocke2_rig:Tongue1Joint_M
+      parentName: Psylocke2_rig:Tongue0Joint_M
+      position: {x: -0.01960093, y: 2.842171e-16, z: -7.105427e-17}
+      rotation: {x: 0.0000000074505797, y: 0.000000059604638, z: 0.15162818, w: 0.9884376}
+      scale: {x: 1, y: 0.9999999, z: 1.0000001}
+    - name: Psylocke2_rig:Tongue2Joint_M
+      parentName: Psylocke2_rig:Tongue1Joint_M
+      position: {x: -0.017788213, y: 8.5265126e-16, z: -1.0658141e-16}
+      rotation: {x: -0.0000000037252903, y: 0.000000029802322, z: 0.13577521, w: 0.9907397}
+      scale: {x: 0.99999994, y: 1, z: 0.99999994}
+    - name: Psylocke2_rig:Tongue3Joint_M
+      parentName: Psylocke2_rig:Tongue2Joint_M
+      position: {x: -0.012977474, y: -5.684342e-16, z: 7.105427e-17}
+      rotation: {x: -0, y: -0.000000059604645, z: 0.004581202, w: 0.9999895}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
+    - name: Psylocke2_rig:upperTeethJoint_M
+      parentName: Psylocke2_rig:lowerFaceJoint_M
+      position: {x: -7.105427e-17, y: -0.016523356, z: 0.04314689}
+      rotation: {x: -0, y: 0.000000029802322, z: -0.000000029802322, w: 1}
+      scale: {x: 1.5714688, y: 1.5714688, z: 1.5714695}
+    - name: Psylocke2_rig:lowerTeethJoint_M
+      parentName: Psylocke2_rig:lowerFaceJoint_M
+      position: {x: -7.105427e-17, y: -0.033198237, z: 0.042878307}
+      rotation: {x: -0, y: 0.000000029802322, z: -0.000000029802322, w: 1}
+      scale: {x: 1.5714686, y: 1.5714687, z: 1.5714692}
+    - name: Psylocke2_rig:LipJoints_M
+      parentName: Psylocke2_rig:lowerFaceJoint_M
+      position: {x: 0.0000604254, y: -0.02468696, z: 0.058147}
+      rotation: {x: -0, y: -0, z: 3.5527128e-15, w: 1}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Psylocke2_rig:upperLipJoint0_M
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.00000004234414, y: 0.004988138, z: 0.009703663}
+      rotation: {x: 0.0003962673, y: 0.8740875, z: 0.48576823, w: -0.00044935112}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Psylocke2_rig:upperLipJoint1_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.0026437037, y: 0.0049754265, z: 0.00964503}
+      rotation: {x: 0.033908058, y: 0.8729377, z: 0.48593026, w: -0.026493113}
+      scale: {x: 1.0000006, y: 1, z: 1.0000002}
+    - name: Psylocke2_rig:upperLipJoint2_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.0054483972, y: 0.004916376, z: 0.009464719}
+      rotation: {x: 0.10872094, y: 0.8659468, z: 0.48311627, w: -0.07010387}
+      scale: {x: 1.0000001, y: 1, z: 1.0000001}
+    - name: Psylocke2_rig:upperLipJoint3_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.0083231265, y: 0.0037623434, z: 0.0075173257}
+      rotation: {x: 0.2607488, y: 0.83343256, z: 0.46417007, w: -0.14814347}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLipJoint4_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.011162282, y: 0.0025996184, z: 0.0056856773}
+      rotation: {x: 0.40583244, y: 0.77710605, z: 0.42872128, w: -0.21818405}
+      scale: {x: 1, y: 1.0000001, z: 1.0000001}
+    - name: Psylocke2_rig:upperLipJoint5_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.013287967, y: 0.0010336913, z: 0.0032512886}
+      rotation: {x: 0.4302127, y: 0.76239663, z: 0.42192537, w: -0.23589715}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
+    - name: Psylocke2_rig:upperLipJoint6_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.014924267, y: -0.000019692643, z: 0.001533016}
+      rotation: {x: 0.39098722, y: 0.77694154, z: 0.43753782, w: -0.228148}
+      scale: {x: 1.0000006, y: 1.0000004, z: 1.0000004}
+    - name: Psylocke2_rig:upperLipJoint7_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.016116096, y: -0.00059131475, z: 0.00047439203}
+      rotation: {x: 0.28763175, y: 0.8121988, z: 0.466625, w: -0.19965519}
+      scale: {x: 1.0000004, y: 1, z: 1.0000004}
+    - name: Psylocke2_rig:upperLipJoint8_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.016923122, y: -0.00093962456, z: -0.0003079395}
+      rotation: {x: 0.11087013, y: 0.8546946, z: 0.4888959, w: -0.13485472}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000002}
+    - name: Psylocke2_rig:upperLipJoint9_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.017156444, y: -0.0010966134, z: -0.0006425765}
+      rotation: {x: 0.067901716, y: 0.86293894, z: 0.48788607, w: -0.112663016}
+      scale: {x: 1.0000005, y: 1.0000001, z: 1.0000004}
+    - name: Psylocke2_rig:upperLipJoint10_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.017543877, y: -0.0010677999, z: -0.0006999382}
+      rotation: {x: 0.0015755405, y: 0.8695208, z: 0.48646593, w: -0.08533504}
+      scale: {x: 1.0000005, y: 1.0000001, z: 1.0000006}
+    - name: Psylocke2_rig:lowerLipJoint0_M
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.0000005619166, y: -0.0067084557, z: 0.006121455}
+      rotation: {x: -0.0016174901, y: 0.5610257, z: 0.82779634, w: -0.0009537345}
+      scale: {x: 1.0000002, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLipJoint1_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.0027278091, y: -0.0065517807, z: 0.0062610265}
+      rotation: {x: -0.036605734, y: 0.55644494, z: 0.8281512, w: -0.056521703}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1}
+    - name: Psylocke2_rig:lowerLipJoint2_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.005606057, y: -0.006162337, z: 0.006391986}
+      rotation: {x: 0.0050842585, y: 0.5492023, z: 0.82474756, w: -0.13469417}
+      scale: {x: 1, y: 1.0000001, z: 0.99999994}
+    - name: Psylocke2_rig:lowerLipJoint3_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.008478507, y: -0.0051948796, z: 0.0049559693}
+      rotation: {x: 0.11437897, y: 0.5376962, z: 0.8050489, w: -0.22292744}
+      scale: {x: 0.9999998, y: 0.99999994, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLipJoint4_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.011262906, y: -0.004606984, z: 0.0034966704}
+      rotation: {x: 0.21413054, y: 0.5311772, z: 0.77083206, w: -0.27895644}
+      scale: {x: 1.0000002, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:lowerLipJoint5_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.013211378, y: -0.0037309506, z: 0.0008688629}
+      rotation: {x: 0.23161954, y: 0.5212037, z: 0.75795877, w: -0.31654018}
+      scale: {x: 0.9999998, y: 0.99999994, z: 1}
+    - name: Psylocke2_rig:lowerLipJoint6_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.014777143, y: -0.0030604026, z: -0.0007143972}
+      rotation: {x: 0.16862674, y: 0.50877124, z: 0.78181124, w: -0.3185718}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLipJoint7_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.01588535, y: -0.0025608495, z: -0.0013539083}
+      rotation: {x: 0.054243438, y: 0.49323565, z: 0.81073785, w: -0.31061298}
+      scale: {x: 0.99999994, y: 1, z: 0.99999994}
+    - name: Psylocke2_rig:lowerLipJoint8_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.01687191, y: -0.0020938802, z: -0.0012864099}
+      rotation: {x: -0.2148941, y: 0.50377613, z: 0.76838034, w: -0.33109194}
+      scale: {x: 1.0000002, y: 1.0000004, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLipJoint9_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.017252807, y: -0.0016274055, z: -0.0013205505}
+      rotation: {x: -0.40953496, y: 0.5816733, z: 0.6858873, w: -0.15328398}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLipJoint10_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.017420284, y: -0.0013862526, z: -0.0010762758}
+      rotation: {x: -0.5285778, y: 0.61389095, z: 0.5854927, w: -0.030689813}
+      scale: {x: 1.0000004, y: 1.0000002, z: 1}
+    - name: Psylocke2_rig:lowerLipJoint11_R
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: 0.017543864, y: -0.0010678497, z: -0.00069992646}
+      rotation: {x: -0.6041416, y: 0.61426544, z: 0.494032, w: 0.11671886}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
+    - name: Psylocke2_rig:upperLipJoint1_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.0027645703, y: 0.0049754274, z: 0.009645027}
+      rotation: {x: -0.033908043, y: 0.8729376, z: 0.48593032, w: 0.02649313}
+      scale: {x: 1.0000004, y: 1.0000001, z: 1.0000004}
+    - name: Psylocke2_rig:upperLipJoint2_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.005569262, y: 0.0049163783, z: 0.009464714}
+      rotation: {x: -0.10872093, y: 0.8659468, z: 0.48311627, w: 0.07010382}
+      scale: {x: 1.0000002, y: 1, z: 1.0000002}
+    - name: Psylocke2_rig:upperLipJoint3_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.008443988, y: 0.0037623497, z: 0.0075173206}
+      rotation: {x: -0.2607489, y: 0.83343256, z: 0.46416998, w: 0.1481435}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000002}
+    - name: Psylocke2_rig:upperLipJoint4_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.011283139, y: 0.0025996284, z: 0.0056856754}
+      rotation: {x: -0.40583244, y: 0.7771061, z: 0.42872128, w: 0.21818401}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: Psylocke2_rig:upperLipJoint5_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.013408819, y: 0.0010337066, z: 0.003251291}
+      rotation: {x: -0.4302127, y: 0.7623966, z: 0.42192537, w: 0.23589718}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
+    - name: Psylocke2_rig:upperLipJoint6_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.015045116, y: -0.000019673013, z: 0.0015330197}
+      rotation: {x: -0.39098713, y: 0.7769416, z: 0.4375378, w: 0.22814792}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: Psylocke2_rig:upperLipJoint7_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.016236942, y: -0.0005912927, z: 0.00047439395}
+      rotation: {x: -0.2876317, y: 0.8121989, z: 0.46662492, w: 0.19965515}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: Psylocke2_rig:upperLipJoint8_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.017043965, y: -0.00093959976, z: -0.00030794143}
+      rotation: {x: -0.11087013, y: 0.8546946, z: 0.4888959, w: 0.13485472}
+      scale: {x: 1.0000002, y: 0.99999994, z: 1.0000001}
+    - name: Psylocke2_rig:upperLipJoint9_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.017277287, y: -0.0010965866, z: -0.0006425802}
+      rotation: {x: -0.06790173, y: 0.862939, z: 0.48788604, w: 0.112662956}
+      scale: {x: 1.0000004, y: 1, z: 1.0000002}
+    - name: Psylocke2_rig:upperLipJoint10_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.017664718, y: -0.0010677724, z: -0.0006999443}
+      rotation: {x: -0.001575527, y: 0.86952084, z: 0.48646587, w: 0.08533503}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLipJoint1_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.0028486645, y: -0.006551779, z: 0.006261023}
+      rotation: {x: 0.03660573, y: 0.55644494, z: 0.8281512, w: 0.056521695}
+      scale: {x: 0.99999994, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLipJoint2_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.005726913, y: -0.006162334, z: 0.006391979}
+      rotation: {x: -0.005084171, y: 0.5492023, z: 0.82474756, w: 0.13469414}
+      scale: {x: 1.0000004, y: 1.0000004, z: 1.0000002}
+    - name: Psylocke2_rig:lowerLipJoint3_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.008599362, y: -0.0051948717, z: 0.0049559604}
+      rotation: {x: -0.11437895, y: 0.5376962, z: 0.8050489, w: 0.22292739}
+      scale: {x: 0.9999998, y: 1, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLipJoint4_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.011383761, y: -0.0046069743, z: 0.00349666}
+      rotation: {x: -0.2141306, y: 0.5311773, z: 0.7708322, w: 0.2789564}
+      scale: {x: 1.0000004, y: 1.0000005, z: 1.0000002}
+    - name: Psylocke2_rig:lowerLipJoint5_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.013332231, y: -0.0037309348, z: 0.00086885353}
+      rotation: {x: -0.23161949, y: 0.52120376, z: 0.7579587, w: 0.31654024}
+      scale: {x: 1.0000001, y: 1.0000002, z: 1}
+    - name: Psylocke2_rig:lowerLipJoint6_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.014897996, y: -0.003060383, z: -0.00071440527}
+      rotation: {x: -0.16862671, y: 0.5087712, z: 0.7818114, w: 0.3185718}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000001}
+    - name: Psylocke2_rig:lowerLipJoint7_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.016006202, y: -0.0025608279, z: -0.001353915}
+      rotation: {x: -0.05424344, y: 0.49323562, z: 0.81073785, w: 0.310613}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    - name: Psylocke2_rig:lowerLipJoint8_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.01699276, y: -0.0020938565, z: -0.0012864157}
+      rotation: {x: 0.2148941, y: 0.5037761, z: 0.7683804, w: 0.33109188}
+      scale: {x: 0.99999994, y: 1, z: 1}
+    - name: Psylocke2_rig:lowerLipJoint9_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.017373659, y: -0.00162738, z: -0.0013205544}
+      rotation: {x: 0.40953496, y: 0.58167326, z: 0.6858873, w: 0.15328407}
+      scale: {x: 0.99999994, y: 0.9999998, z: 0.9999998}
+    - name: Psylocke2_rig:lowerLipJoint10_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.017541137, y: -0.0013862258, z: -0.0010762791}
+      rotation: {x: 0.52857774, y: 0.61389095, z: 0.5854927, w: 0.030689798}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1}
+    - name: Psylocke2_rig:lowerLipJoint11_L
+      parentName: Psylocke2_rig:LipJoints_M
+      position: {x: -0.017664716, y: -0.0010678213, z: -0.00069992844}
+      rotation: {x: 0.6041416, y: 0.6142655, z: 0.4940319, w: -0.116718784}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000001}
+    - name: Psylocke2_rig:JawJoint_M
+      parentName: Psylocke2_rig:lowerFaceJoint_M
+      position: {x: -3.5527136e-17, y: -0.012650218, z: 1.8651746e-16}
+      rotation: {x: -0.000000059604638, y: 0.000000059604645, z: 3.5527116e-15, w: 1}
+      scale: {x: 1.5714692, y: 1.5714686, z: 1.5714695}
+    - name: Psylocke2_rig:NoseCornerJoint_R
+      parentName: Psylocke2_rig:lowerFaceJoint_M
+      position: {x: 0.013506551, y: -0.0041657207, z: 0.07442254}
+      rotation: {x: 1, y: -0.000000059604638, z: 8.881781e-16, w: -0.00000008940696}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Psylocke2_rig:NoseCornerJoint_L
+      parentName: Psylocke2_rig:lowerFaceJoint_M
+      position: {x: -0.013506551, y: -0.0041657207, z: 0.07442254}
+      rotation: {x: -0, y: -0, z: 3.5527128e-15, w: 1}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: Psylocke2_rig:CheekJoint_R
+      parentName: Psylocke2_rig:lowerFaceJoint_M
+      position: {x: 0.042381287, y: -0.015736155, z: 0.04933751}
+      rotation: {x: 1, y: -0.00000008940695, z: -0.000000029802326, w: -0.00000008940697}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:CheekJoint_L
+      parentName: Psylocke2_rig:lowerFaceJoint_M
+      position: {x: -0.042381287, y: -0.015736155, z: 0.04933751}
+      rotation: {x: -0, y: -0, z: 2.6645348e-15, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:HeadEnd_M
+      parentName: Psylocke2_rig:Head_M
+      position: {x: -0.18935019, y: 3.7303492e-16, z: -5.32907e-16}
+      rotation: {x: 0.000000017212681, y: 0.000000015836784, z: -0.85041755, w: -0.52610844}
+      scale: {x: 1.0000023, y: 1.0000006, z: 1.0000018}
+    - name: Psylocke2_rig:hairBack1_M
+      parentName: Psylocke2_rig:HeadEnd_M
+      position: {x: -0.08805629, y: 1.9895197e-15, z: 4.973799e-16}
+      rotation: {x: -0, y: 0.000000029802322, z: 0.40843165, w: 0.9127889}
+      scale: {x: 1.000001, y: 1.0000006, z: 1.0000002}
+    - name: Psylocke2_rig:hairBack2_M
+      parentName: Psylocke2_rig:hairBack1_M
+      position: {x: -0.16364527, y: 1.2789769e-15, z: 7.105427e-16}
+      rotation: {x: -0.000000009040558, y: -0.000000023231475, z: 0.07316082, w: 0.9973202}
+      scale: {x: 1.000002, y: 0.9999997, z: 1.0000006}
+    - name: Psylocke2_rig:hairBack3_M
+      parentName: Psylocke2_rig:hairBack2_M
+      position: {x: -0.16723159, y: 3.5527135e-16, z: 4.2632563e-16}
+      rotation: {x: 0.000000029802322, y: 0.000000029802322, z: 0.12658204, w: 0.9919562}
+      scale: {x: 0.9999996, y: 1.0000017, z: 1.0000008}
+    - name: Psylocke2_rig:hairBack4_M
+      parentName: Psylocke2_rig:hairBack3_M
+      position: {x: -0.1350448, y: 8.8817837e-17, z: 1.7763567e-16}
+      rotation: {x: -0.000000029802322, y: 0.000000029802322, z: -0.14080586, w: -0.99003726}
+      scale: {x: 1.0000002, y: 1.0000011, z: 0.9999998}
+    - name: Psylocke2_rig:hairBack5_M
+      parentName: Psylocke2_rig:hairBack4_M
+      position: {x: -0.13576575, y: -3.5527136e-17, z: 4.3586833e-17}
+      rotation: {x: -0, y: -0, z: 6.2620656e-17, w: 1}
+      scale: {x: 1, y: 1.0000001, z: 0.99999994}
+    - name: Psylocke2_rig:hairL_1_R
+      parentName: Psylocke2_rig:HeadEnd_M
+      position: {x: 0.04777336, y: -0.027219765, z: 0.02569301}
+      rotation: {x: -0.09201131, y: 0.3283387, z: 0.26002127, w: 0.9033918}
+      scale: {x: 1.0000002, y: 1.0000007, z: 1.0000006}
+    - name: Psylocke2_rig:hairL_2_R
+      parentName: Psylocke2_rig:hairL_1_R
+      position: {x: -0.063735604, y: 8.5265126e-16, z: 1.7053025e-15}
+      rotation: {x: 0.119771704, y: -0.22017965, z: -0.25163466, w: 0.93480253}
+      scale: {x: 1.0000012, y: 0.9999984, z: 1.0000005}
+    - name: Psylocke2_rig:hairL_3_R
+      parentName: Psylocke2_rig:hairL_2_R
+      position: {x: -0.060048383, y: -1.7053025e-15, z: 8.5265126e-16}
+      rotation: {x: 0.02312336, y: -0.11373007, z: -0.16786337, w: 0.978955}
+      scale: {x: 1.0000013, y: 1.0000011, z: 1.0000015}
+    - name: Psylocke2_rig:hairL_4_R
+      parentName: Psylocke2_rig:hairL_3_R
+      position: {x: -0.06515305, y: 3.694822e-15, z: 1.0658141e-16}
+      rotation: {x: -0, y: -0, z: -0.000000007217749, w: 1}
+      scale: {x: 1, y: 1, z: 0.99999994}
+    - name: Psylocke2_rig:hairR_1_R
+      parentName: Psylocke2_rig:HeadEnd_M
+      position: {x: 0.035488587, y: -0.01908709, z: -0.013283304}
+      rotation: {x: 0.52130955, y: 0.57507265, z: -0.059803057, w: -0.62765557}
+      scale: {x: 1.0000043, y: 1.0000011, z: 1.0000029}
+    - name: Psylocke2_rig:hairR_2_R
+      parentName: Psylocke2_rig:hairR_1_R
+      position: {x: -0.07360461, y: -9.947598e-16, z: 7.81597e-16}
+      rotation: {x: 0.04213414, y: -0.13256134, z: 0.2470209, w: 0.95897496}
+      scale: {x: 0.99999744, y: 1.0000017, z: 1.0000027}
+    - name: Psylocke2_rig:hairR_3_R
+      parentName: Psylocke2_rig:hairR_2_R
+      position: {x: -0.086810164, y: 2.2115643e-15, z: -4.6185276e-16}
+      rotation: {x: -0.0076254746, y: 0.04715489, z: 0.010285928, w: 0.9988056}
+      scale: {x: 1.0000017, y: 1.0000002, z: 1.0000017}
+    - name: Psylocke2_rig:hairR_4_R
+      parentName: Psylocke2_rig:hairR_3_R
+      position: {x: -0.08101673, y: -9.192646e-16, z: -1.4654943e-16}
+      rotation: {x: 0.061929744, y: 0.09427933, z: -0.049542796, w: 0.99238175}
+      scale: {x: 1.0000011, y: 1.0000015, z: 1.000002}
+    - name: Psylocke2_rig:hairR_5_R
+      parentName: Psylocke2_rig:hairR_4_R
+      position: {x: -0.096032314, y: -1.4210854e-16, z: -2.842171e-16}
+      rotation: {x: 0.000000007450579, y: -0, z: -0.000000007450579, w: 1}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000006}
+    - name: Psylocke2_rig:Scapula_R
+      parentName: Psylocke2_rig:Chest_M
+      position: {x: -0.08446496, y: -0.018329436, z: -0.015695078}
+      rotation: {x: 0.1920985, y: 0.6526251, z: 0.18661736, w: -0.7087684}
+      scale: {x: 1.0000006, y: 1.0000005, z: 1}
+    - name: Psylocke2_rig:Shoulder_R
+      parentName: Psylocke2_rig:Scapula_R
+      position: {x: -0.103525884, y: -2.4158453e-15, z: 8.668622e-15}
+      rotation: {x: 0.0017488892, y: -0.18922032, z: -0.011151967, w: 0.9818698}
+      scale: {x: 1.0000018, y: 1.000001, z: 1.0000001}
+    - name: Psylocke2_rig:ShoulderPart1_R
+      parentName: Psylocke2_rig:Shoulder_R
+      position: {x: -0.08333715, y: 7.105427e-17, z: 1.4210854e-16}
+      rotation: {x: 0.000000021420414, y: 0.11691735, z: -0.0027064516, w: 0.993138}
+      scale: {x: 0.9999984, y: 0.9999992, z: 0.999999}
+    - name: Psylocke2_rig:ShoulderPart2_R
+      parentName: Psylocke2_rig:ShoulderPart1_R
+      position: {x: -0.08333715, y: 0, z: -4.2632563e-16}
+      rotation: {x: 0.000000014901158, y: 0.000000059604645, z: -0.000000044703484, w: 1}
+      scale: {x: 1.0000014, y: 1.0000005, z: 1.0000002}
+    - name: Psylocke2_rig:Elbow_R
+      parentName: Psylocke2_rig:ShoulderPart2_R
+      position: {x: -0.08333715, y: -6.217249e-16, z: -9.947598e-16}
+      rotation: {x: 0.008659029, y: 0.031919096, z: -0.03096887, w: 0.9989731}
+      scale: {x: 1.0000006, y: 0.9999997, z: 1.0000007}
+    - name: Psylocke2_rig:ElbowPart1_R
+      parentName: Psylocke2_rig:Elbow_R
+      position: {x: -0.06859355, y: 7.9491967e-16, z: -8.5265126e-16}
+      rotation: {x: 0.000000108309564, y: 0.00000002938279, z: 0.00000011920925, w: 1}
+      scale: {x: 1.0000012, y: 1.0000004, z: 1.0000006}
+    - name: Psylocke2_rig:ElbowPart2_R
+      parentName: Psylocke2_rig:ElbowPart1_R
+      position: {x: -0.06859355, y: 7.283063e-16, z: -1.4210854e-15}
+      rotation: {x: 0.00000012293457, y: -0.000000059604638, z: -0.0000000074505797, w: 1}
+      scale: {x: 0.9999997, y: 0.9999998, z: 0.9999992}
+    - name: Psylocke2_rig:Wrist_R
+      parentName: Psylocke2_rig:ElbowPart2_R
+      position: {x: -0.06859355, y: 8.881784e-16, z: -1.7053025e-15}
+      rotation: {x: -0.033135768, y: 0.003763705, z: 0.00273198, w: 0.9994401}
+      scale: {x: 1.0000025, y: 1.0000017, z: 1.0000018}
+    - name: Psylocke2_rig:metacarpal1_R
+      parentName: Psylocke2_rig:Wrist_R
+      position: {x: -0.029414427, y: 0.0074485634, z: -0.0014333491}
+      rotation: {x: -0.1591946, y: 0.0001477301, z: -0.11230329, w: 0.98083895}
+      scale: {x: 0.9999985, y: 0.9999986, z: 0.9999998}
+    - name: Psylocke2_rig:IndexFinger1_R
+      parentName: Psylocke2_rig:metacarpal1_R
+      position: {x: -0.06527032, y: -4.2632563e-16, z: 1.4210854e-16}
+      rotation: {x: 0.028712627, y: -0.03634909, z: 0.19833195, w: 0.9790398}
+      scale: {x: 1.000001, y: 1.0000024, z: 1.0000006}
+    - name: Psylocke2_rig:IndexFinger2_R
+      parentName: Psylocke2_rig:IndexFinger1_R
+      position: {x: -0.040696815, y: -1.4210854e-16, z: 1.2079227e-15}
+      rotation: {x: -0.00008340358, y: -0.03883537, z: 0.00040225274, w: 0.9992455}
+      scale: {x: 1.0000006, y: 1.0000012, z: 0.99999994}
+    - name: Psylocke2_rig:IndexFinger3_R
+      parentName: Psylocke2_rig:IndexFinger2_R
+      position: {x: -0.023134839, y: 2.1316282e-16, z: -8.5265126e-16}
+      rotation: {x: -0.014191911, y: -0.016746819, z: 0.0008903295, w: 0.99975866}
+      scale: {x: 1.0000007, y: 1.0000006, z: 1.0000008}
+    - name: Psylocke2_rig:metacarpal2_R
+      parentName: Psylocke2_rig:Wrist_R
+      position: {x: -0.030454509, y: -0.0029919164, z: 0.00011636048}
+      rotation: {x: -0.07741855, y: 0.036119998, z: 0.03207145, w: 0.9958279}
+      scale: {x: 0.9999992, y: 0.99999887, z: 0.9999997}
+    - name: Psylocke2_rig:MiddleFinger1_R
+      parentName: Psylocke2_rig:metacarpal2_R
+      position: {x: -0.059004433, y: 7.105427e-17, z: -5.684342e-16}
+      rotation: {x: 0.029609, y: -0.03639342, z: 0.067265555, w: 0.99663144}
+      scale: {x: 1.0000002, y: 0.9999998, z: 1.0000006}
+    - name: Psylocke2_rig:MiddleFinger2_R
+      parentName: Psylocke2_rig:MiddleFinger1_R
+      position: {x: -0.03859034, y: 2.842171e-16, z: -1.6342482e-15}
+      rotation: {x: 0.0003183612, y: -0.04100051, z: -0.000015852496, w: 0.9991591}
+      scale: {x: 1.0000021, y: 1.0000012, z: 1.0000014}
+    - name: Psylocke2_rig:MiddleFinger3_R
+      parentName: Psylocke2_rig:MiddleFinger2_R
+      position: {x: -0.031085726, y: -7.105427e-17, z: 0}
+      rotation: {x: 0.00046430342, y: -0.022516599, z: -0.000020158537, w: 0.9997464}
+      scale: {x: 1.0000006, y: 1.0000006, z: 0.9999997}
+    - name: Psylocke2_rig:ThumbFinger1_R
+      parentName: Psylocke2_rig:Wrist_R
+      position: {x: -0.021581192, y: 0.030320255, z: -0.016557304}
+      rotation: {x: -0.49326476, y: 0.14243373, z: -0.28507918, w: 0.80940247}
+      scale: {x: 0.9999978, y: 0.99999994, z: 0.99999875}
+    - name: Psylocke2_rig:ThumbFinger2_R
+      parentName: Psylocke2_rig:ThumbFinger1_R
+      position: {x: -0.043911647, y: 3.459865e-10, z: -7.105427e-16}
+      rotation: {x: -0.000000089406946, y: -0.034545355, z: 0.00000026449555, w: 0.9994032}
+      scale: {x: 1.0000006, y: 1.0000001, z: 0.9999992}
+    - name: Psylocke2_rig:ThumbFinger3_R
+      parentName: Psylocke2_rig:ThumbFinger2_R
+      position: {x: -0.030920953, y: 1.985434e-12, z: -1.4210854e-16}
+      rotation: {x: -0.00000002051266, y: -0.054575734, z: 0.00000046794864, w: 0.99850965}
+      scale: {x: 1.0000017, y: 1.0000013, z: 0.99999994}
+    - name: Psylocke2_rig:metacarpal3_R
+      parentName: Psylocke2_rig:Wrist_R
+      position: {x: -0.02861754, y: -0.010945048, z: 0.0013913932}
+      rotation: {x: -0.024701964, y: 0.005053758, z: 0.1813793, w: 0.98309}
+      scale: {x: 0.99999875, y: 0.9999986, z: 0.9999996}
+    - name: Psylocke2_rig:RingFinger1_R
+      parentName: Psylocke2_rig:metacarpal3_R
+      position: {x: -0.054344527, y: -3.1974422e-16, z: -4.2632563e-16}
+      rotation: {x: 0.09631279, y: -0.009417487, z: -0.08268627, w: 0.99186605}
+      scale: {x: 1.0000006, y: 1.0000011, z: 1.0000014}
+    - name: Psylocke2_rig:RingFinger2_R
+      parentName: Psylocke2_rig:RingFinger1_R
+      position: {x: -0.039214984, y: 3.907985e-16, z: 3.694822e-15}
+      rotation: {x: -0.0024591384, y: -0.04309686, z: 0.000100516234, w: 0.9990679}
+      scale: {x: 1.0000004, y: 0.9999996, z: 1.0000005}
+    - name: Psylocke2_rig:RingFinger3_R
+      parentName: Psylocke2_rig:RingFinger2_R
+      position: {x: -0.026512517, y: -8.5265126e-16, z: -2.9842794e-15}
+      rotation: {x: 0.0049311086, y: -0.05231676, z: -0.00033087417, w: 0.99861836}
+      scale: {x: 1.000001, y: 1, z: 1.0000013}
+    - name: Psylocke2_rig:metacarpal4_R
+      parentName: Psylocke2_rig:Wrist_R
+      position: {x: -0.023505451, y: -0.018667657, z: -0.0028844182}
+      rotation: {x: 0.22889975, y: 0.020023955, z: 0.3100223, w: 0.92254543}
+      scale: {x: 1, y: 0.9999997, z: 1.0000014}
+    - name: Psylocke2_rig:PinkyFinger1_R
+      parentName: Psylocke2_rig:metacarpal4_R
+      position: {x: -0.058159173, y: -7.105427e-17, z: -2.1316282e-16}
+      rotation: {x: -0.14917272, y: -0.015918493, z: -0.22090673, w: 0.96368796}
+      scale: {x: 1.0000006, y: 1.000001, z: 1.000001}
+    - name: Psylocke2_rig:PinkyFinger2_R
+      parentName: Psylocke2_rig:PinkyFinger1_R
+      position: {x: -0.024737451, y: -1.9095835e-16, z: -1.4210854e-16}
+      rotation: {x: 0.0023536514, y: -0.037558734, z: -0.0000547403, w: 0.99929166}
+      scale: {x: 0.99999803, y: 0.9999985, z: 0.99999934}
+    - name: Psylocke2_rig:PinkyFinger3_R
+      parentName: Psylocke2_rig:PinkyFinger2_R
+      position: {x: -0.023804897, y: -8.8817837e-17, z: 1.563194e-15}
+      rotation: {x: 0.018732114, y: -0.03198294, z: -0.00042730564, w: 0.99931276}
+      scale: {x: 1.0000008, y: 0.9999996, z: 0.9999997}
+    - name: Psylocke2_rig:pantFixBack2_1_M
+      parentName: Psylocke2_rig:Root_M
+      position: {x: 0.11242254, y: -0.11014802, z: 2.4868996e-16}
+      rotation: {x: -0, y: -0, z: 0.88577235, w: 0.46412006}
+      scale: {x: 1.0000011, y: 1.0000002, z: 1.0000012}
+    - name: Psylocke2_rig:beltFix_M
+      parentName: Psylocke2_rig:Root_M
+      position: {x: -0.050047807, y: 0.0715041, z: -1.7763567e-16}
+      rotation: {x: 0.00000003188433, y: -0.000000008134446, z: -0.6987436, w: 0.7153723}
+      scale: {x: 1.0000014, y: 1.0000031, z: 1.0000019}
+    - name: Psylocke2_rig:beltFix2_R
+      parentName: Psylocke2_rig:Root_M
+      position: {x: -0.048629902, y: 0.0011735772, z: -0.07900442}
+      rotation: {x: -0.5058446, y: 0.49408633, z: -0.5058446, w: -0.4940863}
+      scale: {x: 1.000002, y: 1, z: 1.0000015}
+    - name: Psylocke2_rig:beltFix4_M
+      parentName: Psylocke2_rig:Root_M
+      position: {x: -0.049707863, y: -0.066257745, z: 7.105427e-17}
+      rotation: {x: -0, y: -0.000000029802322, z: 0.7153723, w: 0.6987436}
+      scale: {x: 1.0000007, y: 1, z: 1.0000014}
+    - name: Psylocke2_rig:Geometry
+      parentName: Psylocke2_rig:Group
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:BeltBuckle_low
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:L_Eye
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:R_Eye
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:Bootstraps
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:TopBracers
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:TopBracersBottom
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:Bracers
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:Bootstrapstop
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:Bootstrapsbottom
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:Shirt001
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:Extract5_1
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:Brows2
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:hairSingle
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:hairBack
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:hairLeft
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:hairRight
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:eyelashUpper
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:eyeLashLower
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:head_m
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:teethLower
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:teethUpper
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:tongue
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:Boots_
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Psylocke2_rig:body_
+      parentName: Psylocke2_rig:Geometry
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: bats1:pCylinder1
+      parentName: attack_2(Clone)
+      position: {x: -0.43492484, y: 0.5583781, z: 0.51858383}
+      rotation: {x: -0.40355232, y: 0.36004975, z: -0.17248331, w: 0.8232613}
+      scale: {x: 2.9615464, y: 3.6836, z: 2.9615464}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -98,9 +2490,9 @@ ModelImporter:
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 2
+  animationType: 3
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
