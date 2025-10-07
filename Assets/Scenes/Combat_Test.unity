@@ -533,6 +533,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1024343530256240927, guid: 80fcee8355641164489b09ed815c068e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1359182351}
+    - targetCorrespondingSourceObject: {fileID: 1024343530256240927, guid: 80fcee8355641164489b09ed815c068e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1359182356}
   m_SourcePrefab: {fileID: 100100000, guid: 80fcee8355641164489b09ed815c068e, type: 3}
 --- !u!1 &757083833
 GameObject:
@@ -1310,6 +1313,25 @@ MonoBehaviour:
   staminaBar: {fileID: 339359044}
   healthText: {fileID: 1577833076}
   staminaText: {fileID: 2098278237}
+--- !u!114 &1359182356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359182346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39ba6f4fd1d923245b3c7eda76971e8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMagnet
+  detectionRadius: 8
+  magnetSpeed: 30
+  faceSpeed: 20
+  minAttackRange: 2
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &1392010271
 GameObject:
   m_ObjectHideFlags: 0
