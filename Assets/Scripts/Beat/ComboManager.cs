@@ -68,7 +68,7 @@ public class ComboManager : MonoBehaviour
         comboTimer = 0f;
 
         UpdateUI();
-        Debug.Log("Combo Reset!");
+//        Debug.Log("Combo Reset!");
     }
 
     private void UpdateUI()

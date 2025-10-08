@@ -22,7 +22,7 @@ public class BeatScheduler : MonoBehaviour
         {
             beatCount++;
             OnBeat?.Invoke(beatCount);
-            Debug.Log("Beat: " + beatCount);
+//            Debug.Log("Beat: " + beatCount);
             nextBeatTime += beatInterval;
         }
     }

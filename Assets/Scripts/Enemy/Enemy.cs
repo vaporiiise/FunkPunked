@@ -1,30 +1,87 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    public int health = 3;
+    [Header("Stats")]
+    public float maxHealth = 5f;
+    private float currentHealth;
 
-    public void TakeHit()
+    [Header("Movement")]
+    public float walkRadius = 5f;
+    public float idleTime = 2f;
+
+    [Header("References")]
+   // public EnemyHealthBar healthBar;
+    private NavMeshAgent agent;
+    private Vector3 startPosition;
+    private float idleTimer;
+
+    [Header("Death Effect")]
+    public GameObject deathParticle; 
+    public float deathDestroyDelay = 1.5f; 
+
+    void Start()
     {
-        health--;
-        Debug.Log($"{gameObject.name} took a hit! Health = {health}");
+        currentHealth = maxHealth;
+        startPosition = transform.position;
+        agent = GetComponent<NavMeshAgent>();
 
-        if (health <= 0)
+       //if (healthBar != null)
+           // healthBar.SetMaxHealth(maxHealth);
+
+        Wander();
+    }
+
+    void Update()
+    {
+        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        {
+            idleTimer += Time.deltaTime;
+            if (idleTimer >= idleTime)
+            {
+                Wander();
+                idleTimer = 0f;
+            }
+        }
+    }
+
+    void Wander()
+    {
+        Vector3 randomDirection = Random.insideUnitSphere * walkRadius;
+        randomDirection += startPosition;
+
+        if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, walkRadius, 1))
+        {
+            agent.SetDestination(hit.position);
+        }
+    }
+
+    public void TakeDamage(float amount)
+    {
+        currentHealth -= amount;
+       // if (healthBar != null)
+          //  healthBar.SetHealth(currentHealth);
+
+        if (currentHealth <= 0)
         {
             Die();
         }
     }
 
-    public void Parried()
+    void Die()
     {
-        Debug.Log($"{gameObject.name} was parried!");
-        // Example: Stun or insta-kill
-        Die();
-    }
+        if (agent != null) agent.isStopped = true;
 
-    private void Die()
-    {
-        Debug.Log($"{gameObject.name} defeated!");
-        Destroy(gameObject);
+        if (deathParticle != null)
+        {
+            GameObject effect = Instantiate(deathParticle, transform.position, Quaternion.identity);
+            Destroy(effect, 3f); 
+        }
+
+      //  if (healthBar != null)
+         //   Destroy(healthBar.gameObject);
+
+        Destroy(gameObject, deathDestroyDelay);
     }
 }
