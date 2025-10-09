@@ -11,8 +11,8 @@ public class PlayerStats : MonoBehaviour
     public float currentStamina;
 
     [Header("Stamina Regen Settings")]
-    public float staminaRegenRate = 15f; // per second
-    public float regenDelay = 1.5f; // time after stamina use before regen starts
+    public float staminaRegenRate = 15f; 
+    public float regenDelay = 1.5f; 
     private float regenTimer = 0f;
 
     [Header("UI")]
@@ -45,7 +45,7 @@ public class PlayerStats : MonoBehaviour
     public void UseStamina(float amount)
     {
         currentStamina = Mathf.Clamp(currentStamina - amount, 0, maxStamina);
-        regenTimer = regenDelay; // ⏳ delay regen when stamina used
+        regenTimer = regenDelay; 
         UpdateUI();
     }
 
@@ -72,7 +72,6 @@ public class PlayerStats : MonoBehaviour
     private void Die()
     {
         Debug.Log("Player Died!");
-        // Add respawn or death logic here later
     }
 
     private void UpdateUI()

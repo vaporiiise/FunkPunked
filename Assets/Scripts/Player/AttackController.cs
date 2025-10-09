@@ -8,13 +8,13 @@ public class AttackController : MonoBehaviour
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private ComboManager comboManager;
 
-    [Header("Timing Windows (seconds)")]
+    [Header("Timing Windows")]
     public float attackWindow = 0.18f;
     public float parryWindow = 0.2f;
 
     [Header("Combat Settings")]
-    public float attackRange = 2f;          // Distance forward to hit
-    public float hitRadius = 1.2f;          // Width of the melee hit area
+    public float attackRange = 2f;          
+    public float hitRadius = 1.2f;          
     public LayerMask enemyLayer;
 
     [Header("Stamina Settings")]
@@ -31,7 +31,7 @@ public class AttackController : MonoBehaviour
     [EventRef] public string parryHitEvent;
     [EventRef] public string parryFailEvent;
 
-    // ───────────────────────────────────────────────
+    
     public void TryAttack()
     {
         bool perfect = scheduler != null && scheduler.IsInAttackWindow(attackWindow);
@@ -42,7 +42,6 @@ public class AttackController : MonoBehaviour
             HitEnemy();
             comboManager?.AddCombo();
 
-            // Alternate attack animations
             if (animator != null && attackTriggers.Length > 0)
             {
                 string trigger = attackTriggers[nextAttackIndex];
@@ -60,7 +59,7 @@ public class AttackController : MonoBehaviour
         }
     }
 
-    // ───────────────────────────────────────────────
+    
     public void TryParry()
     {
         bool perfect = scheduler != null && scheduler.IsInAttackWindow(parryWindow);
@@ -94,7 +93,7 @@ public class AttackController : MonoBehaviour
         }
     }
 
-    // ───────────────────────────────────────────────
+    
     private void HitEnemy()
     {
         Vector3 attackOrigin = transform.position + transform.forward * (attackRange * 0.5f);
@@ -118,7 +117,6 @@ public class AttackController : MonoBehaviour
         }
     }
 
-    // ───────────────────────────────────────────────
     private void ParryEnemy()
     {
         Vector3 attackOrigin = transform.position + transform.forward * (attackRange * 0.5f);
@@ -129,13 +127,12 @@ public class AttackController : MonoBehaviour
             Enemy enemy = hit.GetComponent<Enemy>();
             if (enemy != null)
             {
-                // Optional: enemy.Parried();
+                //enemy.Parried();
                 Debug.Log("Parried enemy: " + enemy.name);
             }
         }
     }
 
-    // ───────────────────────────────────────────────
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

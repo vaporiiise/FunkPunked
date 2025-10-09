@@ -7,7 +7,7 @@ using FMOD.Studio;
 public class ComboManager : MonoBehaviour
 {
     [Header("UI")]
-    public Image comboBar; // UI bar (set to Filled)
+    public Image comboBar; 
     public TextMeshProUGUI comboText;
 
     [Header("Combo Settings")]
@@ -25,7 +25,6 @@ public class ComboManager : MonoBehaviour
 
     void Start()
     {
-        // Start FMOD event only once (optional)
         if (!string.IsNullOrEmpty(fmodEvent))
         {
             musicInstance = RuntimeManager.CreateInstance(fmodEvent);

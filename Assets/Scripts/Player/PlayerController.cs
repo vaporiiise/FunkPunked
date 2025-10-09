@@ -15,8 +15,8 @@ public class PlayerController : MonoBehaviour
     private bool isDashing = false;
 
     [Header("Custom Gravity")]
-    public float fallMultiplier = 2.5f; // how fast you fall
-    public float lowJumpMultiplier = 2f; // short hop if you release jump early
+    public float fallMultiplier = 2.5f; 
+    public float lowJumpMultiplier = 2f; 
 
     [Header("References")]
     public AttackController attackController;
@@ -37,28 +37,23 @@ public class PlayerController : MonoBehaviour
         float v = Input.GetAxisRaw("Vertical");
         moveDirection = new Vector3(h, 0f, v).normalized;
 
-        // Handle running
         isRunning = Input.GetKey(KeyCode.LeftShift);
 
-        // Rotation
         if (moveDirection != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
 
-        // Attacks
         if (Input.GetKeyDown(KeyCode.Mouse0))
             attackController?.TryAttack();
 
         if (Input.GetKeyDown(KeyCode.Mouse1))
             attackController?.TryParry();
 
-        // Jump
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
             Jump();
 
-        // Dash
         if (Input.GetKeyDown(KeyCode.LeftControl) && !isDashing)
             StartCoroutine(Dash());
     }
@@ -76,7 +71,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z); // reset Y velocity
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z); 
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
@@ -84,12 +79,10 @@ public class PlayerController : MonoBehaviour
     {
         if (rb.linearVelocity.y < 0)
         {
-            // Faster fall
             rb.linearVelocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
         }
         else if (rb.linearVelocity.y > 0 && !Input.GetKey(KeyCode.Space))
         {
-            // Shorter jump when jump key is released
             rb.linearVelocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
         }
     }

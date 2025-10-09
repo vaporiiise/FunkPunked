@@ -48,6 +48,6 @@ public class BeatVisualizer : MonoBehaviour
     private void OnBeat(int beatIndex)
     {
         timer = 0f;
-        movingRight = !movingRight; // switch direction cleanly
+        movingRight = !movingRight; 
     }
 }

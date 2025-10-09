@@ -3,22 +3,20 @@ using UnityEngine;
 public class EnemyMagnet : MonoBehaviour
 {
     [Header("Magnet Settings")]
-    public float detectionRadius = 8f;      // How far player can detect enemies
-    public float magnetSpeed = 7f;          // How fast player moves toward enemy
-    public float faceSpeed = 10f;           // How fast player rotates toward enemy
-    public float minAttackRange = 2f;       // Stop moving when close enough
-    public LayerMask enemyLayer;            // Enemy layer
+    public float detectionRadius = 8f;      
+    public float magnetSpeed = 7f;          
+    public float faceSpeed = 10f;           
+    public float minAttackRange = 2f;       
+    public LayerMask enemyLayer;            
 
     private Transform targetEnemy;
     private bool isLockingOn;
 
     void Update()
     {
-        // Detect closest enemy every frame
         DetectClosestEnemy();
 
-        // Check for attack input
-        if (Input.GetMouseButtonDown(0)) // Left click = attack
+        if (Input.GetMouseButtonDown(0)) 
         {
             if (targetEnemy != null)
             {
@@ -26,13 +24,11 @@ public class EnemyMagnet : MonoBehaviour
             }
         }
 
-        // Move toward target only during attack lock
         if (isLockingOn && targetEnemy != null)
         {
             FaceTarget();
             MoveTowardTarget();
 
-            // stop if close enough
             float dist = Vector3.Distance(transform.position, targetEnemy.position);
             if (dist <= minAttackRange + 0.1f)
                 isLockingOn = false;

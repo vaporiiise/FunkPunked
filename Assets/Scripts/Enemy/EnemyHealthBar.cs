@@ -9,14 +9,13 @@ public class EnemyHealthBar : MonoBehaviour
 
     void Start()
     {
-        // Get the main camera once
         if (Camera.main != null)
             cam = Camera.main.transform;
     }
 
     public void SetMaxHealth(float value)
     {
-        maxHealth = Mathf.Max(1f, value); // avoid divide by zero
+        maxHealth = Mathf.Max(1f, value); 
         fillImage.fillAmount = 1f;
     }
 
@@ -27,11 +26,10 @@ public class EnemyHealthBar : MonoBehaviour
 
     void LateUpdate()
     {
-        // Face the camera but keep upright
         if (cam != null)
         {
             Vector3 dir = transform.position - cam.position;
-            dir.y = 0; // keeps it from tilting up/down
+            dir.y = 0; 
             transform.rotation = Quaternion.LookRotation(dir);
         }
     }

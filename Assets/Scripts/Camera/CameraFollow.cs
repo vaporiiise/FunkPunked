@@ -17,16 +17,13 @@ public class CameraFollow : MonoBehaviour
     {
         if (target == null) return;
 
-        // Smooth position follow
         Vector3 desiredPosition = target.position + offset;
         transform.position = Vector3.Lerp(transform.position, desiredPosition, followSpeed * Time.deltaTime);
 
-        // Calculate desired rotation
         Vector3 lookPoint = target.position + new Vector3(0, lookYOffset, 0);
         Vector3 direction = (lookPoint - transform.position).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
 
-        // Smooth rotation
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 }

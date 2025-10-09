@@ -3,12 +3,12 @@ using System;
 
 public class BeatScheduler : MonoBehaviour
 {
-    public float bpm = 120f; // set same BPM as your song
-    private float beatInterval; // seconds per beat
+    public float bpm = 120f;
+    private float beatInterval; 
     private float nextBeatTime;
     private int beatCount;
 
-    public static event Action<int> OnBeat; // broadcasts beats
+    public static event Action<int> OnBeat; 
 
     void Start()
     {

@@ -10,7 +10,7 @@ public class MusicManager : MonoBehaviour
     void Start()
     {
         musicInstance = RuntimeManager.CreateInstance(musicEvent);
-        musicInstance.start(); // play once
+        musicInstance.start(); 
     }
 
     void OnDestroy()

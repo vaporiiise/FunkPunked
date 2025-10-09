@@ -13,7 +13,6 @@ public class AlwaysFaceCamera : MonoBehaviour
     {
         if (!mainCam) return;
 
-        // Make the object face the camera directly
         transform.forward = mainCam.transform.forward;
     }
 }
