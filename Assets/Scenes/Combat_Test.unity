@@ -976,6 +976,10 @@ PrefabInstance:
       value: event:/BatHit
       objectReference: {fileID: 0}
     - target: {fileID: 2129139900826164991, guid: 80fcee8355641164489b09ed815c068e, type: 3}
+      propertyPath: knockbackForce
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 2129139900826164991, guid: 80fcee8355641164489b09ed815c068e, type: 3}
       propertyPath: enemyLayer.m_Bits
       value: 64
       objectReference: {fileID: 0}

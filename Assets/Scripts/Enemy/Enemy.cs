@@ -12,24 +12,19 @@ public class Enemy : MonoBehaviour
     public float idleTime = 2f;
 
     [Header("References")]
-   // public EnemyHealthBar healthBar;
     private NavMeshAgent agent;
     private Vector3 startPosition;
     private float idleTimer;
 
     [Header("Death Effect")]
-    public GameObject deathParticle; 
-    public float deathDestroyDelay = 1.5f; 
+    public GameObject deathParticle;
+    public float deathDestroyDelay = 1.5f;
 
     void Start()
     {
         currentHealth = maxHealth;
         startPosition = transform.position;
         agent = GetComponent<NavMeshAgent>();
-
-       //if (healthBar != null)
-           // healthBar.SetMaxHealth(maxHealth);
-
         Wander();
     }
 
@@ -60,8 +55,6 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float amount)
     {
         currentHealth -= amount;
-       // if (healthBar != null)
-          //  healthBar.SetHealth(currentHealth);
 
         if (currentHealth <= 0)
         {
@@ -71,16 +64,14 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
-        if (agent != null) agent.isStopped = true;
+        if (agent != null)
+            agent.isStopped = true;
 
         if (deathParticle != null)
         {
             GameObject effect = Instantiate(deathParticle, transform.position, Quaternion.identity);
-            Destroy(effect, 3f); 
+            Destroy(effect, 3f);
         }
-
-      //  if (healthBar != null)
-         //   Destroy(healthBar.gameObject);
 
         Destroy(gameObject, deathDestroyDelay);
     }
