@@ -23,16 +23,31 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
-        startPosition = transform.position;
         agent = GetComponent<NavMeshAgent>();
-        Wander();
+        startPosition = transform.position;
+
+        // Only start wandering if agent is on a valid NavMesh
+        if (agent != null && agent.isOnNavMesh)
+        {
+            Wander();
+        }
+        else
+        {
+            Debug.LogWarning($"{name} is not placed on a NavMesh at Start!");
+        }
     }
 
     void Update()
     {
-        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        // Skip logic if agent is missing or not on a valid NavMesh
+        if (agent == null || !agent.isOnNavMesh)
+            return;
+
+        // Check remaining distance only if agent has an active path
+        if (!agent.pathPending && agent.hasPath && agent.remainingDistance < 0.5f)
         {
             idleTimer += Time.deltaTime;
+
             if (idleTimer >= idleTime)
             {
                 Wander();
@@ -43,10 +58,13 @@ public class Enemy : MonoBehaviour
 
     void Wander()
     {
+        if (agent == null || !agent.isOnNavMesh)
+            return;
+
         Vector3 randomDirection = Random.insideUnitSphere * walkRadius;
         randomDirection += startPosition;
 
-        if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, walkRadius, 1))
+        if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, walkRadius, NavMesh.AllAreas))
         {
             agent.SetDestination(hit.position);
         }
@@ -65,7 +83,10 @@ public class Enemy : MonoBehaviour
     void Die()
     {
         if (agent != null)
-            agent.isStopped = true;
+        {
+            if (agent.isOnNavMesh)
+                agent.isStopped = true;
+        }
 
         if (deathParticle != null)
         {
