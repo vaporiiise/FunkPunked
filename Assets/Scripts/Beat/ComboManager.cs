@@ -3,11 +3,12 @@ using UnityEngine.UI;
 using TMPro;
 using FMODUnity;
 using FMOD.Studio;
+using System;
 
 public class ComboManager : MonoBehaviour
 {
     [Header("UI")]
-    public Image comboBar; 
+    public Image comboBar;
     public TextMeshProUGUI comboText;
 
     [Header("Combo Settings")]
@@ -22,6 +23,8 @@ public class ComboManager : MonoBehaviour
 
     private EventInstance musicInstance;
     private bool fmodStarted = false;
+
+    public event Action OnComboReset;
 
     void Start()
     {
@@ -41,7 +44,6 @@ public class ComboManager : MonoBehaviour
         {
             comboTimer -= Time.deltaTime;
 
-            // Update UI bar
             if (comboBar != null)
                 comboBar.fillAmount = comboTimer / comboResetTime;
 
@@ -67,7 +69,9 @@ public class ComboManager : MonoBehaviour
         comboTimer = 0f;
 
         UpdateUI();
-//        Debug.Log("Combo Reset!");
+        Debug.Log("Combo Reset!");
+
+        OnComboReset?.Invoke();
     }
 
     private void UpdateUI()

@@ -21,42 +21,54 @@ public class Enemy : MonoBehaviour
     public float deathDestroyDelay = 1.5f;
     private EnemyHealthBar healthUI;
 
-
     void Start()
     {
         currentHealth = maxHealth;
         healthUI = GetComponentInChildren<EnemyHealthBar>();
         if (healthUI != null)
             healthUI.InitializeHealth((int)maxHealth);
+
         agent = GetComponent<NavMeshAgent>();
         startPosition = transform.position;
 
-        // Only start wandering if agent is on a valid NavMesh
+        // Try warping onto NavMesh if not already
+        if (agent != null && !agent.isOnNavMesh)
+        {
+            if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 2f, NavMesh.AllAreas))
+            {
+                agent.Warp(hit.position);
+                Debug.Log($"{name} warped to NavMesh at {hit.position}");
+            }
+            else
+            {
+                Debug.LogWarning($"{name} could not find NavMesh nearby!");
+            }
+        }
+
         if (agent != null && agent.isOnNavMesh)
         {
+            agent.stoppingDistance = 1f; // keeps small space from player
             Wander();
-        }
-        else
-        {
-            Debug.LogWarning($"{name} is not placed on a NavMesh at Start!");
         }
     }
 
     void Update()
     {
-        // Skip logic if agent is missing or not on a valid NavMesh
         if (agent == null || !agent.isOnNavMesh)
             return;
 
-        // Check remaining distance only if agent has an active path
-        if (!agent.pathPending && agent.hasPath && agent.remainingDistance < 0.5f)
+        // Check when the agent has reached its destination
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
-            idleTimer += Time.deltaTime;
-
-            if (idleTimer >= idleTime)
+            // Agent arrived
+            if (!agent.hasPath || agent.velocity.sqrMagnitude < 0.01f)
             {
-                Wander();
-                idleTimer = 0f;
+                idleTimer += Time.deltaTime;
+                if (idleTimer >= idleTime)
+                {
+                    Wander();
+                    idleTimer = 0f;
+                }
             }
         }
     }
@@ -72,6 +84,7 @@ public class Enemy : MonoBehaviour
         if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, walkRadius, NavMesh.AllAreas))
         {
             agent.SetDestination(hit.position);
+            idleTime = Random.Range(1f, 3f); // random idle variation
         }
     }
 
@@ -93,11 +106,8 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
-        if (agent != null)
-        {
-            if (agent.isOnNavMesh)
-                agent.isStopped = true;
-        }
+        if (agent != null && agent.isOnNavMesh)
+            agent.isStopped = true;
 
         if (deathParticle != null)
         {
@@ -106,5 +116,11 @@ public class Enemy : MonoBehaviour
         }
 
         Destroy(gameObject, deathDestroyDelay);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(startPosition == Vector3.zero ? transform.position : startPosition, walkRadius);
     }
 }

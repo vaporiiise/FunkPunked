@@ -16,26 +16,36 @@ public class AttackController : MonoBehaviour
 
     [Header("Combat Settings")]
     public float attackRange = 2f;
-    public float sphereRadius = 0.6f;
+    public float hitRadius = 0.8f;
     public float knockbackForce = 10f;
     public LayerMask enemyLayer;
 
     [Header("Animation")]
     public Animator animator;
-    public string[] attackTriggers = { "Attack1", "Attack2" };
+    public string[] attackTriggers = { "Attack1", "Attack2", "Attack3" };
     private int attackCount = 0;
 
-    [Header("Stamina")]
+    [Header("Stamina & Parry")]
     public float parryStaminaGain = 25f;
-    public float failedParryPenalty = 30f;
 
     [Header("FMOD Events")]
     [EventRef] public string attackHitEvent;
     [EventRef] public string parryHitEvent;
-    [EventRef] public string parryFailEvent;
 
     [Header("Attack Cooldown")]
     public float attackCooldown = 0.25f;
+
+    private void OnEnable()
+    {
+        if (comboManager != null)
+            comboManager.OnComboReset += ResetAttackCombo;
+    }
+
+    private void OnDisable()
+    {
+        if (comboManager != null)
+            comboManager.OnComboReset -= ResetAttackCombo;
+    }
 
     private void Update()
     {
@@ -58,7 +68,6 @@ public class AttackController : MonoBehaviour
             attackCount++;
             Debug.Log($"Perfect Attack #{attackCount}");
 
-            // Trigger animation
             if (animator && attackTriggers.Length > 0)
             {
                 string trigger = attackTriggers[(attackCount - 1) % attackTriggers.Length];
@@ -66,7 +75,6 @@ public class AttackController : MonoBehaviour
             }
 
             PerformAttack(attackCount);
-
             comboManager?.AddCombo();
 
             if (!string.IsNullOrEmpty(attackHitEvent))
@@ -93,21 +101,29 @@ public class AttackController : MonoBehaviour
 
     private void PerformAttack(int currentAttack)
     {
-        if (Physics.SphereCast(transform.position, sphereRadius, transform.forward, out RaycastHit hit, attackRange, enemyLayer))
+        Vector3 attackCenter = transform.position + transform.forward * (attackRange * 0.5f);
+        Collider[] hits = Physics.OverlapSphere(attackCenter, hitRadius, enemyLayer);
+
+        if (hits.Length == 0)
         {
-            Enemy enemy = hit.collider.GetComponent<Enemy>();
+            Debug.Log("No enemy hit!");
+            return;
+        }
+
+        foreach (Collider col in hits)
+        {
+            Enemy enemy = col.GetComponent<Enemy>();
             if (enemy != null)
             {
                 enemy.TakeDamage(1f);
 
-                // Apply knockback on every 3rd hit
                 if (currentAttack == 3)
                 {
                     Rigidbody enemyRb = enemy.GetComponent<Rigidbody>();
                     NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
 
                     if (agent != null)
-                        agent.enabled = false; 
+                        agent.enabled = false;
 
                     if (enemyRb != null)
                     {
@@ -117,15 +133,10 @@ public class AttackController : MonoBehaviour
                         Debug.Log("Knockback applied!");
                     }
 
-                    // Re-enable agent after short delay
                     if (agent != null)
                         StartCoroutine(ReenableAgent(agent, 0.8f));
                 }
             }
-        }
-        else
-        {
-            Debug.Log("No enemy hit!");
         }
     }
 
@@ -158,36 +169,38 @@ public class AttackController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Failed Parry!");
+            Debug.Log("Failed Parry! (No animation)");
             comboManager?.ResetCombo();
-
-            if (animator)
-                animator.SetTrigger("ParryFail");
-
-            playerStats?.UseStamina(failedParryPenalty);
-
-            if (!string.IsNullOrEmpty(parryFailEvent))
-                RuntimeManager.PlayOneShot(parryFailEvent, transform.position);
         }
     }
 
     private void ParryEnemy()
     {
-        if (Physics.SphereCast(transform.position, sphereRadius, transform.forward, out RaycastHit hit, attackRange, enemyLayer))
+        Vector3 parryCenter = transform.position + transform.forward * (attackRange * 0.5f);
+        Collider[] hits = Physics.OverlapSphere(parryCenter, hitRadius, enemyLayer);
+
+        foreach (Collider col in hits)
         {
-            Enemy enemy = hit.collider.GetComponent<Enemy>();
+            Enemy enemy = col.GetComponent<Enemy>();
             if (enemy != null)
             {
                 Debug.Log($"Enemy parried: {enemy.name}");
-                // stun enemy or feedbacks here
+                // Add stun or effects later
             }
         }
     }
 
-    // --- GIZMOS ---
+    private void ResetAttackCombo()
+    {
+        // 🔥 Reset attack combo animation when combo timer runs out
+        attackCount = 0;
+        Debug.Log("Attack combo reset due to combo timer expiry!");
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position + transform.forward * attackRange * 0.5f, sphereRadius);
+        Vector3 center = transform.position + transform.forward * (attackRange * 0.5f);
+        Gizmos.DrawWireSphere(center, hitRadius);
     }
 }
