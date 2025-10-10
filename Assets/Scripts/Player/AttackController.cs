@@ -1,6 +1,7 @@
 using UnityEngine;
 using FMODUnity;
 using UnityEngine.AI;
+using System.Collections;
 
 public class AttackController : MonoBehaviour
 {
@@ -63,51 +64,57 @@ public class AttackController : MonoBehaviour
 
         bool perfect = scheduler.IsInAttackWindow(attackWindow);
 
-        if (perfect)
+        if (!perfect)
         {
-            attackCount++;
-            Debug.Log($"Perfect Attack #{attackCount}");
+            Debug.Log("Missed Attack!");
+            comboManager?.ResetCombo();
+            return;
+        }
 
-            if (animator && attackTriggers.Length > 0)
-            {
-                string trigger = attackTriggers[(attackCount - 1) % attackTriggers.Length];
-                animator.SetTrigger(trigger);
-            }
+        attackCount++;
+        Debug.Log($"Perfect Attack #{attackCount}");
 
-            PerformAttack(attackCount);
+        // Trigger attack animation regardless of hit
+        if (animator && attackTriggers.Length > 0)
+        {
+            string trigger = attackTriggers[(attackCount - 1) % attackTriggers.Length];
+            animator.SetTrigger(trigger);
+        }
+
+        // Check if the attack actually hits an enemy
+        bool hitEnemy = PerformAttack(attackCount);
+
+        // Only add combo and play FMOD if hit
+        if (hitEnemy)
+        {
             comboManager?.AddCombo();
 
             if (!string.IsNullOrEmpty(attackHitEvent))
                 RuntimeManager.PlayOneShot(attackHitEvent, transform.position);
-
-            if (attackCount >= 3)
-                attackCount = 0;
-
-            StartCoroutine(AttackCooldown());
         }
-        else
-        {
-            Debug.Log("Missed Attack!");
-            comboManager?.ResetCombo();
-        }
+
+        if (attackCount >= attackTriggers.Length)
+            attackCount = 0;
+
+        StartCoroutine(AttackCooldown());
     }
 
-    private System.Collections.IEnumerator AttackCooldown()
+    private IEnumerator AttackCooldown()
     {
         canAttack = false;
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
     }
 
-    private void PerformAttack(int currentAttack)
+    private bool PerformAttack(int currentAttack)
     {
         Vector3 attackCenter = transform.position + transform.forward * (attackRange * 0.5f);
         Collider[] hits = Physics.OverlapSphere(attackCenter, hitRadius, enemyLayer);
 
         if (hits.Length == 0)
         {
-            Debug.Log("No enemy hit!");
-            return;
+            Debug.Log("Attack hit nothing!");
+            return false; // no enemy hit
         }
 
         foreach (Collider col in hits)
@@ -117,7 +124,8 @@ public class AttackController : MonoBehaviour
             {
                 enemy.TakeDamage(1f);
 
-                if (currentAttack == 3)
+                // Apply knockback on every 3rd attack
+                if (currentAttack % 3 == 0)
                 {
                     Rigidbody enemyRb = enemy.GetComponent<Rigidbody>();
                     NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
@@ -138,9 +146,11 @@ public class AttackController : MonoBehaviour
                 }
             }
         }
+
+        return true; // at least one enemy hit
     }
 
-    private System.Collections.IEnumerator ReenableAgent(NavMeshAgent agent, float delay)
+    private IEnumerator ReenableAgent(NavMeshAgent agent, float delay)
     {
         yield return new WaitForSeconds(delay);
         if (agent != null)
@@ -185,14 +195,15 @@ public class AttackController : MonoBehaviour
             if (enemy != null)
             {
                 Debug.Log($"Enemy parried: {enemy.name}");
-                // Add stun or effects later
+                // Stun enemy for 2 seconds
+                enemy.Stun(2f);
             }
         }
     }
 
+    // --- RESET ATTACK COMBO ON COMBO TIMER EXPIRY ---
     private void ResetAttackCombo()
     {
-        // 🔥 Reset attack combo animation when combo timer runs out
         attackCount = 0;
         Debug.Log("Attack combo reset due to combo timer expiry!");
     }
