@@ -19,10 +19,15 @@ public class Enemy : MonoBehaviour
     [Header("Death Effect")]
     public GameObject deathParticle;
     public float deathDestroyDelay = 1.5f;
+    private EnemyHealthBar healthUI;
+
 
     void Start()
     {
         currentHealth = maxHealth;
+        healthUI = GetComponentInChildren<EnemyHealthBar>();
+        if (healthUI != null)
+            healthUI.InitializeHealth((int)maxHealth);
         agent = GetComponent<NavMeshAgent>();
         startPosition = transform.position;
 
@@ -73,6 +78,12 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float amount)
     {
         currentHealth -= amount;
+
+        if (healthUI != null)
+        {
+            healthUI.PlayDamageEffect();
+            healthUI.UpdateHealth((int)currentHealth);
+        }
 
         if (currentHealth <= 0)
         {
