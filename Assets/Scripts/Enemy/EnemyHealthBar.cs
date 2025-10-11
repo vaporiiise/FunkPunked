@@ -63,7 +63,7 @@ public class EnemyHealthBar : MonoBehaviour
         while (elapsed < glitchDuration)
         {
             float offset = Random.Range(-glitchIntensity, glitchIntensity);
-            transform.localPosition = new Vector3(0, 2.3f, 0) + new Vector3(offset * 0.01f, 0, 0);
+            transform.localPosition = new Vector3(0, 2.75f, 0) + new Vector3(offset * 0.01f, 0, 0);
             foreach (var img in icons)
                 img.color = damageColor;
 
@@ -71,8 +71,7 @@ public class EnemyHealthBar : MonoBehaviour
             yield return null;
         }
 
-        // Reset position and color
-        transform.localPosition = new Vector3(0, 2.3f, 0);
+        transform.localPosition = new Vector3(0, 2.75f, 0);
         foreach (var img in icons)
             img.color = normalColor;
     }

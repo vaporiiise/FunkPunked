@@ -326,9 +326,9 @@ NavMeshAgent:
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
+  m_AutoTraverseOffMeshLink: 0
+  m_AutoBraking: 0
+  m_AutoRepath: 0
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
@@ -352,6 +352,7 @@ MonoBehaviour:
   attackRange: 2
   attackDelay: 0.5
   parryStunDuration: 2
+  damage: 10
   player: {fileID: 4771450057211255264, guid: 80fcee8355641164489b09ed815c068e, type: 3}
   animator: {fileID: 8108715368890518765}
   deathParticle: {fileID: 1653068312463967644, guid: f5e4e98ea7a2eed4b85d36d437db3e96, type: 3}

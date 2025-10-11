@@ -36,6 +36,11 @@ public class AttackController : MonoBehaviour
     [Header("Attack Cooldown")]
     public float attackCooldown = 0.25f;
 
+    // 🟩 Added parry active state
+    [Header("Parry Protection")]
+    public float parryActiveDuration = 0.6f; // how long player is immune after a parry
+    [HideInInspector] public bool isParrying = false;
+
     private void OnEnable()
     {
         if (comboManager != null)
@@ -74,17 +79,14 @@ public class AttackController : MonoBehaviour
         attackCount++;
         Debug.Log($"Perfect Attack #{attackCount}");
 
-        // Trigger attack animation regardless of hit
         if (animator && attackTriggers.Length > 0)
         {
             string trigger = attackTriggers[(attackCount - 1) % attackTriggers.Length];
             animator.SetTrigger(trigger);
         }
 
-        // Check if the attack actually hits an enemy
         bool hitEnemy = PerformAttack(attackCount);
 
-        // Only add combo and play FMOD if hit
         if (hitEnemy)
         {
             comboManager?.AddCombo();
@@ -114,7 +116,7 @@ public class AttackController : MonoBehaviour
         if (hits.Length == 0)
         {
             Debug.Log("Attack hit nothing!");
-            return false; // no enemy hit
+            return false;
         }
 
         foreach (Collider col in hits)
@@ -124,7 +126,6 @@ public class AttackController : MonoBehaviour
             {
                 enemy.TakeDamage(1f);
 
-                // Apply knockback on every 3rd attack
                 if (currentAttack % 3 == 0)
                 {
                     Rigidbody enemyRb = enemy.GetComponent<Rigidbody>();
@@ -147,7 +148,7 @@ public class AttackController : MonoBehaviour
             }
         }
 
-        return true; // at least one enemy hit
+        return true;
     }
 
     private IEnumerator ReenableAgent(NavMeshAgent agent, float delay)
@@ -162,7 +163,7 @@ public class AttackController : MonoBehaviour
     {
         bool perfect = scheduler.IsInAttackWindow(parryWindow);
 
-        if (perfect)
+        if (perfect && !isParrying)
         {
             Debug.Log("Perfect Parry!");
             comboManager?.AddCombo();
@@ -175,6 +176,7 @@ public class AttackController : MonoBehaviour
             if (!string.IsNullOrEmpty(parryHitEvent))
                 RuntimeManager.PlayOneShot(parryHitEvent, transform.position);
 
+            StartCoroutine(ParryActiveState()); // 🟩 Begin immunity window
             ParryEnemy();
         }
         else
@@ -182,6 +184,16 @@ public class AttackController : MonoBehaviour
             Debug.Log("Failed Parry! (No animation)");
             comboManager?.ResetCombo();
         }
+    }
+
+    // 🟩 Added — active parry duration
+    private IEnumerator ParryActiveState()
+    {
+        isParrying = true;
+        Debug.Log("🛡 Parry active — player immune to damage!");
+        yield return new WaitForSeconds(parryActiveDuration);
+        isParrying = false;
+        Debug.Log("⚠️ Parry window ended.");
     }
 
     private void ParryEnemy()
@@ -195,13 +207,11 @@ public class AttackController : MonoBehaviour
             if (enemy != null)
             {
                 Debug.Log($"Enemy parried: {enemy.name}");
-                // Stun enemy for 2 seconds
-                enemy.Stun(2f);
+                // Add stun logic here if needed
             }
         }
     }
 
-    // --- RESET ATTACK COMBO ON COMBO TIMER EXPIRY ---
     private void ResetAttackCombo()
     {
         attackCount = 0;
