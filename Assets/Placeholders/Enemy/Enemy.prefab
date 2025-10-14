@@ -345,16 +345,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75d4af82c41339f4dbcde0a92e9a0f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  attackWarningFeedback: {fileID: 85775744462859528}
   maxHealth: 5
+  damage: 10
+  attackRange: 2
+  attackCooldown: 2
+  warningBeatsBefore: 1
+  moveSpeed: 3.5
   walkRadius: 5
   idleTime: 2
-  attackRange: 2
-  attackDelay: 0.5
-  parryStunDuration: 2
-  damage: 10
   player: {fileID: 4771450057211255264, guid: 80fcee8355641164489b09ed815c068e, type: 3}
-  animator: {fileID: 8108715368890518765}
+  attackWarningFeedback: {fileID: 85775744462859528}
   deathParticle: {fileID: 1653068312463967644, guid: f5e4e98ea7a2eed4b85d36d437db3e96, type: 3}
   deathDestroyDelay: 1.5
 --- !u!136 &3387880983050043281
@@ -667,6 +667,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 381d4c8360da4e44dbc955004d343160, type: 3}
       propertyPath: m_Name
       value: Baton
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 381d4c8360da4e44dbc955004d343160, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3511747512056316633, guid: 381d4c8360da4e44dbc955004d343160, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

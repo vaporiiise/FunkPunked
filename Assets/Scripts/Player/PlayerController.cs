@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -12,14 +13,16 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 7f;
     public float dashForce = 15f;
     public float dashDuration = 0.2f;
-    private bool isDashing = false;
+    private bool isDashing;
 
-    [Header("Custom Gravity")]
-    public float fallMultiplier = 2.5f; 
-    public float lowJumpMultiplier = 2f; 
+    [Header("Gravity")]
+    public float fallMultiplier = 2.5f;
+    public float lowJumpMultiplier = 2f;
 
     [Header("References")]
     public AttackController attackController;
+    public PlayerStats playerStats;
+    public PlayerFeedbacks feedbacks;
 
     private Rigidbody rb;
     private Vector3 moveDirection;
@@ -33,29 +36,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        moveDirection = new Vector3(h, 0f, v).normalized;
-
-        isRunning = Input.GetKey(KeyCode.LeftShift);
-
-        if (moveDirection != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-            attackController?.TryAttack();
-
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-            attackController?.TryParry();
-
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
-            Jump();
-
-        if (Input.GetKeyDown(KeyCode.LeftControl) && !isDashing)
-            StartCoroutine(Dash());
+        HandleMovementInput();
+        HandleActions();
     }
 
     private void FixedUpdate()
@@ -69,41 +51,60 @@ public class PlayerController : MonoBehaviour
         ApplyBetterGravity();
     }
 
+    private void HandleMovementInput()
+    {
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+        moveDirection = new Vector3(h, 0f, v).normalized;
+        isRunning = Input.GetKey(KeyCode.LeftShift);
+
+        if (moveDirection != Vector3.zero)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(moveDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
+        }
+    }
+
+    private void HandleActions()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+            Jump();
+
+        if (Input.GetKeyDown(KeyCode.LeftControl) && !isDashing)
+            StartCoroutine(Dash());
+    }
+
     private void Jump()
     {
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z); 
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        feedbacks?.PlayJumpFeedback();
     }
 
-    private void ApplyBetterGravity()
-    {
-        if (rb.linearVelocity.y < 0)
-        {
-            rb.linearVelocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
-        }
-        else if (rb.linearVelocity.y > 0 && !Input.GetKey(KeyCode.Space))
-        {
-            rb.linearVelocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
-        }
-    }
-
-    private System.Collections.IEnumerator Dash()
+    private IEnumerator Dash()
     {
         isDashing = true;
-        Vector3 dashDirection = moveDirection != Vector3.zero ? moveDirection : transform.forward;
+        Vector3 dashDir = moveDirection != Vector3.zero ? moveDirection : transform.forward;
         float startTime = Time.time;
+
+        feedbacks?.PlayDashFeedback();
 
         while (Time.time < startTime + dashDuration)
         {
-            rb.MovePosition(rb.position + dashDirection * dashForce * Time.fixedDeltaTime);
+            rb.MovePosition(rb.position + dashDir * dashForce * Time.fixedDeltaTime);
             yield return null;
         }
 
         isDashing = false;
     }
 
-    private bool IsGrounded()
+    private void ApplyBetterGravity()
     {
-        return Physics.Raycast(transform.position, Vector3.down, 1.1f);
+        if (rb.linearVelocity.y < 0)
+            rb.linearVelocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
+        else if (rb.linearVelocity.y > 0 && !Input.GetKey(KeyCode.Space))
+            rb.linearVelocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
     }
+
+    private bool IsGrounded() => Physics.Raycast(transform.position, Vector3.down, 1.1f);
 }

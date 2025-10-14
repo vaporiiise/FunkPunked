@@ -36,9 +36,8 @@ public class AttackController : MonoBehaviour
     [Header("Attack Cooldown")]
     public float attackCooldown = 0.25f;
 
-    // 🟩 Added parry active state
     [Header("Parry Protection")]
-    public float parryActiveDuration = 0.6f; // how long player is immune after a parry
+    public float parryActiveDuration = 0.6f; 
     [HideInInspector] public bool isParrying = false;
 
     private void OnEnable()
@@ -121,7 +120,7 @@ public class AttackController : MonoBehaviour
 
         foreach (Collider col in hits)
         {
-            Enemy enemy = col.GetComponent<Enemy>();
+            EnemyHealth enemy = col.GetComponent<EnemyHealth>();            
             if (enemy != null)
             {
                 enemy.TakeDamage(1f);

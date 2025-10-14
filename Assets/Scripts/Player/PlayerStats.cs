@@ -28,6 +28,7 @@ public class PlayerStats : MonoBehaviour
     public Image staminaBar;
     public TMP_Text healthText;
     public TMP_Text staminaText;
+    [SerializeField] private PlayerFeedbacks feedbacks;
 
     private void Start()
     {
