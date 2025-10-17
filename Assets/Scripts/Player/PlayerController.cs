@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     public AttackController attackController;
     public PlayerStats playerStats;
     public PlayerFeedbacks feedbacks;
+    public Animator animator; // reference to Animator
 
     private Rigidbody rb;
     private Vector3 moveDirection;
@@ -45,7 +46,8 @@ public class PlayerController : MonoBehaviour
         if (!isDashing)
         {
             float currentSpeed = isRunning ? moveSpeed * runMultiplier : moveSpeed;
-            rb.MovePosition(rb.position + moveDirection * currentSpeed * Time.fixedDeltaTime);
+            Vector3 velocity = new Vector3(moveDirection.x * currentSpeed, rb.linearVelocity.y, moveDirection.z * currentSpeed);
+            rb.linearVelocity = velocity;
         }
 
         ApplyBetterGravity();
@@ -63,6 +65,10 @@ public class PlayerController : MonoBehaviour
             Quaternion targetRot = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
         }
+
+        // Drive animator (optional)
+        if(animator != null)
+            animator.SetFloat("Speed", new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude);
     }
 
     private void HandleActions()
@@ -84,16 +90,35 @@ public class PlayerController : MonoBehaviour
     private IEnumerator Dash()
     {
         isDashing = true;
+
+        // Disable animator so it doesn't fight movement
+        if(animator != null)
+            animator.enabled = false;
+
         Vector3 dashDir = moveDirection != Vector3.zero ? moveDirection : transform.forward;
-        float startTime = Time.time;
+        float dashEndTime = Time.time + dashDuration;
+
+        // Temporarily disable gravity and drag
+        float originalDrag = rb.linearDamping;
+        rb.linearDamping = 0f;
+        rb.useGravity = false;
 
         feedbacks?.PlayDashFeedback();
 
-        while (Time.time < startTime + dashDuration)
+        while (Time.time < dashEndTime)
         {
-            rb.MovePosition(rb.position + dashDir * dashForce * Time.fixedDeltaTime);
+            rb.linearVelocity = dashDir * dashForce;
             yield return null;
         }
+
+        // Restore physics
+        rb.useGravity = true;
+        rb.linearDamping = originalDrag;
+        rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+
+        // Re-enable animator
+        if(animator != null)
+            animator.enabled = true;
 
         isDashing = false;
     }
@@ -106,5 +131,6 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
     }
 
-    private bool IsGrounded() => Physics.Raycast(transform.position, Vector3.down, 1.1f);
+    private bool IsGrounded() =>
+        Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 1.2f);
 }
