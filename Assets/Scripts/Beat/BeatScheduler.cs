@@ -4,11 +4,11 @@ using System;
 public class BeatScheduler : MonoBehaviour
 {
     public float bpm = 120f;
-    private float beatInterval; 
+    private float beatInterval;
     private float nextBeatTime;
     private int beatCount;
 
-    public static event Action<int> OnBeat; 
+    public static event Action<int> OnBeat;
 
     void Start()
     {
@@ -18,11 +18,11 @@ public class BeatScheduler : MonoBehaviour
 
     void Update()
     {
-        if (Time.time >= nextBeatTime)
+        while (Time.time >= nextBeatTime)
         {
             beatCount++;
             OnBeat?.Invoke(beatCount);
-//            Debug.Log("Beat: " + beatCount);
+
             nextBeatTime += beatInterval;
         }
     }

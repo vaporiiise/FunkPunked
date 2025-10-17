@@ -75,6 +75,30 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
+--- !u!114 &-3351666305210984326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Beat1/MusicState
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: MusicState
+  StudioPath: 
+  Min: 0
+  Max: 3
+  Default: 0
+  ID:
+    data1: 3871962564
+    data2: 1167475032
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
 --- !u!114 &-3289476293758217394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,10 +114,10 @@ MonoBehaviour:
   Path: Assets/FMOD/FunkPunk_FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638955677205099637
+  lastModified: 638963521775359530
   FileSizes:
   - Name: Desktop
-    Value: 6435200
+    Value: 6932320
   Exists: 1
 --- !u!114 &-3104255747235420074
 MonoBehaviour:
@@ -110,10 +134,10 @@ MonoBehaviour:
   Path: Assets/FMOD/FunkPunk_FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638955677205124688
+  lastModified: 638963521775374523
   FileSizes:
   - Name: Desktop
-    Value: 900
+    Value: 1000
   Exists: 1
 --- !u!114 &-1917499820804274997
 MonoBehaviour:
@@ -203,12 +227,13 @@ MonoBehaviour:
   - {fileID: 8259628741526423851}
   - {fileID: 4852361086722243058}
   - {fileID: 9099960685458158504}
+  - {fileID: 5874455811358144091}
   EditorParameters: []
   MasterBanks:
   - {fileID: -3289476293758217394}
   StringsBanks:
   - {fileID: -3104255747235420074}
-  cacheTime: 638955677205124688
+  cacheTime: 638963521775374523
   cacheVersion: 131632
 --- !u!114 &450539101136993072
 MonoBehaviour:
@@ -257,6 +282,34 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 252081
+--- !u!114 &5874455811358144091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Beat1
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Beat1
+  Guid:
+    Data1: -358386881
+    Data2: 1127388499
+    Data3: -980522851
+    Data4: -1161823552
+  Banks:
+  - {fileID: -3289476293758217394}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -3351666305210984326}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 8001
 --- !u!114 &8259628741526423851
 MonoBehaviour:
   m_ObjectHideFlags: 0

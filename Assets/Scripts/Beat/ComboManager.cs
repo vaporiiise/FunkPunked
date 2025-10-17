@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using FMODUnity;
-using FMOD.Studio;
 using System;
 
 public class ComboManager : MonoBehaviour
@@ -14,29 +12,11 @@ public class ComboManager : MonoBehaviour
     [Header("Combo Settings")]
     public float comboResetTime = 3f;
 
-    [Header("FMOD Music (Optional)")]
-    [SerializeField] private string fmodEvent = "event:/YourMusic";
-
     private int comboCount = 0;
     private float comboTimer = 0f;
     private bool comboActive = false;
 
-    private EventInstance musicInstance;
-    private bool fmodStarted = false;
-
     public event Action OnComboReset;
-
-    void Start()
-    {
-        if (!string.IsNullOrEmpty(fmodEvent))
-        {
-            musicInstance = RuntimeManager.CreateInstance(fmodEvent);
-            musicInstance.start();
-            fmodStarted = true;
-        }
-
-        UpdateUI();
-    }
 
     void Update()
     {
@@ -60,6 +40,8 @@ public class ComboManager : MonoBehaviour
 
         UpdateUI();
         Debug.Log("x" + comboCount);
+
+        UpdateMusicState();
     }
 
     public void ResetCombo()
@@ -70,6 +52,8 @@ public class ComboManager : MonoBehaviour
 
         UpdateUI();
         Debug.Log("Combo Reset!");
+
+        MusicManager.Instance?.SetMusicState(0);
 
         OnComboReset?.Invoke();
     }
@@ -83,12 +67,15 @@ public class ComboManager : MonoBehaviour
             comboBar.fillAmount = comboActive ? comboTimer / comboResetTime : 0f;
     }
 
-    private void OnDestroy()
+    private void UpdateMusicState()
     {
-        if (fmodStarted)
-        {
-            musicInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-            musicInstance.release();
-        }
+        if (MusicManager.Instance == null) return;
+
+        if (comboCount >= 20)
+            MusicManager.Instance.SetMusicState(2, 1.5f); 
+        else if (comboCount >= 10)
+            MusicManager.Instance.SetMusicState(1, 1.5f);
+        else
+            MusicManager.Instance.SetMusicState(0, 1.5f);
     }
 }
