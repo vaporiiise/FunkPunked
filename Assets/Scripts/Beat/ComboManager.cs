@@ -71,11 +71,11 @@ public class ComboManager : MonoBehaviour
     {
         if (MusicManager.Instance == null) return;
 
-        if (comboCount >= 20)
-            MusicManager.Instance.SetMusicState(2, 1.5f); 
+        if (comboCount >= 35)
+            MusicManager.Instance.SetMusicState(2, 1.1f); 
         else if (comboCount >= 10)
-            MusicManager.Instance.SetMusicState(1, 1.5f);
+            MusicManager.Instance.SetMusicState(1, 1.2f);
         else
-            MusicManager.Instance.SetMusicState(0, 1.5f);
+            MusicManager.Instance.SetMusicState(0, 1.3f);
     }
 }
