@@ -9,21 +9,16 @@ public class AttackController : MonoBehaviour
     [SerializeField] private BeatScheduler scheduler;
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private ComboManager comboManager;
+    [SerializeField] private WeaponCollider weaponCollider; // 🟩 assign your weapon here
 
     [Header("Timing Windows (seconds)")]
     public float attackWindow = 0.18f;
     public float parryWindow = 0.2f;
     private bool canAttack = true;
 
-    [Header("Combat Settings")]
-    public float attackRange = 2f;
-    public float hitRadius = 0.8f;
-    public float knockbackForce = 10f;
-    public LayerMask enemyLayer;
-
     [Header("Animation")]
     public Animator animator;
-    public string[] attackTriggers = { "Attack1", "Attack2", "Attack3" };
+    public string[] attackTriggers = { "Attack1", "Attack2"};
     private int attackCount = 0;
 
     [Header("Stamina & Parry")]
@@ -37,8 +32,14 @@ public class AttackController : MonoBehaviour
     public float attackCooldown = 0.25f;
 
     [Header("Parry Protection")]
-    public float parryActiveDuration = 0.6f; 
+    public float parryActiveDuration = 0.6f;
     [HideInInspector] public bool isParrying = false;
+
+    private void Start()
+    {
+        if (weaponCollider)
+            weaponCollider.Initialize(this); // 🟩 link back to this controller
+    }
 
     private void OnEnable()
     {
@@ -61,13 +62,12 @@ public class AttackController : MonoBehaviour
             TryParry();
     }
 
-    // --- ATTACK SYSTEM ---
+    // --- ATTACK ---
     public void TryAttack()
     {
         if (!canAttack) return;
 
         bool perfect = scheduler.IsInAttackWindow(attackWindow);
-
         if (!perfect)
         {
             Debug.Log("Missed Attack!");
@@ -84,19 +84,6 @@ public class AttackController : MonoBehaviour
             animator.SetTrigger(trigger);
         }
 
-        bool hitEnemy = PerformAttack(attackCount);
-
-        if (hitEnemy)
-        {
-            comboManager?.AddCombo();
-
-            if (!string.IsNullOrEmpty(attackHitEvent))
-                RuntimeManager.PlayOneShot(attackHitEvent, transform.position);
-        }
-
-        if (attackCount >= attackTriggers.Length)
-            attackCount = 0;
-
         StartCoroutine(AttackCooldown());
     }
 
@@ -107,57 +94,15 @@ public class AttackController : MonoBehaviour
         canAttack = true;
     }
 
-    private bool PerformAttack(int currentAttack)
+    public void OnSuccessfulHit()
     {
-        Vector3 attackCenter = transform.position + transform.forward * (attackRange * 0.5f);
-        Collider[] hits = Physics.OverlapSphere(attackCenter, hitRadius, enemyLayer);
+        comboManager?.AddCombo();
 
-        if (hits.Length == 0)
-        {
-            Debug.Log("Attack hit nothing!");
-            return false;
-        }
-
-        foreach (Collider col in hits)
-        {
-            EnemyHealth enemy = col.GetComponent<EnemyHealth>();            
-            if (enemy != null)
-            {
-                enemy.TakeDamage(1f);
-
-                if (currentAttack % 3 == 0)
-                {
-                    Rigidbody enemyRb = enemy.GetComponent<Rigidbody>();
-                    NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
-
-                    if (agent != null)
-                        agent.enabled = false;
-
-                    if (enemyRb != null)
-                    {
-                        Vector3 knockDir = (enemy.transform.position - transform.position).normalized;
-                        knockDir.y = 0.3f;
-                        enemyRb.AddForce(knockDir * knockbackForce, ForceMode.Impulse);
-                        Debug.Log("Knockback applied!");
-                    }
-
-                    if (agent != null)
-                        StartCoroutine(ReenableAgent(agent, 0.8f));
-                }
-            }
-        }
-
-        return true;
+        if (!string.IsNullOrEmpty(attackHitEvent))
+            RuntimeManager.PlayOneShot(attackHitEvent, transform.position);
     }
 
-    private IEnumerator ReenableAgent(NavMeshAgent agent, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        if (agent != null)
-            agent.enabled = true;
-    }
-
-    // --- PARRY SYSTEM ---
+    // --- PARRY ---
     public void TryParry()
     {
         bool perfect = scheduler.IsInAttackWindow(parryWindow);
@@ -175,52 +120,27 @@ public class AttackController : MonoBehaviour
             if (!string.IsNullOrEmpty(parryHitEvent))
                 RuntimeManager.PlayOneShot(parryHitEvent, transform.position);
 
-            StartCoroutine(ParryActiveState()); // 🟩 Begin immunity window
-            ParryEnemy();
+            StartCoroutine(ParryActiveState());
         }
         else
         {
-            Debug.Log("Failed Parry! (No animation)");
+            Debug.Log("Failed Parry!");
             comboManager?.ResetCombo();
         }
     }
 
-    // 🟩 Added — active parry duration
     private IEnumerator ParryActiveState()
     {
         isParrying = true;
-        Debug.Log("🛡 Parry active — player immune to damage!");
+        Debug.Log("🛡 Parry active — player immune!");
         yield return new WaitForSeconds(parryActiveDuration);
         isParrying = false;
         Debug.Log("⚠️ Parry window ended.");
-    }
-
-    private void ParryEnemy()
-    {
-        Vector3 parryCenter = transform.position + transform.forward * (attackRange * 0.5f);
-        Collider[] hits = Physics.OverlapSphere(parryCenter, hitRadius, enemyLayer);
-
-        foreach (Collider col in hits)
-        {
-            Enemy enemy = col.GetComponent<Enemy>();
-            if (enemy != null)
-            {
-                Debug.Log($"Enemy parried: {enemy.name}");
-                // Add stun logic here if needed
-            }
-        }
     }
 
     private void ResetAttackCombo()
     {
         attackCount = 0;
         Debug.Log("Attack combo reset due to combo timer expiry!");
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Vector3 center = transform.position + transform.forward * (attackRange * 0.5f);
-        Gizmos.DrawWireSphere(center, hitRadius);
     }
 }

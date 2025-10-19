@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     public AttackController attackController;
     public PlayerStats playerStats;
     public PlayerFeedbacks feedbacks;
-    public Animator animator; // reference to Animator
+    public Animator animator;
 
     private Rigidbody rb;
     private Vector3 moveDirection;
@@ -60,15 +60,26 @@ public class PlayerController : MonoBehaviour
         moveDirection = new Vector3(h, 0f, v).normalized;
         isRunning = Input.GetKey(KeyCode.LeftShift);
 
+        // Rotate player toward movement direction
         if (moveDirection != Vector3.zero)
         {
             Quaternion targetRot = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
         }
 
-        // Drive animator (optional)
-        if(animator != null)
-            animator.SetFloat("Speed", new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude);
+        // ----- ANIMATOR UPDATES -----
+        if (animator != null)
+        {
+            // Calculate current ground movement speed
+            float currentSpeed = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
+
+            // Normalize to 0–1 range for smooth blending
+            float normalizedSpeed = Mathf.InverseLerp(0, moveSpeed * runMultiplier, currentSpeed);
+
+            animator.SetFloat("Speed", normalizedSpeed, 0.1f, Time.deltaTime);
+            animator.SetBool("IsGrounded", IsGrounded());
+            animator.SetBool("IsDashing", isDashing);
+        }
     }
 
     private void HandleActions()
@@ -91,14 +102,14 @@ public class PlayerController : MonoBehaviour
     {
         isDashing = true;
 
-        // Disable animator so it doesn't fight movement
-        if(animator != null)
+        // Disable animator so it doesn’t interfere with dash movement
+        if (animator != null)
             animator.enabled = false;
 
         Vector3 dashDir = moveDirection != Vector3.zero ? moveDirection : transform.forward;
         float dashEndTime = Time.time + dashDuration;
 
-        // Temporarily disable gravity and drag
+        // Temporarily disable drag & gravity
         float originalDrag = rb.linearDamping;
         rb.linearDamping = 0f;
         rb.useGravity = false;
@@ -117,7 +128,7 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
 
         // Re-enable animator
-        if(animator != null)
+        if (animator != null)
             animator.enabled = true;
 
         isDashing = false;
