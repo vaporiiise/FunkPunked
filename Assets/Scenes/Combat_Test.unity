@@ -1813,6 +1813,26 @@ PrefabInstance:
       propertyPath: comboText
       value: 
       objectReference: {fileID: 80842439}
+    - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
+      propertyPath: musicLevels.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
+      propertyPath: musicLevels.Array.data[1].musicLevel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
+      propertyPath: musicLevels.Array.data[2].musicLevel
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
+      propertyPath: musicLevels.Array.data[1].comboThreshold
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
+      propertyPath: musicLevels.Array.data[2].comboThreshold
+      value: 35
+      objectReference: {fileID: 0}
     - target: {fileID: 6173323494988133954, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
       propertyPath: m_Name
       value: ComboManager
@@ -1830,6 +1850,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3821696812829242569, guid: 7812189051e183c46abd48eacef729b6, type: 3}
+      propertyPath: parameters.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3821696812829242569, guid: 7812189051e183c46abd48eacef729b6, type: 3}
+      propertyPath: parameters.Array.data[0].parameterName
+      value: MusicState
+      objectReference: {fileID: 0}
     - target: {fileID: 8200764094649588089, guid: 7812189051e183c46abd48eacef729b6, type: 3}
       propertyPath: m_Name
       value: BeatManager

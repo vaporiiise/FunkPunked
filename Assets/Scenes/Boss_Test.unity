@@ -486,6 +486,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!114 &322201099 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3379177951918008168, guid: 7ea7aa2e4deebfd4cad2414590b00550, type: 3}
+  m_PrefabInstance: {fileID: 319714011}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &346277699
 GameObject:
   m_ObjectHideFlags: 0
@@ -898,6 +909,198 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &689435608
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 689435616}
+  - component: {fileID: 689435615}
+  - component: {fileID: 689435614}
+  - component: {fileID: 689435613}
+  - component: {fileID: 689435612}
+  - component: {fileID: 689435611}
+  - component: {fileID: 689435610}
+  - component: {fileID: 689435609}
+  m_Layer: 0
+  m_Name: Boss
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &689435609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689435608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88ab5f5de7931ca4a8e00c5765ba0cad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossController
+  player: {fileID: 1834720902}
+  chaseSpeed: 3
+  retreatDistance: 5
+  meleeRange: 2
+  projectileCooldown: 3
+  meleeCooldown: 3
+--- !u!114 &689435610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689435608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a6ba0f0cf9f2264d979e0fb6114d864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossMeleeAttack
+  damage: 10
+  attackRange: 2
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 8
+--- !u!114 &689435611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689435608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c0cc11f5b64c124db381d6d18076a1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossProjectileAttack
+  projectilePrefab: {fileID: 2215648855613845020, guid: 5274de140bd035f4ba564771d94d811d, type: 3}
+  firePoint: {fileID: 689435616}
+  projectileSpeed: 10
+--- !u!54 &689435612
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689435608}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &689435613
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689435608}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &689435614
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689435608}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &689435615
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689435608}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &689435616
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689435608}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.74, y: 2.6, z: -6.44}
+  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &744825362
 GameObject:
   m_ObjectHideFlags: 0
@@ -1133,17 +1336,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 821855711}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &829085775 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8768815662073929417, guid: 7ea7aa2e4deebfd4cad2414590b00550, type: 3}
-  m_PrefabInstance: {fileID: 319714011}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &868046111
 GameObject:
   m_ObjectHideFlags: 0
@@ -1283,6 +1475,18 @@ PrefabInstance:
       propertyPath: musicEvent.Guid.Data4
       value: 1837270957
       objectReference: {fileID: 0}
+    - target: {fileID: 3821696812829242569, guid: 7812189051e183c46abd48eacef729b6, type: 3}
+      propertyPath: parameters.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3821696812829242569, guid: 7812189051e183c46abd48eacef729b6, type: 3}
+      propertyPath: parameters.Array.data[0].fadeTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3821696812829242569, guid: 7812189051e183c46abd48eacef729b6, type: 3}
+      propertyPath: parameters.Array.data[0].parameterName
+      value: BossMusicState
+      objectReference: {fileID: 0}
     - target: {fileID: 5741452882637289000, guid: 7812189051e183c46abd48eacef729b6, type: 3}
       propertyPath: bpm
       value: 140
@@ -1401,7 +1605,7 @@ Transform:
   m_GameObject: {fileID: 1134766840}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1455,6 +1659,10 @@ PrefabInstance:
     - target: {fileID: 5548558789399057823, guid: 3310f0928a1354d488a73edfeb3dff49, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7531105974973088766, guid: 3310f0928a1354d488a73edfeb3dff49, type: 3}
+      propertyPath: maxHealth
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 7571807349956592850, guid: 3310f0928a1354d488a73edfeb3dff49, type: 3}
       propertyPath: m_Name
@@ -1516,11 +1724,35 @@ PrefabInstance:
     - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
       propertyPath: comboBar
       value: 
-      objectReference: {fileID: 829085775}
+      objectReference: {fileID: 322201099}
     - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
       propertyPath: comboText
       value: 
       objectReference: {fileID: 813816800}
+    - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
+      propertyPath: parameterName
+      value: BossMusicState
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
+      propertyPath: musicLevels.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
+      propertyPath: musicLevels.Array.data[1].musicLevel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
+      propertyPath: musicLevels.Array.data[2].musicLevel
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
+      propertyPath: musicLevels.Array.data[1].comboThreshold
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
+      propertyPath: musicLevels.Array.data[2].comboThreshold
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 6173323494988133954, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
       propertyPath: m_Name
       value: ComboManager
@@ -2377,3 +2609,4 @@ SceneRoots:
   - {fileID: 319714011}
   - {fileID: 1279792981}
   - {fileID: 744825366}
+  - {fileID: 689435616}

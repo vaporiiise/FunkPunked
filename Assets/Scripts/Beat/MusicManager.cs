@@ -7,9 +7,13 @@ public class MusicManager : MonoBehaviour
 {
     public static MusicManager Instance { get; private set; }
 
+    [Header("FMOD Music Event")]
     [SerializeField] private EventReference musicEvent;
-    private EventInstance musicInstance;
 
+    [Header("Music Parameters")]
+    [SerializeField] private MusicParameter[] parameters; // You can add multiple here
+
+    private EventInstance musicInstance;
     private Coroutine fadeCoroutine;
 
     void Awake()
@@ -29,11 +33,30 @@ public class MusicManager : MonoBehaviour
         musicInstance.start();
     }
 
-    public void SetMusicState(float targetValue, float fadeTime = 1.0f)
+    /// <summary>
+    /// Fades a parameter smoothly by name.
+    /// </summary>
+    public void SetMusicState(string parameterName, float targetValue, float fadeTime = -1f)
     {
+        // Find a default fade time from our list if none specified
+        if (fadeTime <= 0f)
+        {
+            foreach (var param in parameters)
+            {
+                if (param.parameterName == parameterName)
+                {
+                    fadeTime = param.fadeTime;
+                    break;
+                }
+            }
+            if (fadeTime <= 0f)
+                fadeTime = 1f; // fallback
+        }
+
         if (fadeCoroutine != null)
             StopCoroutine(fadeCoroutine);
-        fadeCoroutine = StartCoroutine(SmoothParameterChange("MusicState", targetValue, fadeTime));
+
+        fadeCoroutine = StartCoroutine(SmoothParameterChange(parameterName, targetValue, fadeTime));
     }
 
     private IEnumerator SmoothParameterChange(string param, float target, float duration)

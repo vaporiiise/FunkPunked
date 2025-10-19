@@ -2,6 +2,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using System.Collections.Generic;
+
+[System.Serializable]
+public class ComboMusicLevel
+{
+    [Tooltip("Minimum combo required to reach this level")]
+    public int comboThreshold = 10;
+
+    [Tooltip("FMOD parameter value to set when this combo is reached")]
+    public float musicLevel = 1f;
+}
 
 public class ComboManager : MonoBehaviour
 {
@@ -11,6 +22,14 @@ public class ComboManager : MonoBehaviour
 
     [Header("Combo Settings")]
     public float comboResetTime = 3f;
+
+    [Header("FMOD Parameter")]
+    [Tooltip("The FMOD parameter name to control (e.g., 'MusicState' or 'BossMusicState')")]
+    public string parameterName = "MusicState";
+
+    [Header("Combo → Music Mapping")]
+    [Tooltip("Define how combo thresholds affect music levels")]
+    public List<ComboMusicLevel> musicLevels = new List<ComboMusicLevel>();
 
     private int comboCount = 0;
     private float comboTimer = 0f;
@@ -24,11 +43,12 @@ public class ComboManager : MonoBehaviour
         {
             comboTimer -= Time.deltaTime;
 
-            if (comboBar != null)
-                comboBar.fillAmount = comboTimer / comboResetTime;
-
             if (comboTimer <= 0f)
+            {
                 ResetCombo();
+            }
+
+            UpdateUI();
         }
     }
 
@@ -46,14 +66,20 @@ public class ComboManager : MonoBehaviour
 
     public void ResetCombo()
     {
-        comboCount = 0;
         comboActive = false;
+
+        comboCount = 0;
         comboTimer = 0f;
 
-        UpdateUI();
+        if (comboText != null)
+            comboText.text = "x0";
+
+        if (comboBar != null)
+            comboBar.fillAmount = 0f;
+
         Debug.Log("Combo Reset!");
 
-        MusicManager.Instance?.SetMusicState(0);
+        MusicManager.Instance?.SetMusicState(parameterName, 0f);
 
         OnComboReset?.Invoke();
     }
@@ -62,20 +88,25 @@ public class ComboManager : MonoBehaviour
     {
         if (comboText != null)
             comboText.text = "x" + comboCount;
-
+    
         if (comboBar != null)
-            comboBar.fillAmount = comboActive ? comboTimer / comboResetTime : 0f;
+        {
+            float fill = Mathf.Clamp01(comboTimer / comboResetTime);
+            comboBar.fillAmount = fill;
+        }
     }
-
     private void UpdateMusicState()
     {
-        if (MusicManager.Instance == null) return;
+        if (MusicManager.Instance == null || musicLevels.Count == 0)
+            return;
 
-        if (comboCount >= 35)
-            MusicManager.Instance.SetMusicState(2, 1.1f); 
-        else if (comboCount >= 10)
-            MusicManager.Instance.SetMusicState(1, 1.2f);
-        else
-            MusicManager.Instance.SetMusicState(0, 1.3f);
+        float newLevel = 0f;
+        foreach (var level in musicLevels)
+        {
+            if (comboCount >= level.comboThreshold)
+                newLevel = level.musicLevel;
+        }
+
+        MusicManager.Instance.SetMusicState(parameterName, newLevel);
     }
 }
