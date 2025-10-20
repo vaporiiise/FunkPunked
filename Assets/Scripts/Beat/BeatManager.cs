@@ -20,14 +20,12 @@ public class BeatManager : MonoBehaviour
     private GCHandle timelineHandle;
     private TimelineInfo timelineInfo;
 
-    // Public beat data
     public static event Action<int> OnBeat;
-    public double BeatInterval { get; private set; } = 0.75f; // fallback = 80 BPM
+    public double BeatInterval { get; private set; } = 0.75f; 
     public double LastBeatDSPTime => timelineInfo.lastBeatDSPTime;
 
     private void Awake()
     {
-        // 🔑 Singleton pattern
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -44,7 +42,6 @@ public class BeatManager : MonoBehaviour
         musicInstance = RuntimeManager.CreateInstance(musicEvent);
         musicInstance.setUserData(GCHandle.ToIntPtr(timelineHandle));
 
-        // Listen for timeline markers
         musicInstance.setCallback(BeatEventCallback, EVENT_CALLBACK_TYPE.TIMELINE_MARKER);
 
         musicInstance.start();
@@ -119,7 +116,7 @@ public class BeatManager : MonoBehaviour
         public int timelinePosition = 0;
         public int beatIndex = 0;
         public double lastBeatDSPTime = 0;
-        public double beatInterval = 0.75; // default
+        public double beatInterval = 0.75; 
     }
     public void SetMusicParameter(string paramName, float value)
     {
