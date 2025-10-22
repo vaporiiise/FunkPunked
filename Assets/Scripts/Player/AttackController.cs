@@ -1,146 +1,148 @@
 using UnityEngine;
-using FMODUnity;
-using UnityEngine.AI;
 using System.Collections;
+using FMODUnity;
 
+[RequireComponent(typeof(PlayerStats))]
 public class AttackController : MonoBehaviour
 {
     [Header("References")]
+    [SerializeField] private Animator animator;
+    [SerializeField] private WeaponCollider weaponCollider;
+    [SerializeField] private GameObject weaponModel;
     [SerializeField] private BeatScheduler scheduler;
-    [SerializeField] private PlayerStats playerStats;
-    [SerializeField] private ComboManager comboManager;
-    [SerializeField] private WeaponCollider weaponCollider; // 🟩 assign your weapon here
+    [SerializeField] private ComboManager comboManager; // ✅ NEW
 
-    [Header("Timing Windows (seconds)")]
-    public float attackWindow = 0.18f;
-    public float parryWindow = 0.2f;
-    private bool canAttack = true;
-
-    [Header("Animation")]
-    public Animator animator;
-    public string[] attackTriggers = { "Attack1", "Attack2"};
-    private int attackCount = 0;
-
-    [Header("Stamina & Parry")]
-    public float parryStaminaGain = 25f;
+    private PlayerStats playerStats;
+    private Rigidbody rb;
 
     [Header("FMOD Events")]
-    [EventRef] public string attackHitEvent;
-    [EventRef] public string parryHitEvent;
+    [SerializeField] private EventReference attackSFX;
+    [SerializeField] private EventReference hitSFX;
+    [SerializeField] private EventReference parrySFX;
 
-    [Header("Attack Cooldown")]
-    public float attackCooldown = 0.25f;
+    [Header("Attack Settings")]
+    public float attackCooldown = 0.4f;
+    public float inCombatDuration = 2f;
+    public float comboResetTime = 1f;
+    public float hitStopDuration = 0.1f;  
+    public float hitSlowFactor = 0.05f;  
 
-    [Header("Parry Protection")]
-    public float parryActiveDuration = 0.6f;
+    private float combatTimer = 0f;
+    private float comboTimer = 0f;
+
+    private bool canAttack = true;
+    private int comboStep = 0;
     [HideInInspector] public bool isParrying = false;
 
     private void Start()
     {
-        if (weaponCollider)
-            weaponCollider.Initialize(this); // 🟩 link back to this controller
-    }
+        playerStats = GetComponent<PlayerStats>();
+        rb = GetComponent<Rigidbody>();
 
-    private void OnEnable()
-    {
-        if (comboManager != null)
-            comboManager.OnComboReset += ResetAttackCombo;
-    }
+        if (weaponCollider != null)
+        {
+            weaponCollider.Initialize(this);
+            weaponCollider.EnableDamage();
+        }
 
-    private void OnDisable()
-    {
-        if (comboManager != null)
-            comboManager.OnComboReset -= ResetAttackCombo;
+        SetWeaponVisible(false);
+
+        if (comboManager == null)
+            comboManager = FindObjectOfType<ComboManager>();
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-            TryAttack();
-
-        if (Input.GetMouseButtonDown(1))
-            TryParry();
+        HandleAttackInput();
+        HandleWeaponVisibilityTimer();
+        HandleComboTimer();
     }
 
-    // --- ATTACK ---
-    public void TryAttack()
+    private void HandleAttackInput()
     {
-        if (!canAttack) return;
-
-        bool perfect = scheduler.IsInAttackWindow(attackWindow);
-        if (!perfect)
-        {
-            Debug.Log("Missed Attack!");
-            comboManager?.ResetCombo();
-            return;
-        }
-
-        attackCount++;
-        Debug.Log($"Perfect Attack #{attackCount}");
-
-        if (animator && attackTriggers.Length > 0)
-        {
-            string trigger = attackTriggers[(attackCount - 1) % attackTriggers.Length];
-            animator.SetTrigger(trigger);
-        }
-
-        StartCoroutine(AttackCooldown());
+        if (Input.GetMouseButtonDown(0) && canAttack)
+            StartCoroutine(PerformAttack());
     }
 
-    private IEnumerator AttackCooldown()
+    private IEnumerator PerformAttack()
     {
         canAttack = false;
+        combatTimer = inCombatDuration;
+        comboTimer = comboResetTime;
+        SetWeaponVisible(true);
+
+        comboStep++;
+        if (comboStep > 2)
+            comboStep = 1;
+
+        animator?.SetTrigger("Attack" + comboStep);
+
+        if (!attackSFX.IsNull)
+            RuntimeManager.PlayOneShot(attackSFX, transform.position);
+
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
     }
 
+    private void HandleComboTimer()
+    {
+        if (comboTimer > 0)
+        {
+            comboTimer -= Time.deltaTime;
+            if (comboTimer <= 0)
+                comboStep = 0;
+        }
+    }
+
     public void OnSuccessfulHit()
     {
+        combatTimer = inCombatDuration;
+        SetWeaponVisible(true);
+
+        // ✅ Add combo here
         comboManager?.AddCombo();
 
-        if (!string.IsNullOrEmpty(attackHitEvent))
-            RuntimeManager.PlayOneShot(attackHitEvent, transform.position);
+        if (!hitSFX.IsNull)
+            RuntimeManager.PlayOneShot(hitSFX, transform.position);
+
+        StartCoroutine(HitStopCoroutine());
     }
 
-    // --- PARRY ---
-    public void TryParry()
+    private IEnumerator HitStopCoroutine()
     {
-        bool perfect = scheduler.IsInAttackWindow(parryWindow);
+        float originalTimeScale = Time.timeScale;
+        Time.timeScale = hitSlowFactor;
+        animator.speed = 0f;
+        if (rb != null) rb.linearVelocity = Vector3.zero;
 
-        if (perfect && !isParrying)
+        yield return new WaitForSecondsRealtime(hitStopDuration);
+
+        Time.timeScale = originalTimeScale;
+        animator.speed = 1f;
+    }
+
+    private void HandleWeaponVisibilityTimer()
+    {
+        if (combatTimer > 0)
         {
-            Debug.Log("Perfect Parry!");
-            comboManager?.AddCombo();
-
-            if (animator)
-                animator.SetTrigger("Parry");
-
-            playerStats?.RegainStamina(parryStaminaGain);
-
-            if (!string.IsNullOrEmpty(parryHitEvent))
-                RuntimeManager.PlayOneShot(parryHitEvent, transform.position);
-
-            StartCoroutine(ParryActiveState());
-        }
-        else
-        {
-            Debug.Log("Failed Parry!");
-            comboManager?.ResetCombo();
+            combatTimer -= Time.deltaTime;
+            if (combatTimer <= 0)
+                SetWeaponVisible(false);
         }
     }
 
-    private IEnumerator ParryActiveState()
+    public void SetWeaponVisible(bool visible)
     {
-        isParrying = true;
-        Debug.Log("🛡 Parry active — player immune!");
-        yield return new WaitForSeconds(parryActiveDuration);
-        isParrying = false;
-        Debug.Log("⚠️ Parry window ended.");
+        if (weaponModel != null)
+            weaponModel.SetActive(visible);
+
+        if (visible)
+            combatTimer = inCombatDuration;
     }
 
-    private void ResetAttackCombo()
+    public void PlayParrySound()
     {
-        attackCount = 0;
-        Debug.Log("Attack combo reset due to combo timer expiry!");
+        if (!parrySFX.IsNull)
+            RuntimeManager.PlayOneShot(parrySFX, transform.position);
     }
 }

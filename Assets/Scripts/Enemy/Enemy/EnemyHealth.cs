@@ -11,8 +11,8 @@ public class EnemyHealth : MonoBehaviour
     public float deathDestroyDelay = 1.5f;
 
     [Header("References")]
-    public EnemyHealthBar healthUI; 
-    private Animator animator;
+    public EnemyHealthBar healthUI;
+    private EnemyAnimatorHandler animHandler;
     private EnemyMovement movement;
 
     public void Initialize()
@@ -28,7 +28,7 @@ public class EnemyHealth : MonoBehaviour
 
     void Start()
     {
-        animator = GetComponentInChildren<Animator>();
+        animHandler = GetComponentInChildren<EnemyAnimatorHandler>();
         movement = GetComponent<EnemyMovement>();
 
         if (currentHealth == 0)
@@ -42,8 +42,10 @@ public class EnemyHealth : MonoBehaviour
         if (healthUI != null)
         {
             healthUI.PlayDamageEffect();
-            healthUI.UpdateHealth((int)currentHealth);
         }
+
+        animHandler?.PlayHit();
+        healthUI?.UpdateHealth((int)currentHealth);
 
         if (currentHealth <= 0)
             Die();
@@ -52,7 +54,7 @@ public class EnemyHealth : MonoBehaviour
     private void Die()
     {
         movement?.StopMovement(true);
-        animator?.SetTrigger("Die");
+        animHandler?.PlayDie();
 
         if (deathParticle != null)
         {

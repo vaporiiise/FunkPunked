@@ -10,7 +10,7 @@ public class EnemyMovement : MonoBehaviour
     public float idleTime = 2f;
 
     private NavMeshAgent agent;
-    private Animator animator;
+    private EnemyAnimatorHandler animHandler;
     private Transform player;
     private Vector3 startPosition;
     private float idleTimer;
@@ -24,7 +24,7 @@ public class EnemyMovement : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponentInChildren<Animator>();
+        animHandler = GetComponentInChildren<EnemyAnimatorHandler>();
 
         if (!agent.isOnNavMesh)
         {
@@ -50,8 +50,11 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
- //       if (animator != null)
-//            animator.SetBool("IsMoving", agent.velocity.sqrMagnitude > 0.01f);
+        if (animHandler != null)
+        {
+            float speedPercent = agent.velocity.magnitude / agent.speed;
+            animHandler.SetMoveSpeed(speedPercent);
+        }
     }
 
     public void StopMovement(bool stop) => agent.isStopped = stop;

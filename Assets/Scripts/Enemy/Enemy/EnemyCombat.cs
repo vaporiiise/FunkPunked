@@ -14,8 +14,8 @@ public class EnemyCombat : MonoBehaviour
     public MMF_Player attackWarningFeedback;
 
     private Transform player;
-    private Animator animator;
     private EnemyMovement movement;
+    private EnemyAnimatorHandler animHandler;
     private BeatScheduler beatScheduler;
 
     private bool isAttacking = false;
@@ -30,8 +30,8 @@ public class EnemyCombat : MonoBehaviour
 
     void Start()
     {
-        animator = GetComponentInChildren<Animator>();
         movement = GetComponent<EnemyMovement>();
+        animHandler = GetComponentInChildren<EnemyAnimatorHandler>();
 
         beatScheduler = FindObjectOfType<BeatScheduler>();
         if (beatScheduler != null)
@@ -66,7 +66,6 @@ public class EnemyCombat : MonoBehaviour
     {
         isAttacking = true;
         movement.StopMovement(true);
-
         FacePlayer();
 
         if (!hasWarned)
@@ -77,7 +76,7 @@ public class EnemyCombat : MonoBehaviour
 
         yield return new WaitUntil(() => lastBeatIndex >= currentBeat + warningBeatsBefore);
 
-        animator?.SetTrigger("Attacking");
+        animHandler?.PlayAttack();
 
         PlayerStats ps = player.GetComponent<PlayerStats>();
         if (ps != null)

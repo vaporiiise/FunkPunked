@@ -4,6 +4,10 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+    
+    [SerializeField] private float jumpAnticipationDelay = 0.2f;
+    
+    
     [Header("Movement")]
     public float moveSpeed = 5f;
     public float rotationSpeed = 10f;
@@ -14,6 +18,9 @@ public class PlayerController : MonoBehaviour
     public float dashForce = 15f;
     public float dashDuration = 0.2f;
     private bool isDashing;
+    private bool isJumping;
+    private bool isFalling;
+    private bool wasGrounded;
 
     [Header("Gravity")]
     public float fallMultiplier = 2.5f;
@@ -33,12 +40,14 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        wasGrounded = IsGrounded();
     }
 
     private void Update()
     {
         HandleMovementInput();
         HandleActions();
+        HandleAirState();
     }
 
     private void FixedUpdate()
@@ -60,20 +69,15 @@ public class PlayerController : MonoBehaviour
         moveDirection = new Vector3(h, 0f, v).normalized;
         isRunning = Input.GetKey(KeyCode.LeftShift);
 
-        // Rotate player toward movement direction
         if (moveDirection != Vector3.zero)
         {
             Quaternion targetRot = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
         }
 
-        // ----- ANIMATOR UPDATES -----
         if (animator != null)
         {
-            // Calculate current ground movement speed
             float currentSpeed = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
-
-            // Normalize to 0–1 range for smooth blending
             float normalizedSpeed = Mathf.InverseLerp(0, moveSpeed * runMultiplier, currentSpeed);
 
             animator.SetFloat("Speed", normalizedSpeed, 0.1f, Time.deltaTime);
@@ -95,21 +99,42 @@ public class PlayerController : MonoBehaviour
     {
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        isJumping = true;
+        animator?.SetTrigger("Jump");
         feedbacks?.PlayJumpFeedback();
+    }
+
+    private void HandleAirState()
+    {
+        bool grounded = IsGrounded();
+
+        if (!grounded && rb.linearVelocity.y < -0.1f && !isFalling)
+        {
+            isFalling = true;
+            animator?.SetBool("IsFalling", true);
+        }
+
+        if (wasGrounded == false && grounded)
+        {
+            isFalling = false;
+            isJumping = false;
+            animator?.SetBool("IsFalling", false);
+            animator?.SetTrigger("Land");
+        }
+
+        wasGrounded = grounded;
     }
 
     private IEnumerator Dash()
     {
         isDashing = true;
 
-        // Disable animator so it doesn’t interfere with dash movement
         if (animator != null)
-            animator.enabled = false;
+            animator.SetBool("IsDashing", true);
 
         Vector3 dashDir = moveDirection != Vector3.zero ? moveDirection : transform.forward;
         float dashEndTime = Time.time + dashDuration;
 
-        // Temporarily disable drag & gravity
         float originalDrag = rb.linearDamping;
         rb.linearDamping = 0f;
         rb.useGravity = false;
@@ -122,16 +147,12 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
 
-        // Restore physics
         rb.useGravity = true;
         rb.linearDamping = originalDrag;
         rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
 
-        // Re-enable animator
-        if (animator != null)
-            animator.enabled = true;
-
         isDashing = false;
+        animator?.SetBool("IsDashing", false);
     }
 
     private void ApplyBetterGravity()
@@ -142,6 +163,24 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
     }
 
-    private bool IsGrounded() =>
-        Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 1.2f);
+    private bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 1.2f);
+    }
+
+    public void OnHit()
+    {
+        animator?.SetTrigger("Hit");
+    }
+    
+    private IEnumerator PerformJumpWithDelay()
+    {
+        if (animator != null)
+            animator.SetTrigger("Jump");
+
+        yield return new WaitForSeconds(jumpAnticipationDelay);
+
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
 }

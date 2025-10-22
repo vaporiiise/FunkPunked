@@ -16,11 +16,14 @@ public class PlayerStats : MonoBehaviour
     public float regenDelay = 1.5f; 
     private float regenTimer = 0f;
 
-    [Header("Parry Settings")]
-    public bool IsParrying { get; private set; } = false;
-    public float parryDuration = 0.3f; // how long parry lasts
-    public float parryCooldown = 1f;   // time before can parry again
-    public float parryStaminaCost = 20f; // stamina used per parry
+    [Header("Defense Settings")]
+    public bool isBlocking = false;
+    public bool isParrying = false;
+    public float blockDamageReduction = 0.5f;   // 50% less damage
+    public float parryWindow = 0.1f;            // Beat window for parry
+    public float parryDuration = 0.3f;
+    public float parryCooldown = 1f;
+    public float parryStaminaCost = 20f;
     private bool canParry = true;
 
     [Header("UI")]
@@ -28,21 +31,39 @@ public class PlayerStats : MonoBehaviour
     public Image staminaBar;
     public TMP_Text healthText;
     public TMP_Text staminaText;
+
+    [Header("References")]
     [SerializeField] private PlayerFeedbacks feedbacks;
+    private AttackController attackController;
+    private BeatScheduler beatScheduler;
 
     private void Start()
     {
         currentHealth = maxHealth;
         currentStamina = maxStamina;
         UpdateUI();
+
+        attackController = GetComponent<AttackController>();
+        beatScheduler = FindObjectOfType<BeatScheduler>();
     }
 
     private void Update()
     {
         HandleStaminaRegen();
 
-        // Simple input test (you can call StartParry() from another script instead)
-        if (Input.GetKeyDown(KeyCode.E))
+        // ---- Blocking ----
+        if (Input.GetMouseButton(1))
+        {
+            isBlocking = true;
+            attackController?.SetWeaponVisible(true); // make sure weapon visible
+        }
+        else
+        {
+            isBlocking = false;
+        }
+
+        // ---- Parry ----
+        if (Input.GetMouseButtonDown(1))
         {
             TryParry();
         }
@@ -53,16 +74,25 @@ public class PlayerStats : MonoBehaviour
     // ----------------------------
     public void TakeDamage(float amount)
     {
-        // 🟩 Check if player is currently parrying
-        AttackController attackController = FindObjectOfType<AttackController>();
-        if (attackController != null && attackController.isParrying)
+        // 🛡 If parrying, block completely
+        if (isParrying)
         {
-            Debug.Log("🛡 Attack blocked — player is parrying!");
-            return; // No damage taken
+            Debug.Log("🟢 Parry Successful! No damage taken.");
+            attackController?.SetWeaponVisible(true);
+            return;
+        }
+
+        // 🧱 If blocking, reduce damage
+        if (isBlocking)
+        {
+            amount *= blockDamageReduction;
+            Debug.Log($"🧱 Blocked attack! Damage reduced to {amount}.");
         }
 
         currentHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
         UpdateUI();
+
+        attackController?.SetWeaponVisible(true);
 
         if (currentHealth <= 0)
             Die();
@@ -103,15 +133,13 @@ public class PlayerStats : MonoBehaviour
     // ----------------------------
     public void TryParry()
     {
-        if (!canParry)
-        {
-            Debug.Log("❌ Parry on cooldown!");
-            return;
-        }
+        if (!canParry) return;
+        if (currentStamina < parryStaminaCost) return;
 
-        if (currentStamina < parryStaminaCost)
+        // Check beat timing (for rhythm precision)
+        if (beatScheduler != null && !beatScheduler.IsInAttackWindow(parryWindow))
         {
-            Debug.Log("⚠️ Not enough stamina to parry!");
+            Debug.Log("❌ Parry failed – off-beat!");
             return;
         }
 
@@ -122,13 +150,13 @@ public class PlayerStats : MonoBehaviour
     private IEnumerator ParryRoutine()
     {
         canParry = false;
-        IsParrying = true;
-
+        isParrying = true;
         Debug.Log("🟢 Parry Active!");
-        // You can trigger MMF parry feedback here
+
+        attackController?.SetWeaponVisible(true);
 
         yield return new WaitForSeconds(parryDuration);
-        IsParrying = false;
+        isParrying = false;
         Debug.Log("🔴 Parry Ended.");
 
         yield return new WaitForSeconds(parryCooldown);
@@ -142,7 +170,7 @@ public class PlayerStats : MonoBehaviour
     private void Die()
     {
         Debug.Log("💀 Player Died!");
-        // Death logic here
+        // Trigger death animation or feedback here
     }
 
     private void UpdateUI()
