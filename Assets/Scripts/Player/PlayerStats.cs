@@ -19,8 +19,8 @@ public class PlayerStats : MonoBehaviour
     [Header("Defense Settings")]
     public bool isBlocking = false;
     public bool isParrying = false;
-    public float blockDamageReduction = 0.5f;   // 50% less damage
-    public float parryWindow = 0.1f;            // Beat window for parry
+    public float blockDamageReduction = 0.5f;   
+    public float parryWindow = 0.1f;            
     public float parryDuration = 0.3f;
     public float parryCooldown = 1f;
     public float parryStaminaCost = 20f;
@@ -55,7 +55,7 @@ public class PlayerStats : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             isBlocking = true;
-            attackController?.SetWeaponVisible(true); // make sure weapon visible
+            attackController?.SetWeaponVisible(true); 
         }
         else
         {
@@ -74,7 +74,6 @@ public class PlayerStats : MonoBehaviour
     // ----------------------------
     public void TakeDamage(float amount)
     {
-        // 🛡 If parrying, block completely
         if (isParrying)
         {
             Debug.Log("🟢 Parry Successful! No damage taken.");
@@ -82,7 +81,6 @@ public class PlayerStats : MonoBehaviour
             return;
         }
 
-        // 🧱 If blocking, reduce damage
         if (isBlocking)
         {
             amount *= blockDamageReduction;
@@ -136,7 +134,6 @@ public class PlayerStats : MonoBehaviour
         if (!canParry) return;
         if (currentStamina < parryStaminaCost) return;
 
-        // Check beat timing (for rhythm precision)
         if (beatScheduler != null && !beatScheduler.IsInAttackWindow(parryWindow))
         {
             Debug.Log("❌ Parry failed – off-beat!");

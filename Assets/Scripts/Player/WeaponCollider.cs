@@ -44,7 +44,6 @@ public class WeaponCollider : MonoBehaviour
         {
             enemy.TakeDamage(damage);
 
-            // Optional: play hit sound from AttackController
             owner?.OnSuccessfulHit();
 
             Debug.Log($"Hit enemy: {other.name}");

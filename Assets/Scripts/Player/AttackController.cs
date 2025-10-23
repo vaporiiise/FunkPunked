@@ -10,7 +10,7 @@ public class AttackController : MonoBehaviour
     [SerializeField] private WeaponCollider weaponCollider;
     [SerializeField] private GameObject weaponModel;
     [SerializeField] private BeatScheduler scheduler;
-    [SerializeField] private ComboManager comboManager; // ✅ NEW
+    [SerializeField] private ComboManager comboManager; 
 
     private PlayerStats playerStats;
     private Rigidbody rb;
@@ -99,7 +99,6 @@ public class AttackController : MonoBehaviour
         combatTimer = inCombatDuration;
         SetWeaponVisible(true);
 
-        // ✅ Add combo here
         comboManager?.AddCombo();
 
         if (!hitSFX.IsNull)
