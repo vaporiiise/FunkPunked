@@ -211,7 +211,6 @@ public class PlayerStats : MonoBehaviour
     private void Die()
     {
         Debug.Log("💀 Player Died!");
-        animHandler?.PlayDie();
     }
 
     private void UpdateUI()
