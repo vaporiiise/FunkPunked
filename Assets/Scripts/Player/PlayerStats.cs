@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using FMODUnity; // for FMOD integration
 
 public class PlayerStats : MonoBehaviour
 {
@@ -12,15 +13,15 @@ public class PlayerStats : MonoBehaviour
     public float currentStamina;
 
     [Header("Stamina Regen Settings")]
-    public float staminaRegenRate = 15f; 
-    public float regenDelay = 1.5f; 
+    public float staminaRegenRate = 15f;
+    public float regenDelay = 1.5f;
     private float regenTimer = 0f;
 
     [Header("Defense Settings")]
     public bool isBlocking = false;
     public bool isParrying = false;
-    public float blockDamageReduction = 0.5f;   
-    public float parryWindow = 0.1f;            
+    public float blockDamageReduction = 0.5f;
+    public float parryWindow = 0.1f;
     public float parryDuration = 0.3f;
     public float parryCooldown = 1f;
     public float parryStaminaCost = 20f;
@@ -32,19 +33,38 @@ public class PlayerStats : MonoBehaviour
     public TMP_Text healthText;
     public TMP_Text staminaText;
 
+    [Header("Hit Feedback UI")]
+    [Tooltip("Assign a full-screen UI image (red vignette) that pulses when hit.")]
+    public Image hitOverlay;
+    public float pulseDuration = 0.25f;
+    public Color hitColor = new Color(1f, 0f, 0f, 0.35f);
+
+    [Header("Audio")]
+    [Tooltip("FMOD event to play when the player is hit.")]
+    [SerializeField] private EventReference gotHitEvent;
+
     [Header("References")]
     [SerializeField] private PlayerFeedbacks feedbacks;
     private AttackController attackController;
     private BeatScheduler beatScheduler;
+    private EnemyAnimatorHandler animHandler;
+
+
+    private Coroutine pulseRoutine;
 
     private void Start()
     {
+        animHandler = GetComponentInChildren<EnemyAnimatorHandler>();
+
         currentHealth = maxHealth;
         currentStamina = maxStamina;
         UpdateUI();
 
         attackController = GetComponent<AttackController>();
         beatScheduler = FindObjectOfType<BeatScheduler>();
+
+        if (hitOverlay != null)
+            hitOverlay.color = new Color(1, 0, 0, 0); // start transparent
     }
 
     private void Update()
@@ -55,7 +75,7 @@ public class PlayerStats : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             isBlocking = true;
-            attackController?.SetWeaponVisible(true); 
+            attackController?.SetWeaponVisible(true);
         }
         else
         {
@@ -92,8 +112,32 @@ public class PlayerStats : MonoBehaviour
 
         attackController?.SetWeaponVisible(true);
 
+        // 🎵 FMOD Hit Sound
+        if (gotHitEvent.IsNull == false)
+            RuntimeManager.PlayOneShot(gotHitEvent, transform.position);
+
+        // 🔴 Red Pulse UI
+        if (hitOverlay != null)
+        {
+            if (pulseRoutine != null) StopCoroutine(pulseRoutine);
+            pulseRoutine = StartCoroutine(HitPulse());
+        }
+
         if (currentHealth <= 0)
             Die();
+    }
+
+    private IEnumerator HitPulse()
+    {
+        float t = 0f;
+        while (t < pulseDuration)
+        {
+            float alpha = Mathf.Sin((t / pulseDuration) * Mathf.PI); // quick pulse
+            hitOverlay.color = new Color(hitColor.r, hitColor.g, hitColor.b, hitColor.a * alpha);
+            t += Time.deltaTime;
+            yield return null;
+        }
+        hitOverlay.color = new Color(hitColor.r, hitColor.g, hitColor.b, 0f);
     }
 
     // ----------------------------
@@ -102,7 +146,7 @@ public class PlayerStats : MonoBehaviour
     public void UseStamina(float amount)
     {
         currentStamina = Mathf.Clamp(currentStamina - amount, 0, maxStamina);
-        regenTimer = regenDelay; 
+        regenTimer = regenDelay;
         UpdateUI();
     }
 
@@ -167,7 +211,7 @@ public class PlayerStats : MonoBehaviour
     private void Die()
     {
         Debug.Log("💀 Player Died!");
-        // Trigger death animation or feedback here
+        animHandler?.PlayDie();
     }
 
     private void UpdateUI()

@@ -1,24 +1,35 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using System.Collections.Generic;
 
 public class EnemyHealthBar : MonoBehaviour
 {
     [Header("UI Settings")]
-    public GameObject healthIconPrefab;       // Prefab for one health image
-    public Transform iconContainer;           // Where icons spawn (e.g., a Horizontal Layout Group)
+    [Tooltip("Assign the Image component that fills the health bar.")]
+    public Image healthFill; 
+
+    [Tooltip("Base color of the health bar.")]
     public Color normalColor = Color.white;
-    public Color damageColor = new Color(0.4f, 0.8f, 1f); // sky blue tint
+
+    [Tooltip("Color during damage glitch pulse.")]
+    public Color damageColor = new Color(0.4f, 0.8f, 1f);
+
+    [Header("Glitch Effect Settings")]
     public float glitchDuration = 0.25f;
     public float glitchIntensity = 15f;
 
-    private List<Image> icons = new List<Image>();
+    [Header("Bar Offset")]
+    public Vector3 barOffset = new Vector3(0, 2.75f, 0);
+
     private Camera mainCam;
+    private Coroutine glitchRoutine;
 
     void Start()
     {
         mainCam = Camera.main;
+
+        if (healthFill != null)
+            healthFill.color = normalColor;
     }
 
     void LateUpdate()
@@ -29,50 +40,47 @@ public class EnemyHealthBar : MonoBehaviour
 
     public void InitializeHealth(int maxHealth)
     {
-        foreach (Transform child in iconContainer)
-            Destroy(child.gameObject);
-
-        icons.Clear();
-
-        for (int i = 0; i < maxHealth; i++)
-        {
-            GameObject icon = Instantiate(healthIconPrefab, iconContainer);
-            Image img = icon.GetComponent<Image>();
-            img.color = normalColor;
-            icons.Add(img);
-        }
+        if (healthFill != null)
+            healthFill.fillAmount = 1f; 
     }
 
-    public void UpdateHealth(int currentHealth)
+    public void UpdateHealth(int currentHealth, int maxHealth)
     {
-        for (int i = 0; i < icons.Count; i++)
+        if (healthFill != null)
         {
-            icons[i].enabled = i < currentHealth;
+            float fill = Mathf.Clamp01((float)currentHealth / maxHealth);
+            healthFill.fillAmount = fill;
         }
     }
 
     public void PlayDamageEffect()
     {
-        StopAllCoroutines();
-        StartCoroutine(DamageGlitchEffect());
+        if (glitchRoutine != null)
+            StopCoroutine(glitchRoutine);
+
+        glitchRoutine = StartCoroutine(DamageGlitchEffect());
     }
 
     private IEnumerator DamageGlitchEffect()
     {
         float elapsed = 0f;
+
         while (elapsed < glitchDuration)
         {
-            float offset = Random.Range(-glitchIntensity, glitchIntensity);
-            transform.localPosition = new Vector3(0, 2.75f, 0) + new Vector3(offset * 0.01f, 0, 0);
-            foreach (var img in icons)
-                img.color = damageColor;
+            float offset = Random.Range(-glitchIntensity, glitchIntensity) * 0.01f;
+            transform.localPosition = barOffset + new Vector3(offset, 0, 0);
+
+            if (healthFill != null)
+                healthFill.color = damageColor;
 
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        transform.localPosition = new Vector3(0, 2.75f, 0);
-        foreach (var img in icons)
-            img.color = normalColor;
+        transform.localPosition = barOffset;
+        if (healthFill != null)
+            healthFill.color = normalColor;
+
+        glitchRoutine = null;
     }
 }

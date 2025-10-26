@@ -27,6 +27,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-6796479022820019106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GotHit
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/GotHit
+  Guid:
+    Data1: -1256066784
+    Data2: 1104731417
+    Data3: -137008246
+    Data4: -58800658
+  Banks:
+  - {fileID: 6326126798111910396}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-4073646449039154053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,12 +153,13 @@ MonoBehaviour:
   - {fileID: 5601807302464920152}
   - {fileID: -8482461169166973431}
   - {fileID: 3373623872734456651}
+  - {fileID: -6796479022820019106}
   EditorParameters: []
   MasterBanks:
   - {fileID: 6326126798111910396}
   StringsBanks:
   - {fileID: 4654748361121105318}
-  cacheTime: 638968047718938952
+  cacheTime: 638971069416302702
   cacheVersion: 131632
 --- !u!114 &2531008280749137170
 MonoBehaviour:
@@ -203,10 +231,10 @@ MonoBehaviour:
   Path: Assets/FMOD/FunkPunk_FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638968047718938952
+  lastModified: 638971069416302702
   FileSizes:
   - Name: Desktop
-    Value: 1152
+    Value: 1200
   Exists: 1
 --- !u!114 &5601807302464920152
 MonoBehaviour:
@@ -277,10 +305,10 @@ MonoBehaviour:
   Path: Assets/FMOD/FunkPunk_FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638968047718928952
+  lastModified: 638971069416282445
   FileSizes:
   - Name: Desktop
-    Value: 8496864
+    Value: 8503488
   Exists: 1
 --- !u!114 &8159992436633077874
 MonoBehaviour:
