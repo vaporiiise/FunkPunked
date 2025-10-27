@@ -47,7 +47,6 @@ public class PlayerController : MonoBehaviour
         HandleActions();
         HandleAirState();
 
-        // Update animator states every frame
         animHandler?.SetGrounded(IsGrounded());
         animHandler?.SetDashing(isDashing);
     }
@@ -61,9 +60,8 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = velocity;
         }
 
-        ApplyBetterGravity();
+        //ApplyBetterGravity();
 
-        // Blend tree update should be based on actual physics velocity
         float horizontalSpeed = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
         float normalizedSpeed = Mathf.InverseLerp(0, moveSpeed * runMultiplier, horizontalSpeed);
         animHandler?.UpdateMovement(normalizedSpeed);
