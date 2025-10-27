@@ -6,11 +6,11 @@ using FMODUnity;
 public class AttackController : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private Animator animator;
     [SerializeField] private WeaponCollider weaponCollider;
     [SerializeField] private GameObject weaponModel;
     [SerializeField] private BeatScheduler scheduler;
-    [SerializeField] private ComboManager comboManager; 
+    [SerializeField] private ComboManager comboManager;
+    [SerializeField] private PlayerAnimationHandler animHandler;
 
     private PlayerStats playerStats;
     private Rigidbody rb;
@@ -24,8 +24,8 @@ public class AttackController : MonoBehaviour
     public float attackCooldown = 0.4f;
     public float inCombatDuration = 2f;
     public float comboResetTime = 1f;
-    public float hitStopDuration = 0.1f;  
-    public float hitSlowFactor = 0.05f;  
+    public float hitStopDuration = 0.1f;
+    public float hitSlowFactor = 0.05f;
 
     private float combatTimer = 0f;
     private float comboTimer = 0f;
@@ -75,7 +75,7 @@ public class AttackController : MonoBehaviour
         if (comboStep > 2)
             comboStep = 1;
 
-        animator?.SetTrigger("Attack" + comboStep);
+        animHandler?.PlayAttack(comboStep);
 
         if (!attackSFX.IsNull)
             RuntimeManager.PlayOneShot(attackSFX, transform.position);
@@ -98,7 +98,6 @@ public class AttackController : MonoBehaviour
     {
         combatTimer = inCombatDuration;
         SetWeaponVisible(true);
-
         comboManager?.AddCombo();
 
         if (!hitSFX.IsNull)
@@ -111,13 +110,13 @@ public class AttackController : MonoBehaviour
     {
         float originalTimeScale = Time.timeScale;
         Time.timeScale = hitSlowFactor;
-        animator.speed = 0f;
+        animHandler?.SetSpeedMultiplier(0f);
         if (rb != null) rb.linearVelocity = Vector3.zero;
 
         yield return new WaitForSecondsRealtime(hitStopDuration);
 
         Time.timeScale = originalTimeScale;
-        animator.speed = 1f;
+        animHandler?.ResetSpeed();
     }
 
     private void HandleWeaponVisibilityTimer()

@@ -4,10 +4,8 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    
     [SerializeField] private float jumpAnticipationDelay = 0.2f;
-    
-    
+
     [Header("Movement")]
     public float moveSpeed = 5f;
     public float rotationSpeed = 10f;
@@ -30,7 +28,7 @@ public class PlayerController : MonoBehaviour
     public AttackController attackController;
     public PlayerStats playerStats;
     public PlayerFeedbacks feedbacks;
-    public Animator animator;
+    public PlayerAnimationHandler animHandler;
 
     private Rigidbody rb;
     private Vector3 moveDirection;
@@ -48,6 +46,10 @@ public class PlayerController : MonoBehaviour
         HandleMovementInput();
         HandleActions();
         HandleAirState();
+
+        // Update animator states every frame
+        animHandler?.SetGrounded(IsGrounded());
+        animHandler?.SetDashing(isDashing);
     }
 
     private void FixedUpdate()
@@ -60,6 +62,11 @@ public class PlayerController : MonoBehaviour
         }
 
         ApplyBetterGravity();
+
+        // Blend tree update should be based on actual physics velocity
+        float horizontalSpeed = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
+        float normalizedSpeed = Mathf.InverseLerp(0, moveSpeed * runMultiplier, horizontalSpeed);
+        animHandler?.UpdateMovement(normalizedSpeed);
     }
 
     private void HandleMovementInput()
@@ -74,33 +81,26 @@ public class PlayerController : MonoBehaviour
             Quaternion targetRot = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
         }
-
-        if (animator != null)
-        {
-            float currentSpeed = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
-            float normalizedSpeed = Mathf.InverseLerp(0, moveSpeed * runMultiplier, currentSpeed);
-
-            animator.SetFloat("Speed", normalizedSpeed, 0.1f, Time.deltaTime);
-            animator.SetBool("IsGrounded", IsGrounded());
-            animator.SetBool("IsDashing", isDashing);
-        }
     }
 
     private void HandleActions()
     {
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
-            Jump();
+            StartCoroutine(PerformJumpWithDelay()); // using anticipation delay now
 
         if (Input.GetKeyDown(KeyCode.LeftControl) && !isDashing)
             StartCoroutine(Dash());
     }
 
-    private void Jump()
+    private IEnumerator PerformJumpWithDelay()
     {
+        animHandler?.PlayJump();
+        yield return new WaitForSeconds(jumpAnticipationDelay);
+
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         isJumping = true;
-        animator?.SetTrigger("Jump");
+
         feedbacks?.PlayJumpFeedback();
     }
 
@@ -111,15 +111,15 @@ public class PlayerController : MonoBehaviour
         if (!grounded && rb.linearVelocity.y < -0.1f && !isFalling)
         {
             isFalling = true;
-            animator?.SetBool("IsFalling", true);
+            animHandler?.SetFalling(true);
         }
 
-        if (wasGrounded == false && grounded)
+        if (!wasGrounded && grounded)
         {
             isFalling = false;
             isJumping = false;
-            animator?.SetBool("IsFalling", false);
-            animator?.SetTrigger("Land");
+            animHandler?.SetFalling(false);
+            animHandler?.PlayLand();
         }
 
         wasGrounded = grounded;
@@ -128,9 +128,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator Dash()
     {
         isDashing = true;
-
-        if (animator != null)
-            animator.SetBool("IsDashing", true);
+        animHandler?.SetDashing(true);
 
         Vector3 dashDir = moveDirection != Vector3.zero ? moveDirection : transform.forward;
         float dashEndTime = Time.time + dashDuration;
@@ -152,7 +150,7 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
 
         isDashing = false;
-        animator?.SetBool("IsDashing", false);
+        animHandler?.SetDashing(false);
     }
 
     private void ApplyBetterGravity()
@@ -170,17 +168,6 @@ public class PlayerController : MonoBehaviour
 
     public void OnHit()
     {
-        animator?.SetTrigger("Hit");
-    }
-    
-    private IEnumerator PerformJumpWithDelay()
-    {
-        if (animator != null)
-            animator.SetTrigger("Jump");
-
-        yield return new WaitForSeconds(jumpAnticipationDelay);
-
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        animHandler?.PlayHit();
     }
 }

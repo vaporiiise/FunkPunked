@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
-using FMODUnity; // for FMOD integration
+using FMODUnity;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -34,44 +34,35 @@ public class PlayerStats : MonoBehaviour
     public TMP_Text staminaText;
 
     [Header("Hit Feedback UI")]
-    [Tooltip("Assign a full-screen UI image (red vignette) that pulses when hit.")]
     public Image hitOverlay;
     public float pulseDuration = 0.25f;
     public Color hitColor = new Color(1f, 0f, 0f, 0.35f);
 
     [Header("Audio")]
-    [Tooltip("FMOD event to play when the player is hit.")]
     [SerializeField] private EventReference gotHitEvent;
 
     [Header("References")]
     [SerializeField] private PlayerFeedbacks feedbacks;
-    private AttackController attackController;
-    private BeatScheduler beatScheduler;
-    private EnemyAnimatorHandler animHandler;
-
+    [SerializeField] private AttackController attackController;
+    [SerializeField] private BeatScheduler beatScheduler;
+    [SerializeField] private PlayerAnimationHandler animHandler;
 
     private Coroutine pulseRoutine;
 
     private void Start()
     {
-        animHandler = GetComponentInChildren<EnemyAnimatorHandler>();
-
         currentHealth = maxHealth;
         currentStamina = maxStamina;
         UpdateUI();
 
-        attackController = GetComponent<AttackController>();
-        beatScheduler = FindObjectOfType<BeatScheduler>();
-
         if (hitOverlay != null)
-            hitOverlay.color = new Color(1, 0, 0, 0); // start transparent
+            hitOverlay.color = new Color(1, 0, 0, 0);
     }
 
     private void Update()
     {
         HandleStaminaRegen();
 
-        // ---- Blocking ----
         if (Input.GetMouseButton(1))
         {
             isBlocking = true;
@@ -82,16 +73,10 @@ public class PlayerStats : MonoBehaviour
             isBlocking = false;
         }
 
-        // ---- Parry ----
         if (Input.GetMouseButtonDown(1))
-        {
             TryParry();
-        }
     }
 
-    // ----------------------------
-    // DAMAGE / HEALTH SYSTEM
-    // ----------------------------
     public void TakeDamage(float amount)
     {
         if (isParrying)
@@ -112,11 +97,9 @@ public class PlayerStats : MonoBehaviour
 
         attackController?.SetWeaponVisible(true);
 
-        // 🎵 FMOD Hit Sound
-        if (gotHitEvent.IsNull == false)
+        if (!gotHitEvent.IsNull)
             RuntimeManager.PlayOneShot(gotHitEvent, transform.position);
 
-        // 🔴 Red Pulse UI
         if (hitOverlay != null)
         {
             if (pulseRoutine != null) StopCoroutine(pulseRoutine);
@@ -132,7 +115,7 @@ public class PlayerStats : MonoBehaviour
         float t = 0f;
         while (t < pulseDuration)
         {
-            float alpha = Mathf.Sin((t / pulseDuration) * Mathf.PI); // quick pulse
+            float alpha = Mathf.Sin((t / pulseDuration) * Mathf.PI);
             hitOverlay.color = new Color(hitColor.r, hitColor.g, hitColor.b, hitColor.a * alpha);
             t += Time.deltaTime;
             yield return null;
@@ -140,9 +123,6 @@ public class PlayerStats : MonoBehaviour
         hitOverlay.color = new Color(hitColor.r, hitColor.g, hitColor.b, 0f);
     }
 
-    // ----------------------------
-    // STAMINA SYSTEM
-    // ----------------------------
     public void UseStamina(float amount)
     {
         currentStamina = Mathf.Clamp(currentStamina - amount, 0, maxStamina);
@@ -170,9 +150,6 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    // ----------------------------
-    // PARRY SYSTEM
-    // ----------------------------
     public void TryParry()
     {
         if (!canParry) return;
@@ -195,6 +172,7 @@ public class PlayerStats : MonoBehaviour
         Debug.Log("🟢 Parry Active!");
 
         attackController?.SetWeaponVisible(true);
+        animHandler?.PlayParry();
 
         yield return new WaitForSeconds(parryDuration);
         isParrying = false;
@@ -205,9 +183,6 @@ public class PlayerStats : MonoBehaviour
         Debug.Log("✅ Parry Ready Again.");
     }
 
-    // ----------------------------
-    // DEATH / UI
-    // ----------------------------
     private void Die()
     {
         Debug.Log("💀 Player Died!");
