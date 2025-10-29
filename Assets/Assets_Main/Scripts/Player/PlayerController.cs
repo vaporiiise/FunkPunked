@@ -19,6 +19,10 @@ public class PlayerController : MonoBehaviour
     private bool isJumping;
     private bool isFalling;
     private bool wasGrounded;
+    
+    [Header("Dash Effects")]
+    public GameObject dashSprite;
+    public TrailRenderer[] dashTrails;
 
     [Header("Gravity")]
     public float fallMultiplier = 2.5f;
@@ -60,16 +64,12 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = velocity;
         }
 
-        // Apply custom gravity for better jump feel
         ApplyBetterGravity();
 
-        // Calculate movement speed for animation blending
         float horizontalSpeed = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
 
-        // Map to 0–0.5 range to match blend tree thresholds (Idle 0 → Walk 0.25 → Run 0.5)
         float normalizedSpeed = Mathf.InverseLerp(0, moveSpeed * runMultiplier, horizontalSpeed) * 0.5f;
 
-        // Small deadzone to prevent jitter in idle animation
         if (normalizedSpeed < 0.05f)
             normalizedSpeed = 0f;
 
@@ -83,7 +83,6 @@ public class PlayerController : MonoBehaviour
         moveDirection = new Vector3(h, 0f, v).normalized;
         isRunning = Input.GetKey(KeyCode.LeftShift);
 
-        // Smooth rotation towards movement direction
         if (moveDirection.sqrMagnitude > 0.01f)
         {
             Quaternion targetRot = Quaternion.LookRotation(moveDirection);
@@ -93,11 +92,9 @@ public class PlayerController : MonoBehaviour
 
     private void HandleActions()
     {
-        // Jump with anticipation delay
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
             StartCoroutine(PerformJumpWithDelay());
 
-        // Dash
         if (Input.GetKeyDown(KeyCode.LeftControl) && !isDashing)
             StartCoroutine(Dash());
     }
@@ -118,14 +115,12 @@ public class PlayerController : MonoBehaviour
     {
         bool grounded = IsGrounded();
 
-        // Falling detection
         if (!grounded && rb.linearVelocity.y < -0.1f && !isFalling)
         {
             isFalling = true;
             animHandler?.SetFalling(true);
         }
 
-        // Landing detection
         if (!wasGrounded && grounded)
         {
             isFalling = false;
@@ -142,28 +137,57 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         animHandler?.SetDashing(true);
 
-        Vector3 dashDir = moveDirection != Vector3.zero ? moveDirection : transform.forward;
+        if (dashSprite != null)
+            dashSprite.SetActive(true);
+
+        if (dashTrails != null)
+        {
+            foreach (TrailRenderer trail in dashTrails)
+            {
+                if (trail == null) continue;
+                trail.emitting = true;
+                trail.Clear();
+            }
+        }
+
+        Vector3 dashDir = moveDirection != Vector3.zero ? moveDirection.normalized : transform.forward;
         float dashEndTime = Time.time + dashDuration;
 
-        float originalDrag = rb.linearDamping;
+        float originalDamping = rb.linearDamping;
         rb.linearDamping = 0f;
         rb.useGravity = false;
 
         feedbacks?.PlayDashFeedback();
 
+        rb.linearVelocity = dashDir * dashForce;
+
         while (Time.time < dashEndTime)
         {
-            rb.linearVelocity = dashDir * dashForce;
-            yield return null;
+            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, dashDir * dashForce, 0.5f);
+            yield return new WaitForFixedUpdate();
         }
 
         rb.useGravity = true;
-        rb.linearDamping = originalDrag;
-        rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+        rb.linearDamping = originalDamping;
+        rb.linearVelocity = new Vector3(dashDir.x * (dashForce * 0.2f), rb.linearVelocity.y, dashDir.z * (dashForce * 0.2f));
+
+        if (dashSprite != null)
+            dashSprite.SetActive(false);
+
+        if (dashTrails != null)
+        {
+            foreach (TrailRenderer trail in dashTrails)
+            {
+                if (trail == null) continue;
+                trail.emitting = false; 
+            }
+        }
 
         isDashing = false;
         animHandler?.SetDashing(false);
     }
+
+
 
     private void ApplyBetterGravity()
     {

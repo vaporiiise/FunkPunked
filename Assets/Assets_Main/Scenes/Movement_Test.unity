@@ -1666,6 +1666,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 890479745}
     - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
+      propertyPath: discAnimator
+      value: 
+      objectReference: {fileID: 8768815661403834124}
+    - target: {fileID: 5478492693817020144, guid: 33eca9a5a7bb3f94386d8359aaf7f791, type: 3}
       propertyPath: musicLevels.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -2944,6 +2948,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!95 &8768815661403834124 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6136072383721636828, guid: 647e2b0703ee4c348af2caaa10702025, type: 3}
+  m_PrefabInstance: {fileID: 3844491385684634579}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

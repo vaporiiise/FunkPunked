@@ -4636,15 +4636,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3764852635722738641, guid: 647e2b0703ee4c348af2caaa10702025, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 184
+      value: 38
       objectReference: {fileID: 0}
     - target: {fileID: 3764852635722738641, guid: 647e2b0703ee4c348af2caaa10702025, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -39
+      value: -247
       objectReference: {fileID: 0}
     - target: {fileID: 3764852635722738641, guid: 647e2b0703ee4c348af2caaa10702025, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -346
+      value: 49
       objectReference: {fileID: 0}
     - target: {fileID: 3917673643590221826, guid: 647e2b0703ee4c348af2caaa10702025, type: 3}
       propertyPath: m_Sprite
@@ -4731,8 +4731,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6260891525231895109, guid: 647e2b0703ee4c348af2caaa10702025, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6260891525231895109, guid: 647e2b0703ee4c348af2caaa10702025, type: 3}
       propertyPath: m_fontSize
-      value: 101.18
+      value: 216.2
       objectReference: {fileID: 0}
     - target: {fileID: 6260891525231895109, guid: 647e2b0703ee4c348af2caaa10702025, type: 3}
       propertyPath: m_margin.x
@@ -4740,7 +4744,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6260891525231895109, guid: 647e2b0703ee4c348af2caaa10702025, type: 3}
       propertyPath: m_fontSizeBase
-      value: 101.18
+      value: 216.2
       objectReference: {fileID: 0}
     - target: {fileID: 6338290948313080262, guid: 647e2b0703ee4c348af2caaa10702025, type: 3}
       propertyPath: m_Name
@@ -4750,6 +4754,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6842371541212979401, guid: 647e2b0703ee4c348af2caaa10702025, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1969121237}
     - targetCorrespondingSourceObject: {fileID: 1414395561842952889, guid: 647e2b0703ee4c348af2caaa10702025, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1617575905}
@@ -15058,7 +15065,12 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'B-upperArm.L'\n\tTransform 'B-toe.L'\n\tTransform
+    'B-upperArm.R'\n\tTransform 'B-thigh.L'\n\tTransform 'B-shoulder.L'\n\tTransform
+    'B-spine'\n\tTransform 'B-shoulder.R'\n\tTransform 'B-chest'\n\tTransform 'B-thigh.R'\n\tTransform
+    'B-hips'\n\tand more ...\n\tFrom animation clip 'HumanF@Fall01'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -21129,6 +21141,39 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8ef1f4409ab3eb4d9d891bed49faa2f, type: 3}
+--- !u!1 &1969121235 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6842371541212979401, guid: 647e2b0703ee4c348af2caaa10702025, type: 3}
+  m_PrefabInstance: {fileID: 650562305}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1969121237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969121235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66664fab8d1a433498271dc9807edb36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIPulseOnBeat
+  targetImage: {fileID: 1969121238}
+  pulseScale: 1.25
+  pulseDuration: 0.15
+  fadeSpeed: 6
+  pulseColor: {r: 1, g: 1, b: 1, a: 0}
+--- !u!114 &1969121238 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5572691363990390423, guid: 647e2b0703ee4c348af2caaa10702025, type: 3}
+  m_PrefabInstance: {fileID: 650562305}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969121235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1001 &1971699403
 PrefabInstance:
   m_ObjectHideFlags: 0
