@@ -9,6 +9,7 @@ public class BeatScheduler : MonoBehaviour
     private float beatInterval;
     private float nextBeatTime;
     private int beatCount;
+    public float attackLeadTime = 0.1f;
 
     public static event Action<int> OnBeat;
 

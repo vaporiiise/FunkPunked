@@ -25,8 +25,16 @@ public class Enemy : MonoBehaviour
                 player = p.transform;
         }
 
-        combat.Initialize(player);
-        movement.Initialize(player);
-        health.Initialize();
+        // Initialize movement
+        if (movement != null && player != null)
+            movement.Initialize(player);
+
+        // Assign player to combat
+        if (combat != null && player != null)
+            combat.player = player;
+
+        // Initialize health
+        if (health != null)
+            health.Initialize();
     }
 }

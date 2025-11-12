@@ -2,36 +2,50 @@ using UnityEngine;
 
 public class EnemyAnimatorHandler : MonoBehaviour
 {
-    private Animator animator;
+    [Header("Animator Settings")]
+    public Animator animator;
+
+    private int moveSpeedHash;
+    private int attackTriggerHash;
+    private int deathTriggerHash;
+    private int hitTriggerHash;
+
+    private bool isDead = false;
 
     void Awake()
     {
-        animator = GetComponent<Animator>();
         if (animator == null)
-            Debug.LogWarning("No Animator found on EnemyAnimatorHandler!");
+            animator = GetComponent<Animator>();
+
+        moveSpeedHash = Animator.StringToHash("MoveSpeed");
+        attackTriggerHash = Animator.StringToHash("Attack");
+        deathTriggerHash = Animator.StringToHash("Death");
+        hitTriggerHash = Animator.StringToHash("Hit");
     }
 
     public void SetMoveSpeed(float speed)
     {
-        if (animator != null)
-            animator.SetFloat("Speed", speed, 0.1f, Time.deltaTime);
+        if (isDead) return;
+        animator.SetFloat(moveSpeedHash, speed, 0.1f, Time.deltaTime);
     }
 
     public void PlayAttack()
     {
-        if (animator != null)
-            animator.SetTrigger("Attack1"); 
+        if (isDead) return;
+        animator.SetTrigger(attackTriggerHash);
     }
 
     public void PlayHit()
     {
-        if (animator != null)
-            animator.SetTrigger("Hit");
+        if (isDead) return;
+        animator.SetTrigger(hitTriggerHash);
     }
 
     public void PlayDie()
     {
-        if (animator != null)
-            animator.SetTrigger("Death");
+        if (isDead) return;
+        isDead = true;
+        animator.SetTrigger(deathTriggerHash);
+        animator.SetFloat(moveSpeedHash, 0);
     }
 }

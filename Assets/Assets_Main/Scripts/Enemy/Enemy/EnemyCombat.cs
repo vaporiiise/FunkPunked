@@ -1,97 +1,73 @@
 using UnityEngine;
 using System.Collections;
-using MoreMountains.Feedbacks;
 
 public class EnemyCombat : MonoBehaviour
 {
     [Header("Combat Settings")]
-    public int damage = 10;
-    public float attackRange = 2.5f;
+    public float damage = 10f;
     public float attackCooldown = 2f;
-    public int warningBeatsBefore = 1;
+    public float attackHitDelay = 0.5f; // When hit actually lands
 
     [Header("References")]
-    public MMF_Player attackWarningFeedback;
+    public Transform player;
 
-    private Transform player;
-    private EnemyMovement movement;
     private EnemyAnimatorHandler animHandler;
-    private BeatScheduler beatScheduler;
+    private EnemyHealth health;
+    private EnemyMovement movement;
 
-    private bool isAttacking = false;
-    private bool hasWarned = false;
-    private int lastBeatIndex = -1;
-    private int attackBeatIndex = -1;
+    private bool canAttack = true;
 
-    public void Initialize(Transform playerRef)
+    private void Awake()
     {
-        player = playerRef;
-    }
-
-    void Start()
-    {
-        movement = GetComponent<EnemyMovement>();
         animHandler = GetComponentInChildren<EnemyAnimatorHandler>();
+        movement = GetComponent<EnemyMovement>();
+        health = GetComponent<EnemyHealth>();
 
-        beatScheduler = FindObjectOfType<BeatScheduler>();
-        if (beatScheduler != null)
-            BeatScheduler.OnBeat += OnBeatReceived;
-    }
-
-    void OnDestroy()
-    {
-        if (beatScheduler != null)
-            BeatScheduler.OnBeat -= OnBeatReceived;
-    }
-
-    void OnBeatReceived(int beatIndex)
-    {
-        lastBeatIndex = beatIndex;
-
-        if (player == null || isAttacking)
-            return;
-
-        if (movement.DistanceToPlayer() > attackRange)
-            return;
-
-        if (attackBeatIndex < beatIndex)
+        if (player == null)
         {
-            attackBeatIndex = beatIndex + 1;
-            hasWarned = false;
-            StartCoroutine(HandleBeatAttack(beatIndex));
+            GameObject p = GameObject.FindGameObjectWithTag("Player");
+            if (p != null) player = p.transform;
         }
     }
 
-    IEnumerator HandleBeatAttack(int currentBeat)
+    public bool CanAttack() => canAttack && player != null;
+
+    public void TriggerAttack()
     {
-        isAttacking = true;
-        movement.StopMovement(true);
-        FacePlayer();
+        if (!CanAttack()) return;
 
-        if (!hasWarned)
-        {
-            attackWarningFeedback?.PlayFeedbacks();
-            hasWarned = true;
-        }
+        StartCoroutine(AttackRoutine());
+    }
 
-        yield return new WaitUntil(() => lastBeatIndex >= currentBeat + warningBeatsBefore);
+    private IEnumerator AttackRoutine()
+    {
+        canAttack = false;
+        movement.SetStopForAttack(true);
 
+        // Play attack animation
         animHandler?.PlayAttack();
 
-        PlayerStats ps = player.GetComponent<PlayerStats>();
-        if (ps != null)
-            ps.TakeDamage(damage);
+        // Wait for animation peak / hit delay
+        yield return new WaitForSeconds(attackHitDelay);
 
-        yield return new WaitForSeconds(attackCooldown);
-        isAttacking = false;
-        movement.StopMovement(false);
-    }
+        // Deal damage to player if still in range
+        if (player != null)
+        {
+            float distance = Vector3.Distance(transform.position, player.position);
+            if (distance <= movement.attackRange)
+            {
+                // Example: assume player has AttackController with TakeDamage
+                var attackController = player.GetComponent<AttackController>();
+                if (attackController != null)
+                    attackController.playerStats.TakeDamage(damage);
+            }
+        }
 
-    void FacePlayer()
-    {
-        if (player == null) return;
-        Vector3 dir = (player.position - transform.position).normalized;
-        dir.y = 0;
-        transform.rotation = Quaternion.LookRotation(dir);
+        // Optional downtime before next attack
+        yield return new WaitForSeconds(attackCooldown - attackHitDelay);
+
+        movement.SetStopForAttack(false);
+        canAttack = true;
     }
+    
 }

@@ -8,12 +8,11 @@ public class AttackController : MonoBehaviour
     [Header("References")]
     [SerializeField] private WeaponCollider weaponCollider;
     [SerializeField] private GameObject weaponModel;
-    [SerializeField] private BeatScheduler scheduler;
-    [SerializeField] private ComboManager comboManager;
     [SerializeField] private PlayerAnimationHandler animHandler;
 
-    private PlayerStats playerStats;
+    [HideInInspector] public PlayerStats playerStats;
     private Rigidbody rb;
+    private float combatTimer = 0f;
 
     [Header("FMOD Events")]
     [SerializeField] private EventReference attackSFX;
@@ -21,88 +20,122 @@ public class AttackController : MonoBehaviour
     [SerializeField] private EventReference parrySFX;
 
     [Header("Attack Settings")]
-    public float attackCooldown = 0.4f;
     public float inCombatDuration = 2f;
-    public float comboResetTime = 1f;
     public float hitStopDuration = 0.1f;
     public float hitSlowFactor = 0.05f;
 
-    private float combatTimer = 0f;
-    private float comboTimer = 0f;
+    [Header("Parry/Block Settings")]
+    public float parryClickThreshold = 0.25f;
+    private float rmbHoldTime = 0f;
 
-    private bool canAttack = true;
-    private int comboStep = 0;
+    [HideInInspector] public bool isBlocking = false;
     [HideInInspector] public bool isParrying = false;
+
+    // Alternate attack tracking
+    private bool nextAttackIsOne = true;
 
     private void Start()
     {
         playerStats = GetComponent<PlayerStats>();
         rb = GetComponent<Rigidbody>();
-
         if (weaponCollider != null)
-        {
             weaponCollider.Initialize(this);
-            weaponCollider.EnableDamage();
-        }
-
         SetWeaponVisible(false);
-
-        if (comboManager == null)
-            comboManager = FindObjectOfType<ComboManager>();
     }
 
     private void Update()
     {
         HandleAttackInput();
+        HandleRMBInput();
         HandleWeaponVisibilityTimer();
-        HandleComboTimer();
     }
 
     private void HandleAttackInput()
     {
-        if (Input.GetMouseButtonDown(0) && canAttack)
+        if (Input.GetMouseButtonDown(0))
             StartCoroutine(PerformAttack());
+    }
+
+    private void HandleRMBInput()
+    {
+        if (Input.GetMouseButton(1))
+        {
+            rmbHoldTime += Time.deltaTime;
+            if (rmbHoldTime > parryClickThreshold && !isBlocking)
+            {
+                isBlocking = true;
+                animHandler?.SetBlocking(true);
+            }
+        }
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            if (rmbHoldTime <= parryClickThreshold)
+            {
+                // CLICK → Parry
+                isParrying = true;
+                animHandler?.PlayParry();
+                PlayParrySound();
+            }
+
+            // Reset
+            rmbHoldTime = 0f;
+            isBlocking = false;
+            animHandler?.SetBlocking(false);
+        }
+    }
+
+    private void HandleWeaponVisibilityTimer()
+    {
+        if (combatTimer > 0f)
+        {
+            combatTimer -= Time.deltaTime;
+            if (combatTimer <= 0f)
+                SetWeaponVisible(false);
+        }
     }
 
     private IEnumerator PerformAttack()
     {
-        canAttack = false;
         combatTimer = inCombatDuration;
-        comboTimer = comboResetTime;
         SetWeaponVisible(true);
 
-        comboStep++;
-        if (comboStep > 2)
-            comboStep = 1;
+        // Alternate attacks
+        if (animHandler != null)
+        {
+            if (nextAttackIsOne)
+                animHandler.PlayAttack(); // will play Attack1
+            else
+                animHandler.PlayAttack(); // will play Attack2
 
-        animHandler?.PlayAttack(comboStep);
+            nextAttackIsOne = !nextAttackIsOne;
+        }
 
         if (!attackSFX.IsNull)
             RuntimeManager.PlayOneShot(attackSFX, transform.position);
 
-        yield return new WaitForSeconds(attackCooldown);
-        canAttack = true;
+        // Wait for animation duration or inCombatDuration
+        yield return new WaitForSeconds(inCombatDuration);
+
+        SetWeaponVisible(false);
     }
 
-    private void HandleComboTimer()
+    // Called by Animation Event at swing peak
+    public void EnableWeaponCollider() => weaponCollider?.EnableDamage();
+    public void DisableWeaponCollider() => weaponCollider?.DisableDamage();
+
+    public void PlaySwingSFX()
     {
-        if (comboTimer > 0)
-        {
-            comboTimer -= Time.deltaTime;
-            if (comboTimer <= 0)
-                comboStep = 0;
-        }
+        if (!attackSFX.IsNull && weaponCollider != null)
+            RuntimeManager.PlayOneShot(attackSFX, weaponCollider.transform.position);
     }
 
     public void OnSuccessfulHit()
     {
         combatTimer = inCombatDuration;
         SetWeaponVisible(true);
-        comboManager?.AddCombo();
-
         if (!hitSFX.IsNull)
             RuntimeManager.PlayOneShot(hitSFX, transform.position);
-
         StartCoroutine(HitStopCoroutine());
     }
 
@@ -111,31 +144,16 @@ public class AttackController : MonoBehaviour
         float originalTimeScale = Time.timeScale;
         Time.timeScale = hitSlowFactor;
         animHandler?.SetSpeedMultiplier(0f);
-        if (rb != null) rb.linearVelocity = Vector3.zero;
-
+        if (rb != null) rb.velocity = Vector3.zero;
         yield return new WaitForSecondsRealtime(hitStopDuration);
-
         Time.timeScale = originalTimeScale;
         animHandler?.ResetSpeed();
-    }
-
-    private void HandleWeaponVisibilityTimer()
-    {
-        if (combatTimer > 0)
-        {
-            combatTimer -= Time.deltaTime;
-            if (combatTimer <= 0)
-                SetWeaponVisible(false);
-        }
     }
 
     public void SetWeaponVisible(bool visible)
     {
         if (weaponModel != null)
             weaponModel.SetActive(visible);
-
-        if (visible)
-            combatTimer = inCombatDuration;
     }
 
     public void PlayParrySound()

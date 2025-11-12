@@ -2,32 +2,37 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
+[RequireComponent(typeof(EnemyMovement))]
+[RequireComponent(typeof(EnemyAnimatorHandler))]
 public class EnemyHealth : MonoBehaviour
 {
     [Header("Health Settings")]
     public float maxHealth = 20f;
     private float currentHealth;
 
-    [Header("UI References")]
+    [Header("UI")]
     public Image healthBarFill;
     public CanvasGroup healthCanvasGroup;
+
+    [Header("Death Settings")]
+    public GameObject deathParticle;
+    public float deathDestroyDelay = 1.5f;
 
     [Header("Fade Settings")]
     public float fadeInDuration = 0.15f;
     public float fadeOutDelay = 1.5f;
     public float fadeOutDuration = 0.5f;
 
-    [Header("Death Settings")]
-    public GameObject deathParticle;
-    public float deathDestroyDelay = 1.5f;
+    [Header("Stagger Settings")]
+    public float staggerDuration = 3f;
+    public GameObject staggerSprite; // simple visual for stagger
 
-    [Header("References")]
     private EnemyAnimatorHandler animHandler;
     private EnemyMovement movement;
-
     private Coroutine fadeRoutine;
+    private bool isDead = false;
 
-    // 🔹 Called from Enemy.cs
+    // Called from Enemy.cs
     public void Initialize()
     {
         animHandler = GetComponentInChildren<EnemyAnimatorHandler>();
@@ -36,17 +41,20 @@ public class EnemyHealth : MonoBehaviour
         currentHealth = maxHealth;
         UpdateHealthBar();
         SetBarVisible(false, true);
+
+        if (staggerSprite != null)
+            staggerSprite.SetActive(false);
     }
 
     public void TakeDamage(float amount)
     {
+        if (isDead) return;
+
         currentHealth -= amount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
         animHandler?.PlayHit();
         UpdateHealthBar();
-
-        // Show bar on hit
         SetBarVisible(true);
 
         if (currentHealth <= 0)
@@ -56,18 +64,15 @@ public class EnemyHealth : MonoBehaviour
     private void UpdateHealthBar()
     {
         if (healthBarFill != null)
-        {
-            float normalized = currentHealth / maxHealth;
-            healthBarFill.fillAmount = normalized;
-        }
-
-        if (currentHealth >= maxHealth)
-            SetBarVisible(false);
+            healthBarFill.fillAmount = currentHealth / maxHealth;
     }
 
     private void Die()
     {
-        movement?.StopMovement(true);
+        if (isDead) return;
+        isDead = true;
+
+        movement?.SetStopForAttack(true);
         animHandler?.PlayDie();
 
         if (deathParticle != null)
@@ -76,16 +81,38 @@ public class EnemyHealth : MonoBehaviour
             Destroy(fx, 3f);
         }
 
+        SetBarVisible(false);
         Destroy(gameObject, deathDestroyDelay);
     }
 
+    /// <summary>
+    /// Called when enemy is successfully parried. Stops movement for staggerDuration.
+    /// </summary>
+    public void Stagger()
+    {
+        if (staggerSprite != null)
+            staggerSprite.SetActive(true);
+
+        movement?.SetStopForAttack(true);
+        StartCoroutine(StaggerRoutine());
+    }
+
+    private IEnumerator StaggerRoutine()
+    {
+        yield return new WaitForSeconds(staggerDuration);
+
+        if (staggerSprite != null)
+            staggerSprite.SetActive(false);
+
+        movement?.SetStopForAttack(false);
+    }
+
     // ---------------------------
-    // FADE EFFECTS
+    // Health bar fade effects
     // ---------------------------
     private void SetBarVisible(bool visible, bool instant = false)
     {
-        if (healthCanvasGroup == null)
-            return;
+        if (healthCanvasGroup == null) return;
 
         if (fadeRoutine != null)
             StopCoroutine(fadeRoutine);
@@ -93,13 +120,11 @@ public class EnemyHealth : MonoBehaviour
         if (instant)
         {
             healthCanvasGroup.alpha = visible ? 1f : 0f;
-            return;
         }
-
-        if (visible)
-            fadeRoutine = StartCoroutine(FadeCanvas(1f, fadeInDuration));
         else
-            fadeRoutine = StartCoroutine(FadeOutAfterDelay());
+        {
+            fadeRoutine = StartCoroutine(visible ? FadeCanvas(1f, fadeInDuration) : FadeOutAfterDelay());
+        }
     }
 
     private IEnumerator FadeOutAfterDelay()
@@ -110,16 +135,13 @@ public class EnemyHealth : MonoBehaviour
 
     private IEnumerator FadeCanvas(float target, float duration)
     {
-        if (healthCanvasGroup == null) yield break;
-
         float start = healthCanvasGroup.alpha;
         float elapsed = 0f;
 
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / duration);
-            healthCanvasGroup.alpha = Mathf.Lerp(start, target, t);
+            healthCanvasGroup.alpha = Mathf.Lerp(start, target, elapsed / duration);
             yield return null;
         }
 

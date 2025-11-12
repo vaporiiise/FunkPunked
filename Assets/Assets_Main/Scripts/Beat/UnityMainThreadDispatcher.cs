@@ -1,42 +1,39 @@
-// Simple singleton main-thread dispatcher - lightweight
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UnityMainThreadDispatcher : MonoBehaviour
 {
-    private static readonly Queue<Action> _executionQueue = new Queue<Action>();
-    private static UnityMainThreadDispatcher _instance;
+    private static readonly Queue<Action> executionQueue = new Queue<Action>();
+    private static UnityMainThreadDispatcher instance = null;
 
-    public static UnityMainThreadDispatcher Instance()
+    public static void Enqueue(Action action)
     {
-        if (_instance == null)
+        lock (executionQueue)
         {
-            var go = new GameObject("UnityMainThreadDispatcher");
-            DontDestroyOnLoad(go);
-            _instance = go.AddComponent<UnityMainThreadDispatcher>();
-        }
-        return _instance;
-    }
-
-    public void Enqueue(Action action)
-    {
-        lock (_executionQueue)
-        {
-            _executionQueue.Enqueue(action);
+            executionQueue.Enqueue(action);
         }
     }
 
     void Update()
     {
-        lock (_executionQueue)
+        lock (executionQueue)
         {
-            while (_executionQueue.Count > 0)
+            while (executionQueue.Count > 0)
             {
-                _executionQueue.Dequeue().Invoke();
+                executionQueue.Dequeue().Invoke();
             }
         }
     }
-}
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void Initialize()
+    {
+        if (instance == null)
+        {
+            GameObject dispatcherObj = new GameObject("UnityMainThreadDispatcher");
+            instance = dispatcherObj.AddComponent<UnityMainThreadDispatcher>();
+            DontDestroyOnLoad(dispatcherObj);
+        }
+    }
+}

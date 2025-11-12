@@ -69,7 +69,7 @@ public class ComboManager : MonoBehaviour
         comboActive = true;
 
         UpdateUI();
-        Debug.Log("x" + comboCount);
+        //Debug.Log("x" + comboCount);
 
         UpdateMusicState();
         UpdateDiscStage();
