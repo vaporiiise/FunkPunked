@@ -144,7 +144,7 @@ public class AttackController : MonoBehaviour
         float originalTimeScale = Time.timeScale;
         Time.timeScale = hitSlowFactor;
         animHandler?.SetSpeedMultiplier(0f);
-        if (rb != null) rb.velocity = Vector3.zero;
+        if (rb != null) rb.linearVelocity = Vector3.zero;
         yield return new WaitForSecondsRealtime(hitStopDuration);
         Time.timeScale = originalTimeScale;
         animHandler?.ResetSpeed();
