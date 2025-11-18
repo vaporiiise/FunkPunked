@@ -5,7 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyHealth))]
 public class Enemy : MonoBehaviour
 {
-    [Header("References")]
     public Transform player;
 
     private EnemyMovement movement;
@@ -25,16 +24,8 @@ public class Enemy : MonoBehaviour
                 player = p.transform;
         }
 
-        // Initialize movement
-        if (movement != null && player != null)
-            movement.Initialize(player);
-
-        // Assign player to combat
-        if (combat != null && player != null)
-            combat.player = player;
-
-        // Initialize health
-        if (health != null)
-            health.Initialize();
+        movement.Initialize(player);
+        combat.player = player;
+        health.Initialize();
     }
 }
