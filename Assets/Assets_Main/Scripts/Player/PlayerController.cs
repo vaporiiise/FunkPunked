@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     private bool isJumping;
     private bool isFalling;
     private bool wasGrounded;
-    
+
     [Header("Dash Effects")]
     public GameObject dashSprite;
     public TrailRenderer[] dashTrails;
@@ -33,6 +33,11 @@ public class PlayerController : MonoBehaviour
     public PlayerStats playerStats;
     public PlayerFeedbacks feedbacks;
     public PlayerAnimationHandler animHandler;
+
+    [Header("Route")]
+    public Transform[] routePoints;        // waypoints along the route
+    public float routeFollowSpeed = 3f;    // horizontal speed along the route
+    private int closestIndex = 0;
 
     private Rigidbody rb;
     private Vector3 moveDirection;
@@ -67,25 +72,49 @@ public class PlayerController : MonoBehaviour
         ApplyBetterGravity();
 
         float horizontalSpeed = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
-
         float normalizedSpeed = Mathf.InverseLerp(0, moveSpeed * runMultiplier, horizontalSpeed) * 0.5f;
-
-        if (normalizedSpeed < 0.05f)
-            normalizedSpeed = 0f;
+        if (normalizedSpeed < 0.05f) normalizedSpeed = 0f;
 
         animHandler?.UpdateMovement(normalizedSpeed);
     }
 
     private void HandleMovementInput()
     {
-        float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
-        moveDirection = new Vector3(h, 0f, v).normalized;
+        float h = 0f;
+
+        // Horizontal input along route
+        if (routePoints.Length > 1)
+        {
+            closestIndex = FindClosestPointIndex();
+            Vector3 routeDir = (routePoints[Mathf.Min(closestIndex + 1, routePoints.Length - 1)].position -
+                                routePoints[closestIndex].position).normalized;
+
+            if (Input.GetKey(KeyCode.D))
+                h = 1f;
+            else if (Input.GetKey(KeyCode.A))
+                h = -1f;
+
+            // Combine route horizontal with free vertical
+            Vector3 camForward = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up).normalized;
+            moveDirection = (routeDir * h + camForward * v).normalized;
+        }
+        else
+        {
+            // Default free movement if no route
+            float rawH = Input.GetAxisRaw("Horizontal");
+            Transform cam = Camera.main.transform;
+            Vector3 camForward = Vector3.ProjectOnPlane(cam.forward, Vector3.up).normalized;
+            Vector3 camRight = Vector3.ProjectOnPlane(cam.right, Vector3.up).normalized;
+            moveDirection = (camForward * v + camRight * rawH).normalized;
+        }
+
         isRunning = Input.GetKey(KeyCode.LeftShift);
 
+        // Rotate player toward movement
         if (moveDirection.sqrMagnitude > 0.01f)
         {
-            Quaternion targetRot = Quaternion.LookRotation(moveDirection);
+            Quaternion targetRot = Quaternion.LookRotation(moveDirection, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
         }
     }
@@ -137,8 +166,7 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         animHandler?.SetDashing(true);
 
-        if (dashSprite != null)
-            dashSprite.SetActive(true);
+        if (dashSprite != null) dashSprite.SetActive(true);
 
         if (dashTrails != null)
         {
@@ -153,7 +181,7 @@ public class PlayerController : MonoBehaviour
         Vector3 dashDir = moveDirection != Vector3.zero ? moveDirection.normalized : transform.forward;
         float dashEndTime = Time.time + dashDuration;
 
-        float originalDamping = rb.linearDamping;
+        float originalDrag = rb.linearDamping;
         rb.linearDamping = 0f;
         rb.useGravity = false;
 
@@ -168,12 +196,10 @@ public class PlayerController : MonoBehaviour
         }
 
         rb.useGravity = true;
-        rb.linearDamping = originalDamping;
+        rb.linearDamping = originalDrag;
         rb.linearVelocity = new Vector3(dashDir.x * (dashForce * 0.2f), rb.linearVelocity.y, dashDir.z * (dashForce * 0.2f));
 
-        if (dashSprite != null)
-            dashSprite.SetActive(false);
-
+        if (dashSprite != null) dashSprite.SetActive(false);
         if (dashTrails != null)
         {
             foreach (TrailRenderer trail in dashTrails)
@@ -186,8 +212,6 @@ public class PlayerController : MonoBehaviour
         isDashing = false;
         animHandler?.SetDashing(false);
     }
-
-
 
     private void ApplyBetterGravity()
     {
@@ -204,6 +228,22 @@ public class PlayerController : MonoBehaviour
     private bool IsGrounded()
     {
         return Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 1.2f);
+    }
+
+    private int FindClosestPointIndex()
+    {
+        int index = 0;
+        float minDist = float.MaxValue;
+        for (int i = 0; i < routePoints.Length; i++)
+        {
+            float dist = Vector3.Distance(transform.position, routePoints[i].position);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                index = i;
+            }
+        }
+        return index;
     }
 
     public void OnHit()
