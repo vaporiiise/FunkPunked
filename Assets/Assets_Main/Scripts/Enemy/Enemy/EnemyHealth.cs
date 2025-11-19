@@ -2,149 +2,153 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-[RequireComponent(typeof(EnemyMovement))]
-[RequireComponent(typeof(EnemyAnimatorHandler))]
 public class EnemyHealth : MonoBehaviour
 {
     [Header("Health Settings")]
     public float maxHealth = 20f;
-    private float currentHealth;
+    private float hp;
 
     [Header("UI")]
     public Image healthBarFill;
-    public CanvasGroup healthCanvasGroup;
-
-    [Header("Death Settings")]
-    public GameObject deathParticle;
-    public float deathDestroyDelay = 1.5f;
-
-    [Header("Fade Settings")]
+    public CanvasGroup healthCanvas;
     public float fadeInDuration = 0.15f;
     public float fadeOutDelay = 1.5f;
     public float fadeOutDuration = 0.5f;
 
-    [Header("Stagger Settings")]
-    public float staggerDuration = 3f;
-    public GameObject staggerSprite; // simple visual for stagger
+    [Header("Stagger")]
+    public GameObject staggerSprite;
+    public float staggerDuration = 2f;
 
-    private EnemyAnimatorHandler animHandler;
-    private EnemyMovement movement;
+    [Header("Death")]
+    public GameObject deathFX;
+    public float destroyDelay = 2f;
+
+    private EnemyAnimatorHandler animator;
+    private Enemy enemyCore;
+
     private Coroutine fadeRoutine;
-    private bool isDead = false;
+    private bool dead = false;
 
-    // Called from Enemy.cs
-    public void Initialize()
+    // ----------------------------------------------------------
+    public void Initialize(Enemy c)
     {
-        animHandler = GetComponentInChildren<EnemyAnimatorHandler>();
-        movement = GetComponent<EnemyMovement>();
+        enemyCore = c;
+        animator = GetComponentInChildren<EnemyAnimatorHandler>();
 
-        currentHealth = maxHealth;
-        UpdateHealthBar();
-        SetBarVisible(false, true);
+        hp = maxHealth;
+
+        if (healthBarFill != null)
+            healthBarFill.fillAmount = 1f;
+
+        if (healthCanvas != null)
+            healthCanvas.alpha = 0f;
 
         if (staggerSprite != null)
             staggerSprite.SetActive(false);
     }
 
+    // ----------------------------------------------------------
     public void TakeDamage(float amount)
     {
-        if (isDead) return;
+        if (dead) return;
 
-        currentHealth -= amount;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        hp -= amount;
+        if (hp < 0) hp = 0;
 
-        animHandler?.PlayHit();
-        UpdateHealthBar();
-        SetBarVisible(true);
+        UpdateBar();
+        ShowBar();
 
-        if (currentHealth <= 0)
+        // If you later add a Hit trigger, you can call animator.PlayHit()
+        // Right now your animator has NO Hit parameter.
+
+        if (hp <= 0)
             Die();
     }
 
-    private void UpdateHealthBar()
+    // ----------------------------------------------------------
+    private void UpdateBar()
     {
         if (healthBarFill != null)
-            healthBarFill.fillAmount = currentHealth / maxHealth;
+            healthBarFill.fillAmount = hp / maxHealth;
     }
 
-    private void Die()
+    // ----------------------------------------------------------
+    private void ShowBar()
     {
-        if (isDead) return;
-        isDead = true;
-
-        movement?.SetStopForAttack(true);
-        animHandler?.PlayDie();
-
-        if (deathParticle != null)
-        {
-            GameObject fx = Instantiate(deathParticle, transform.position, Quaternion.identity);
-            Destroy(fx, 3f);
-        }
-
-        SetBarVisible(false);
-        Destroy(gameObject, deathDestroyDelay);
-    }
-
-    /// <summary>
-    /// Called when enemy is successfully parried. Stops movement for staggerDuration.
-    /// </summary>
-    public void Stagger()
-    {
-        if (staggerSprite != null)
-            staggerSprite.SetActive(true);
-
-        movement?.SetStopForAttack(true);
-        StartCoroutine(StaggerRoutine());
-    }
-
-    private IEnumerator StaggerRoutine()
-    {
-        yield return new WaitForSeconds(staggerDuration);
-
-        if (staggerSprite != null)
-            staggerSprite.SetActive(false);
-
-        movement?.SetStopForAttack(false);
-    }
-
-    // ---------------------------
-    // Health bar fade effects
-    // ---------------------------
-    private void SetBarVisible(bool visible, bool instant = false)
-    {
-        if (healthCanvasGroup == null) return;
+        if (healthCanvas == null) return;
 
         if (fadeRoutine != null)
             StopCoroutine(fadeRoutine);
 
-        if (instant)
-        {
-            healthCanvasGroup.alpha = visible ? 1f : 0f;
-        }
-        else
-        {
-            fadeRoutine = StartCoroutine(visible ? FadeCanvas(1f, fadeInDuration) : FadeOutAfterDelay());
-        }
+        fadeRoutine = StartCoroutine(FadeCanvas(1f, fadeInDuration, false));
     }
 
-    private IEnumerator FadeOutAfterDelay()
+    private IEnumerator FadeCanvas(float target, float duration, bool waitThenFade)
     {
-        yield return new WaitForSeconds(fadeOutDelay);
-        yield return FadeCanvas(0f, fadeOutDuration);
-    }
+        if (waitThenFade)
+            yield return new WaitForSeconds(fadeOutDelay);
 
-    private IEnumerator FadeCanvas(float target, float duration)
-    {
-        float start = healthCanvasGroup.alpha;
+        float start = healthCanvas.alpha;
         float elapsed = 0f;
 
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            healthCanvasGroup.alpha = Mathf.Lerp(start, target, elapsed / duration);
+            healthCanvas.alpha = Mathf.Lerp(start, target, elapsed / duration);
             yield return null;
         }
 
-        healthCanvasGroup.alpha = target;
+        healthCanvas.alpha = target;
+    }
+
+    public void HideBarDelayed()
+    {
+        if (healthCanvas == null) return;
+
+        if (fadeRoutine != null)
+            StopCoroutine(fadeRoutine);
+
+        fadeRoutine = StartCoroutine(FadeCanvas(0f, fadeOutDuration, true));
+    }
+
+    // ----------------------------------------------------------
+    public void ApplyStagger()
+    {
+        if (dead) return;
+
+        if (staggerSprite != null)
+            staggerSprite.SetActive(true);
+
+        StartCoroutine(StaggerRoutine());
+    }
+
+    private IEnumerator StaggerRoutine()
+    {
+        enemyCore.EnterStagger(staggerDuration);
+        yield return new WaitForSeconds(staggerDuration);
+
+        if (staggerSprite != null)
+            staggerSprite.SetActive(false);
+    }
+
+    // ----------------------------------------------------------
+    private void Die()
+    {
+        dead = true;
+
+        animator.PlayDeath();
+        //enemyCore.OnEnemyDeath();
+
+        if (deathFX != null)
+        {
+            var fx = Instantiate(deathFX, transform.position, Quaternion.identity);
+            Destroy(fx, 3f);
+        }
+
+        // Hide UI
+        if (healthCanvas != null)
+            healthCanvas.alpha = 0f;
+
+        Destroy(gameObject, destroyDelay);
     }
 }

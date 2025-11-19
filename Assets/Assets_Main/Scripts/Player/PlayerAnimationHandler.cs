@@ -89,4 +89,13 @@ public class PlayerAnimationHandler : MonoBehaviour
 
     public void SetSpeedMultiplier(float speed) => animator.speed = speed;
     public void ResetSpeed() => animator.speed = 1f;
+    
+    public bool IsPlayingAttack()
+    {
+        if (animator == null) return false;
+
+        AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+        // Replace "Attack" with the base name of your attack animations
+        return state.IsName("Attack1") || state.IsName("Attack2");
+    }
 }

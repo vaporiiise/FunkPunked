@@ -40,6 +40,7 @@ public class AttackController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         if (weaponCollider != null)
             weaponCollider.Initialize(this);
+
         SetWeaponVisible(false);
     }
 
@@ -47,7 +48,7 @@ public class AttackController : MonoBehaviour
     {
         HandleAttackInput();
         HandleRMBInput();
-        HandleWeaponVisibilityTimer();
+        UpdateCombatTimer();
     }
 
     private void HandleAttackInput()
@@ -85,13 +86,16 @@ public class AttackController : MonoBehaviour
         }
     }
 
-    private void HandleWeaponVisibilityTimer()
+    private void UpdateCombatTimer()
     {
         if (combatTimer > 0f)
         {
             combatTimer -= Time.deltaTime;
-            if (combatTimer <= 0f)
+            if (combatTimer <= 0f && !animHandler.IsPlayingAttack())
+            {
+                // Only hide weapon if not mid-attack
                 SetWeaponVisible(false);
+            }
         }
     }
 
@@ -104,26 +108,30 @@ public class AttackController : MonoBehaviour
         if (animHandler != null)
         {
             if (nextAttackIsOne)
-                animHandler.PlayAttack(); // will play Attack1
+                animHandler.PlayAttack();
             else
-                animHandler.PlayAttack(); // will play Attack2
+                animHandler.PlayAttack();
 
             nextAttackIsOne = !nextAttackIsOne;
         }
 
+        // Play attack sound
         if (!attackSFX.IsNull)
             RuntimeManager.PlayOneShot(attackSFX, transform.position);
 
-        // Wait for animation duration or inCombatDuration
-        yield return new WaitForSeconds(inCombatDuration);
-
-        SetWeaponVisible(false);
+        // Wait until the animation finishes, do NOT hide weapon here
+        yield return null;
     }
 
-    // Called by Animation Event at swing peak
+    // ----------------- Weapon Collider -----------------
+    // Called by Animation Event at swing start
     public void EnableWeaponCollider() => weaponCollider?.EnableDamage();
+    // Called by Animation Event at swing end
     public void DisableWeaponCollider() => weaponCollider?.DisableDamage();
+    // Called by Animation Event at animation end
+    public void HideWeapon() => SetWeaponVisible(false);
 
+    // ----------------- SFX -----------------
     public void PlaySwingSFX()
     {
         if (!attackSFX.IsNull && weaponCollider != null)
@@ -144,7 +152,7 @@ public class AttackController : MonoBehaviour
         float originalTimeScale = Time.timeScale;
         Time.timeScale = hitSlowFactor;
         animHandler?.SetSpeedMultiplier(0f);
-        if (rb != null) rb.linearVelocity = Vector3.zero;
+        if (rb != null) rb.linearVelocity = Vector3.zero; // freeze movement
         yield return new WaitForSecondsRealtime(hitStopDuration);
         Time.timeScale = originalTimeScale;
         animHandler?.ResetSpeed();
