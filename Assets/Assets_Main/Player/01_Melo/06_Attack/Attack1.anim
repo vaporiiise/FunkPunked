@@ -80271,6 +80271,13 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
+  - time: 0.25
+    functionName: StartAttackTrails
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 0.35
     functionName: EnableWeaponCollider
     data: 
@@ -80280,6 +80287,20 @@ AnimationClip:
     messageOptions: 0
   - time: 0.43333334
     functionName: DisableWeaponCollider
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.55
+    functionName: EnableNextAttack
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.55
+    functionName: StopAttackTrails
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

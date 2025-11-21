@@ -12,7 +12,13 @@ public class AttackController : MonoBehaviour
 
     [HideInInspector] public PlayerStats playerStats;
     private Rigidbody rb;
+
+    private bool isAttacking = false;
+    private bool queuedAttack = false;
+
     private float combatTimer = 0f;
+
+    private bool isHitStopping = false;
 
     [Header("FMOD Events")]
     [SerializeField] private EventReference attackSFX;
@@ -27,17 +33,18 @@ public class AttackController : MonoBehaviour
     [Header("Parry/Block Settings")]
     public float parryClickThreshold = 0.25f;
     private float rmbHoldTime = 0f;
+    
+    [Header("Attack Trails")]
+    [SerializeField] private TrailRenderer[] attackTrails; 
 
     [HideInInspector] public bool isBlocking = false;
     [HideInInspector] public bool isParrying = false;
-
-    // Alternate attack tracking
-    private bool nextAttackIsOne = true;
 
     private void Start()
     {
         playerStats = GetComponent<PlayerStats>();
         rb = GetComponent<Rigidbody>();
+
         if (weaponCollider != null)
             weaponCollider.Initialize(this);
 
@@ -49,23 +56,66 @@ public class AttackController : MonoBehaviour
         HandleAttackInput();
         HandleRMBInput();
         UpdateCombatTimer();
+        
+        if (!isAttacking && attackTrails != null)
+        {
+            foreach (TrailRenderer trail in attackTrails)
+                if (trail != null) trail.emitting = false;
+        }
     }
 
+    // -------------------------
+    // Attack Input + Queue
+    // -------------------------
     private void HandleAttackInput()
     {
         if (Input.GetMouseButtonDown(0))
+        {
+            if (!isAttacking)
+            {
+                StartCoroutine(PerformAttack());
+            }
+            else if (!queuedAttack)
+            {
+                queuedAttack = true; 
+            }
+        }
+    }
+
+    private IEnumerator PerformAttack()
+    {
+        isAttacking = true;
+        queuedAttack = false;
+
+        combatTimer = inCombatDuration;
+        SetWeaponVisible(true);
+
+        animHandler.PlayAttack();
+
+        if (!attackSFX.IsNull)
+            RuntimeManager.PlayOneShot(attackSFX, transform.position);
+
+        yield return new WaitUntil(() => animHandler.canQueueNext);
+
+        isAttacking = false;
+
+        if (queuedAttack)
             StartCoroutine(PerformAttack());
     }
 
+    // -------------------------
+    // Block / Parry
+    // -------------------------
     private void HandleRMBInput()
     {
         if (Input.GetMouseButton(1))
         {
             rmbHoldTime += Time.deltaTime;
+
             if (rmbHoldTime > parryClickThreshold && !isBlocking)
             {
                 isBlocking = true;
-                animHandler?.SetBlocking(true);
+                animHandler.SetBlocking(true);
             }
         }
 
@@ -73,90 +123,70 @@ public class AttackController : MonoBehaviour
         {
             if (rmbHoldTime <= parryClickThreshold)
             {
-                // CLICK → Parry
                 isParrying = true;
-                animHandler?.PlayParry();
+                animHandler.PlayParry();
                 PlayParrySound();
             }
 
-            // Reset
             rmbHoldTime = 0f;
             isBlocking = false;
-            animHandler?.SetBlocking(false);
+            animHandler.SetBlocking(false);
         }
     }
 
+    // -------------------------
+    // Hit Stop
+    // -------------------------
+    public void OnSuccessfulHit()
+    {
+        combatTimer = inCombatDuration;
+        SetWeaponVisible(true);
+
+        if (!hitSFX.IsNull)
+            RuntimeManager.PlayOneShot(hitSFX, transform.position);
+
+        if (!isHitStopping)
+            StartCoroutine(HitStopCoroutine());
+    }
+
+    private IEnumerator HitStopCoroutine()
+    {
+        isHitStopping = true;
+
+        float originalTimeScale = Time.timeScale;
+        Time.timeScale = hitSlowFactor;
+        animHandler.SetSpeedMultiplier(0f);
+
+        if (rb != null)
+            rb.linearVelocity = Vector3.zero;
+
+        yield return new WaitForSecondsRealtime(hitStopDuration);
+
+        Time.timeScale = originalTimeScale;
+        animHandler.ResetSpeed();
+        isHitStopping = false;
+    }
+
+    // -------------------------
+    // Auto-hide weapon
+    // -------------------------
     private void UpdateCombatTimer()
     {
         if (combatTimer > 0f)
         {
             combatTimer -= Time.deltaTime;
-            if (combatTimer <= 0f && !animHandler.IsPlayingAttack())
-            {
-                // Only hide weapon if not mid-attack
+
+            if (combatTimer <= 0f && !isAttacking)
                 SetWeaponVisible(false);
-            }
         }
     }
 
-    private IEnumerator PerformAttack()
-    {
-        combatTimer = inCombatDuration;
-        SetWeaponVisible(true);
-
-        // Alternate attacks
-        if (animHandler != null)
-        {
-            if (nextAttackIsOne)
-                animHandler.PlayAttack();
-            else
-                animHandler.PlayAttack();
-
-            nextAttackIsOne = !nextAttackIsOne;
-        }
-
-        // Play attack sound
-        if (!attackSFX.IsNull)
-            RuntimeManager.PlayOneShot(attackSFX, transform.position);
-
-        // Wait until the animation finishes, do NOT hide weapon here
-        yield return null;
-    }
-
-    // ----------------- Weapon Collider -----------------
-    // Called by Animation Event at swing start
+    // -------------------------
+    // Weapon Collider / Visibility
+    // -------------------------
     public void EnableWeaponCollider() => weaponCollider?.EnableDamage();
-    // Called by Animation Event at swing end
     public void DisableWeaponCollider() => weaponCollider?.DisableDamage();
-    // Called by Animation Event at animation end
     public void HideWeapon() => SetWeaponVisible(false);
-
-    // ----------------- SFX -----------------
-    public void PlaySwingSFX()
-    {
-        if (!attackSFX.IsNull && weaponCollider != null)
-            RuntimeManager.PlayOneShot(attackSFX, weaponCollider.transform.position);
-    }
-
-    public void OnSuccessfulHit()
-    {
-        combatTimer = inCombatDuration;
-        SetWeaponVisible(true);
-        if (!hitSFX.IsNull)
-            RuntimeManager.PlayOneShot(hitSFX, transform.position);
-        StartCoroutine(HitStopCoroutine());
-    }
-
-    private IEnumerator HitStopCoroutine()
-    {
-        float originalTimeScale = Time.timeScale;
-        Time.timeScale = hitSlowFactor;
-        animHandler?.SetSpeedMultiplier(0f);
-        if (rb != null) rb.linearVelocity = Vector3.zero; // freeze movement
-        yield return new WaitForSecondsRealtime(hitStopDuration);
-        Time.timeScale = originalTimeScale;
-        animHandler?.ResetSpeed();
-    }
 
     public void SetWeaponVisible(bool visible)
     {
@@ -164,9 +194,36 @@ public class AttackController : MonoBehaviour
             weaponModel.SetActive(visible);
     }
 
+    // -------------------------
+    // SFX
+    // -------------------------
     public void PlayParrySound()
     {
         if (!parrySFX.IsNull)
             RuntimeManager.PlayOneShot(parrySFX, transform.position);
     }
+    
+    public void StartAttackTrails()
+    {
+        if (attackTrails == null) return;
+    
+        foreach (TrailRenderer trail in attackTrails)
+        {
+            if (trail == null) continue;
+            trail.Clear();        
+            trail.emitting = true; 
+        }
+    }
+    
+    public void StopAttackTrails()
+    {
+        if (attackTrails == null) return;
+    
+        foreach (TrailRenderer trail in attackTrails)
+        {
+            if (trail == null) continue;
+            trail.emitting = false; 
+        }
+    }
+
 }

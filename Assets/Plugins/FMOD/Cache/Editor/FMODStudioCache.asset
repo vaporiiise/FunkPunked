@@ -15,10 +15,10 @@ MonoBehaviour:
   Path: Assets/FMOD/FunkPunk_FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638990919801119734
+  lastModified: 638993751493242239
   FileSizes:
   - Name: Desktop
-    Value: 1242
+    Value: 1318
   Exists: 1
 --- !u!114 &-8875413440642711717
 MonoBehaviour:
@@ -47,6 +47,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-8661809797865905210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BeatTest
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/BeatTest
+  Guid:
+    Data1: -509588208
+    Data2: 1197976628
+    Data3: 1987771826
+    Data4: -1711842339
+  Banks:
+  - {fileID: -6922230723617444402}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 9601
 --- !u!114 &-8289768404016567495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,10 +144,10 @@ MonoBehaviour:
   Path: Assets/FMOD/FunkPunk_FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638990919801114718
+  lastModified: 638993751493227236
   FileSizes:
   - Name: Desktop
-    Value: 10807616
+    Value: 10967136
   Exists: 1
 --- !u!114 &-6843423979543593907
 MonoBehaviour:
@@ -304,6 +331,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 132140
+--- !u!114 &-1230636924834033868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/AttackHit
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/AttackHit
+  Guid:
+    Data1: 2063530780
+    Data2: 1256896006
+    Data3: -93535859
+    Data4: 1045689982
+  Banks:
+  - {fileID: -6922230723617444402}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,12 +383,14 @@ MonoBehaviour:
   - {fileID: -5228118026370310074}
   - {fileID: 6749525921328277540}
   - {fileID: 3445435536360116550}
+  - {fileID: -1230636924834033868}
+  - {fileID: -8661809797865905210}
   EditorParameters: []
   MasterBanks:
   - {fileID: -6922230723617444402}
   StringsBanks:
   - {fileID: -9008786623715297602}
-  cacheTime: 638990919801119734
+  cacheTime: 638993751493242239
   cacheVersion: 131633
 --- !u!114 &3445435536360116550
 MonoBehaviour:
