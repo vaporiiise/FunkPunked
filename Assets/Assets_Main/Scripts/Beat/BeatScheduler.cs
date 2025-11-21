@@ -5,12 +5,11 @@ public class BeatScheduler : MonoBehaviour
 {
     [Header("BPM Settings")]
     public float bpm = 120f;
-
     private float beatInterval;
     private float nextBeatTime;
     private int beatCount;
-    public float attackLeadTime = 0.1f;
 
+    public float attackLeadTime = 0.1f;
     public static event Action<int> OnBeat;
 
     void Start()
@@ -25,11 +24,9 @@ public class BeatScheduler : MonoBehaviour
         {
             beatCount++;
             OnBeat?.Invoke(beatCount);
-
             nextBeatTime += beatInterval;
         }
     }
-
 
     public bool IsInAttackWindow(float window = 0.1f)
     {
@@ -38,15 +35,6 @@ public class BeatScheduler : MonoBehaviour
         return (timeToNext <= window || timeSinceLast <= window);
     }
 
-
-    public float TimeToNextBeat()
-    {
-        return nextBeatTime - Time.time;
-    }
-
-
-    public float TimeSinceLastBeat()
-    {
-        return Time.time - (nextBeatTime - beatInterval);
-    }
+    public float TimeToNextBeat() => nextBeatTime - Time.time;
+    public float TimeSinceLastBeat() => Time.time - (nextBeatTime - beatInterval);
 }

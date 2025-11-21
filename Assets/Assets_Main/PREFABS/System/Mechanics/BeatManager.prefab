@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 8200764094649588089}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.33202, y: 0.28536, z: -0.0783}
+  m_LocalPosition: {x: 0.18567, y: 1.18936, z: 0.34501}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -47,11 +47,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MusicManager
   musicEvent:
     Guid:
-      Data1: -358386881
-      Data2: 1127388499
-      Data3: -980522851
-      Data4: -1161823552
-    Path: event:/Beat1
+      Data1: -509588208
+      Data2: 1197976628
+      Data3: 1987771826
+      Data4: -1711842339
+    Path: event:/BeatTest
+  parameters: []
 --- !u!114 &5741452882637289000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,4 +65,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2328e20d3f5079549b2a97d4978d975a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BeatScheduler
-  bpm: 120
+  bpm: 100
+  attackLeadTime: 0.1

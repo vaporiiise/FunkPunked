@@ -18,42 +18,20 @@ public class WeaponCollider : MonoBehaviour
         weaponCollider.enabled = false;
     }
 
-    /// <summary>
-    /// Initialize the weapon collider with its owner (player/attack controller).
-    /// </summary>
     public void Initialize(AttackController controller)
     {
         owner = controller;
     }
 
-    /// <summary>
-    /// Enables damage detection (use for swing peak).
-    /// </summary>
     public void EnableDamage()
     {
         canDamage = true;
         weaponCollider.enabled = true;
     }
 
-    /// <summary>
-    /// Disables damage detection.
-    /// </summary>
     public void DisableDamage()
     {
         canDamage = false;
-        weaponCollider.enabled = false;
-    }
-
-    /// <summary>
-    /// These functions are for Animation Events if you want to toggle the collider directly.
-    /// </summary>
-    public void EnableWeaponCollider()
-    {
-        weaponCollider.enabled = true;
-    }
-
-    public void DisableWeaponCollider()
-    {
         weaponCollider.enabled = false;
     }
 
@@ -61,15 +39,13 @@ public class WeaponCollider : MonoBehaviour
     {
         if (!canDamage) return;
         if (!other.CompareTag(targetTag)) return;
-
-        // Only deal damage to objects on the specified layer
         if ((enemyLayer.value & (1 << other.gameObject.layer)) == 0) return;
 
         EnemyHealth enemy = other.GetComponent<EnemyHealth>();
         if (enemy != null)
         {
             enemy.TakeDamage(damage);
-            owner?.OnSuccessfulHit();
+            owner?.OnSuccessfulHit(); // always safe
 
             Debug.Log($"Hit enemy: {other.name}");
         }

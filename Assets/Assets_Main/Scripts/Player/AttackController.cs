@@ -9,15 +9,13 @@ public class AttackController : MonoBehaviour
     [SerializeField] private WeaponCollider weaponCollider;
     [SerializeField] private GameObject weaponModel;
     [SerializeField] private PlayerAnimationHandler animHandler;
+    [SerializeField] private BeatScheduler beatScheduler; // Reference to your BeatScheduler
 
     [HideInInspector] public PlayerStats playerStats;
     private Rigidbody rb;
 
     private bool isAttacking = false;
     private bool queuedAttack = false;
-
-    private float combatTimer = 0f;
-
     private bool isHitStopping = false;
 
     [Header("FMOD Events")]
@@ -29,13 +27,14 @@ public class AttackController : MonoBehaviour
     public float inCombatDuration = 2f;
     public float hitStopDuration = 0.1f;
     public float hitSlowFactor = 0.05f;
+    public float attackLeadTime = 0.1f; // How early player can hit before the beat
 
     [Header("Parry/Block Settings")]
     public float parryClickThreshold = 0.25f;
     private float rmbHoldTime = 0f;
-    
+
     [Header("Attack Trails")]
-    [SerializeField] private TrailRenderer[] attackTrails; 
+    [SerializeField] private TrailRenderer[] attackTrails;
 
     [HideInInspector] public bool isBlocking = false;
     [HideInInspector] public bool isParrying = false;
@@ -56,7 +55,8 @@ public class AttackController : MonoBehaviour
         HandleAttackInput();
         HandleRMBInput();
         UpdateCombatTimer();
-        
+
+        // Always stop trails when not attacking
         if (!isAttacking && attackTrails != null)
         {
             foreach (TrailRenderer trail in attackTrails)
@@ -137,18 +137,6 @@ public class AttackController : MonoBehaviour
     // -------------------------
     // Hit Stop
     // -------------------------
-    public void OnSuccessfulHit()
-    {
-        combatTimer = inCombatDuration;
-        SetWeaponVisible(true);
-
-        if (!hitSFX.IsNull)
-            RuntimeManager.PlayOneShot(hitSFX, transform.position);
-
-        if (!isHitStopping)
-            StartCoroutine(HitStopCoroutine());
-    }
-
     private IEnumerator HitStopCoroutine()
     {
         isHitStopping = true;
@@ -170,6 +158,7 @@ public class AttackController : MonoBehaviour
     // -------------------------
     // Auto-hide weapon
     // -------------------------
+    private float combatTimer = 0f;
     private void UpdateCombatTimer()
     {
         if (combatTimer > 0f)
@@ -202,28 +191,76 @@ public class AttackController : MonoBehaviour
         if (!parrySFX.IsNull)
             RuntimeManager.PlayOneShot(parrySFX, transform.position);
     }
-    
+
+    // -------------------------
+    // Trails
+    // -------------------------
     public void StartAttackTrails()
     {
         if (attackTrails == null) return;
-    
+
         foreach (TrailRenderer trail in attackTrails)
         {
             if (trail == null) continue;
-            trail.Clear();        
-            trail.emitting = true; 
-        }
-    }
-    
-    public void StopAttackTrails()
-    {
-        if (attackTrails == null) return;
-    
-        foreach (TrailRenderer trail in attackTrails)
-        {
-            if (trail == null) continue;
-            trail.emitting = false; 
+            trail.Clear();
+            trail.emitting = true;
         }
     }
 
+    public void StopAttackTrails()
+    {
+        if (attackTrails == null) return;
+
+        foreach (TrailRenderer trail in attackTrails)
+        {
+            if (trail == null) continue;
+            trail.emitting = false;
+        }
+    }
+
+    // -------------------------
+    // BEAT-SYNCED HIT
+    // -------------------------
+    /// <summary>
+    /// Call this from Animation Event at the frame you want the "hit" to occur.
+    /// The actual hit will only register if within the beat window.
+    /// </summary>
+    public void TryHit()
+    {
+        if (beatScheduler == null) return;
+
+        // If we're close to the beat, trigger immediately
+        if (beatScheduler.IsInAttackWindow(attackLeadTime))
+        {
+            OnSuccessfulHit();
+        }
+        else
+        {
+            // Otherwise, schedule hit exactly on the next beat
+            StartCoroutine(DelayedHitToNextBeat());
+        }
+    }
+
+    private IEnumerator DelayedHitToNextBeat()
+    {
+        float delay = beatScheduler.TimeToNextBeat();
+        yield return new WaitForSeconds(delay);
+
+        OnSuccessfulHit();
+    }
+
+    // -------------------------
+    // Actual Hit Logic
+    // -------------------------
+    public void OnSuccessfulHit()
+    {
+        combatTimer = inCombatDuration;
+        SetWeaponVisible(true);
+
+        if (!hitSFX.IsNull)
+            RuntimeManager.PlayOneShot(hitSFX, transform.position);
+
+        if (!isHitStopping)
+            StartCoroutine(HitStopCoroutine());
+    }
 }

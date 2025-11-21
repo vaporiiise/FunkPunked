@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 6173323494988133954}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.18567, y: 1.18936, z: 0.34501}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46,4 +46,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ComboManager
   comboBar: {fileID: 0}
   comboText: {fileID: 0}
+  discAnimator: {fileID: 0}
+  stageParameter: StageIndex
+  nextStageTrigger: NextStage
+  failTrigger: Fail
   comboResetTime: 1.5
+  parameterName: MusicState
+  musicLevels: []
