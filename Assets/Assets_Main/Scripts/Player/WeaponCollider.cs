@@ -45,9 +45,14 @@ public class WeaponCollider : MonoBehaviour
         if (enemy != null)
         {
             enemy.TakeDamage(damage);
-            owner?.OnSuccessfulHit(); // always safe
 
-            Debug.Log($"Hit enemy: {other.name}");
+            owner?.OnSuccessfulHit(); // keep this
+
+            // 🔥 NEW: Add combo here
+            ComboManager combo = FindObjectOfType<ComboManager>();
+            combo?.AddCombo();
+
+            Debug.Log($"Hit enemy: {other.name} → +1 Combo");
         }
     }
 }

@@ -28,6 +28,9 @@ public class EnemyHealth : MonoBehaviour
 
     private Coroutine fadeRoutine;
     private bool dead = false;
+    
+    public float currentHealth { get { return hp; } }
+
 
     // ----------------------------------------------------------
     public void Initialize(Enemy c)

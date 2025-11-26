@@ -13,6 +13,13 @@ public class EnemyMovement : MonoBehaviour
     public float visionAngle = 120f;
 
     public float attackRange = 2f;
+    
+    [Header("Circling")]
+    public float circleSpeed = 2f;
+    public float circleDistance = 3f;      // ideal distance from player
+    public float circleDirectionSwitch = 2f; // seconds before switching L/R
+    private float circleTimer;
+    private int circleDirection = 1; // +1 = right, -1 = left
 
     private Transform player;
     private NavMeshAgent agent;
@@ -151,5 +158,55 @@ public class EnemyMovement : MonoBehaviour
             Gizmos.DrawLine(previousPoint, nextPoint);
             previousPoint = nextPoint;
         }
+    }
+    
+    public void CirclePlayer(Transform player)
+    {
+        if (player == null) return;
+
+        // --- ALWAYS face player ---
+        Vector3 lookDir = (player.position - transform.position);
+        lookDir.y = 0;
+        if (lookDir != Vector3.zero)
+            transform.rotation = Quaternion.Slerp(transform.rotation,
+                Quaternion.LookRotation(lookDir), Time.deltaTime * 6f);
+
+        // --- Maintain distance ---
+        float dist = Vector3.Distance(transform.position, player.position);
+
+        Vector3 offset = Vector3.zero;
+
+        // Move outward if too close
+        if (dist < circleDistance * 0.8f)
+            offset += -lookDir.normalized;
+
+        // Move inward if too far
+        else if (dist > circleDistance * 1.2f)
+            offset += lookDir.normalized;
+
+        // --- Circle sideways ---
+        Vector3 side = Vector3.Cross(lookDir.normalized, Vector3.up);
+        offset += side * circleDirection;
+
+        offset = offset.normalized;
+
+        agent.isStopped = false;
+        agent.speed = circleSpeed;
+        agent.SetDestination(transform.position + offset);
+
+        // --- Switch left / right every X seconds ---
+        circleTimer += Time.deltaTime;
+        if (circleTimer >= circleDirectionSwitch)
+        {
+            circleTimer = 0;
+            circleDirection *= -1; // flip side
+        }
+
+    }
+    public void MoveTo(Vector3 pos)
+    {
+        agent.isStopped = false;
+        agent.speed = moveSpeed;
+        agent.SetDestination(pos);
     }
 }

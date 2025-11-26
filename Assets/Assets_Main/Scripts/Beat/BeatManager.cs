@@ -46,7 +46,7 @@ public class BeatManager : MonoBehaviour
 
         musicInstance.start();
 
-        Debug.Log("[BeatManager] Started FMOD music event: " + musicEvent.Path);
+        //Debug.Log("[BeatManager] Started FMOD music event: " + musicEvent.Path);
     }
 
     private void Update()
