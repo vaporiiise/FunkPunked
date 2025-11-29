@@ -43,7 +43,7 @@ MonoBehaviour:
   Path: Assets/FMOD/FunkPunk_FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638990763812306393
+  lastModified: 638999751665321927
   FileSizes:
   - Name: Desktop
     Value: 10807616
@@ -94,7 +94,7 @@ MonoBehaviour:
   FileSizes:
   - Name: Desktop
     Value: 1242
-  Exists: 1
+  Exists: 0
 --- !u!114 &-185276691842435979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,12 +134,13 @@ MonoBehaviour:
   EditorBanks:
   - {fileID: -2685805546886892236}
   - {fileID: -7090693318059335686}
+  - {fileID: 4424313535175006855}
   EditorEvents:
   - {fileID: 5801415795933763024}
   - {fileID: 3782262509683173060}
   - {fileID: 5933495958959511114}
   - {fileID: -4076533996144259063}
-  - {fileID: 4382369895931907917}
+  - {fileID: 0}
   - {fileID: 3834503891367779409}
   - {fileID: -9193827217724352615}
   - {fileID: 7508342150285780275}
@@ -148,8 +149,9 @@ MonoBehaviour:
   MasterBanks:
   - {fileID: -7090693318059335686}
   StringsBanks:
-  - {fileID: -2685805546886892236}
-  cacheTime: 638990763812316445
+  - {fileID: 5418814102633582914}
+  - {fileID: 4424313535175006855}
+  cacheTime: 638999751665332060
   cacheVersion: 131633
 --- !u!114 &2844040736554982617
 MonoBehaviour:
@@ -265,26 +267,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Beat1
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
-  Path: event:/Beat1
-  Guid:
-    Data1: -358386881
-    Data2: 1127388499
-    Data3: -980522851
-    Data4: -1161823552
-  Banks:
-  - {fileID: -7090693318059335686}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 0
-  Parameters:
-  - {fileID: 3131721032267327958}
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 16024
---- !u!114 &5801415795933763024
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: Assets/FMOD/FunkPunk_FMOD/Build/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 638987732133841776
+  FileSizes:
+  - Name: Desktop
+    Value: 1242
+  Exists: 1
+--- !u!114 &4424313535175006855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: Assets/FMOD/FunkPunk_FMOD/Build/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 638999751665332060
+  FileSizes:
+  - Name: Desktop
+    Value: 1242
+  Exists: 1
+--- !u!114 &5701117211503026187
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
