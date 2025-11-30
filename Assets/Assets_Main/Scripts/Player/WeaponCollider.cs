@@ -46,9 +46,8 @@ public class WeaponCollider : MonoBehaviour
         {
             enemy.TakeDamage(damage);
 
-            owner?.OnSuccessfulHit(); // keep this
+            owner?.OnSuccessfulHit();
 
-            // 🔥 NEW: Add combo here
             ComboManager combo = FindObjectOfType<ComboManager>();
             combo?.AddCombo();
 

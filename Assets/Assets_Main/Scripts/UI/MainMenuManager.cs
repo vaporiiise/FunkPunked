@@ -53,12 +53,10 @@ public class MainMenuManager : MonoBehaviour
     /// </summary>
     public void GoToScene(string sceneName)
     {
-        // Stop FMOD music from PressAnyButton if it exists
         PressAnyButton pressAnyButton = FindObjectOfType<PressAnyButton>();
         if (pressAnyButton != null)
             pressAnyButton.StopMusic();
 
-        // Load the next scene
         SceneManager.LoadScene(sceneName);
     }
 }

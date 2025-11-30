@@ -3317,6 +3317,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2938838636795697782}
   - {fileID: 8482135610265280098}
   - {fileID: 7837995198696146815}
   m_Father: {fileID: 0}
@@ -3444,6 +3445,10 @@ MonoBehaviour:
   animHandler: {fileID: 1530986157138923840}
   beatScheduler: {fileID: 0}
   playerStats: {fileID: 0}
+  autoHideWeapon: 0
+  isHolstered: 1
+  lockMovementDuringAttack: 1
+  isMovementLocked: 0
   attackSFX:
     Guid:
       Data1: -698428136
@@ -8031,15 +8036,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4118024538648994723}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 80, z: 3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.19165011, y: -0.64262164, z: -0.66618174, w: -0.3263582}
+  m_LocalPosition: {x: 0.4008295, y: 0.9241388, z: 0.47541523}
+  m_LocalScale: {x: 0.01, y: 0.009999996, z: 0.009999999}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7191255354229486222}
   - {fileID: 2781735929490062999}
   - {fileID: 3266029639973847807}
-  m_Father: {fileID: 5737252831881493659}
+  m_Father: {fileID: 2465193258868040495}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4121920793133548150
 GameObject:
@@ -9027,7 +9032,6 @@ Transform:
   - {fileID: 3934692894945576562}
   - {fileID: 7883315748248213090}
   - {fileID: 8173956318842285132}
-  - {fileID: 2938838636795697782}
   m_Father: {fileID: 8886489837371823485}
   m_LocalEulerAnglesHint: {x: -8.312, y: -2.855, z: 8.263}
 --- !u!136 &6950155810432645582

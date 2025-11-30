@@ -5,11 +5,10 @@ using FMODUnity;
 [RequireComponent(typeof(PlayerStats))]
 public class AttackController : MonoBehaviour
 {
-    [Header("References")]
     [SerializeField] private WeaponCollider weaponCollider;
     [SerializeField] private GameObject weaponModel;
     [SerializeField] private PlayerAnimationHandler animHandler;
-    [SerializeField] private BeatScheduler beatScheduler; // Reference to your BeatScheduler
+    [SerializeField] private BeatScheduler beatScheduler;
 
     [HideInInspector] public PlayerStats playerStats;
     private Rigidbody rb;
@@ -17,37 +16,36 @@ public class AttackController : MonoBehaviour
     private bool isAttacking = false;
     private bool queuedAttack = false;
     private bool isHitStopping = false;
+    private bool weaponHolstered = false;
 
-    [Header("FMOD Events")]
     [SerializeField] private EventReference attackSFX;
     [SerializeField] private EventReference hitSFX;
     [SerializeField] private EventReference parrySFX;
 
-    [Header("Attack Settings")]
     public float inCombatDuration = 2f;
     public float hitStopDuration = 0.1f;
     public float hitSlowFactor = 0.05f;
-    public float attackLeadTime = 0.1f; // How early player can hit before the beat
+    public float attackLeadTime = 0.1f;
 
-    [Header("Parry/Block Settings")]
     public float parryClickThreshold = 0.25f;
     private float rmbHoldTime = 0f;
 
-    [Header("Attack Trails")]
     [SerializeField] private TrailRenderer[] attackTrails;
 
     [HideInInspector] public bool isBlocking = false;
     [HideInInspector] public bool isParrying = false;
 
+    private float combatTimer = 0f;
+
+    public bool IsAttacking => isAttacking;
+    public bool WeaponHolstered => weaponHolstered;
+
     private void Start()
     {
         playerStats = GetComponent<PlayerStats>();
         rb = GetComponent<Rigidbody>();
-
-        if (weaponCollider != null)
-            weaponCollider.Initialize(this);
-
-        SetWeaponVisible(false);
+        if (weaponCollider != null) weaponCollider.Initialize(this);
+        SetWeaponVisible(!weaponHolstered);
     }
 
     private void Update()
@@ -55,30 +53,31 @@ public class AttackController : MonoBehaviour
         HandleAttackInput();
         HandleRMBInput();
         UpdateCombatTimer();
-
-        // Always stop trails when not attacking
         if (!isAttacking && attackTrails != null)
         {
             foreach (TrailRenderer trail in attackTrails)
                 if (trail != null) trail.emitting = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            weaponHolstered = !weaponHolstered;
+            SetWeaponVisible(!weaponHolstered);
+        }
     }
 
-    // -------------------------
-    // Attack Input + Queue
-    // -------------------------
     private void HandleAttackInput()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (!isAttacking)
+            if (weaponHolstered)
             {
-                StartCoroutine(PerformAttack());
+                weaponHolstered = false;
+                SetWeaponVisible(true);
             }
-            else if (!queuedAttack)
-            {
-                queuedAttack = true; 
-            }
+
+            if (!isAttacking) StartCoroutine(PerformAttack());
+            else if (!queuedAttack) queuedAttack = true;
         }
     }
 
@@ -86,32 +85,20 @@ public class AttackController : MonoBehaviour
     {
         isAttacking = true;
         queuedAttack = false;
-
         combatTimer = inCombatDuration;
         SetWeaponVisible(true);
-
         animHandler.PlayAttack();
-
-        if (!attackSFX.IsNull)
-            RuntimeManager.PlayOneShot(attackSFX, transform.position);
-
+        if (!attackSFX.IsNull) RuntimeManager.PlayOneShot(attackSFX, transform.position);
         yield return new WaitUntil(() => animHandler.canQueueNext);
-
         isAttacking = false;
-
-        if (queuedAttack)
-            StartCoroutine(PerformAttack());
+        if (queuedAttack) StartCoroutine(PerformAttack());
     }
 
-    // -------------------------
-    // Block / Parry
-    // -------------------------
     private void HandleRMBInput()
     {
         if (Input.GetMouseButton(1))
         {
             rmbHoldTime += Time.deltaTime;
-
             if (rmbHoldTime > parryClickThreshold && !isBlocking)
             {
                 isBlocking = true;
@@ -127,78 +114,51 @@ public class AttackController : MonoBehaviour
                 animHandler.PlayParry();
                 PlayParrySound();
             }
-
             rmbHoldTime = 0f;
             isBlocking = false;
             animHandler.SetBlocking(false);
         }
     }
 
-    // -------------------------
-    // Hit Stop
-    // -------------------------
     private IEnumerator HitStopCoroutine()
     {
         isHitStopping = true;
-
         float originalTimeScale = Time.timeScale;
         Time.timeScale = hitSlowFactor;
         animHandler.SetSpeedMultiplier(0f);
-
-        if (rb != null)
-            rb.linearVelocity = Vector3.zero;
-
+        if (rb != null) rb.linearVelocity = Vector3.zero;
         yield return new WaitForSecondsRealtime(hitStopDuration);
-
         Time.timeScale = originalTimeScale;
         animHandler.ResetSpeed();
         isHitStopping = false;
     }
 
-    // -------------------------
-    // Auto-hide weapon
-    // -------------------------
-    private float combatTimer = 0f;
     private void UpdateCombatTimer()
     {
         if (combatTimer > 0f)
         {
             combatTimer -= Time.deltaTime;
-
-            if (combatTimer <= 0f && !isAttacking)
-                SetWeaponVisible(false);
+            if (combatTimer <= 0f && !isAttacking) SetWeaponVisible(!weaponHolstered);
         }
     }
 
-    // -------------------------
-    // Weapon Collider / Visibility
-    // -------------------------
     public void EnableWeaponCollider() => weaponCollider?.EnableDamage();
     public void DisableWeaponCollider() => weaponCollider?.DisableDamage();
     public void HideWeapon() => SetWeaponVisible(false);
 
     public void SetWeaponVisible(bool visible)
     {
-        if (weaponModel != null)
-            weaponModel.SetActive(visible);
+        if (weaponModel != null) weaponModel.SetActive(visible);
     }
 
-    // -------------------------
-    // SFX
-    // -------------------------
     public void PlayParrySound()
     {
-        if (!parrySFX.IsNull)
-            RuntimeManager.PlayOneShot(parrySFX, transform.position);
+        if (!parrySFX.IsNull) RuntimeManager.PlayOneShot(parrySFX, transform.position);
     }
 
-    // -------------------------
-    // Trails
-    // -------------------------
     public void StartAttackTrails()
     {
         if (attackTrails == null) return;
-
         foreach (TrailRenderer trail in attackTrails)
         {
             if (trail == null) continue;
@@ -210,7 +170,6 @@ public class AttackController : MonoBehaviour
     public void StopAttackTrails()
     {
         if (attackTrails == null) return;
-
         foreach (TrailRenderer trail in attackTrails)
         {
             if (trail == null) continue;
@@ -218,49 +177,25 @@ public class AttackController : MonoBehaviour
         }
     }
 
-    // -------------------------
-    // BEAT-SYNCED HIT
-    // -------------------------
-    /// <summary>
-    /// Call this from Animation Event at the frame you want the "hit" to occur.
-    /// The actual hit will only register if within the beat window.
-    /// </summary>
     public void TryHit()
     {
         if (beatScheduler == null) return;
-
-        // If we're close to the beat, trigger immediately
-        if (beatScheduler.IsInAttackWindow(attackLeadTime))
-        {
-            OnSuccessfulHit();
-        }
-        else
-        {
-            // Otherwise, schedule hit exactly on the next beat
-            StartCoroutine(DelayedHitToNextBeat());
-        }
+        if (beatScheduler.IsInAttackWindow(attackLeadTime)) OnSuccessfulHit();
+        else StartCoroutine(DelayedHitToNextBeat());
     }
 
     private IEnumerator DelayedHitToNextBeat()
     {
         float delay = beatScheduler.TimeToNextBeat();
         yield return new WaitForSeconds(delay);
-
         OnSuccessfulHit();
     }
 
-    // -------------------------
-    // Actual Hit Logic
-    // -------------------------
     public void OnSuccessfulHit()
     {
         combatTimer = inCombatDuration;
         SetWeaponVisible(true);
-
-        if (!hitSFX.IsNull)
-            RuntimeManager.PlayOneShot(hitSFX, transform.position);
-
-        if (!isHitStopping)
-            StartCoroutine(HitStopCoroutine());
+        if (!hitSFX.IsNull) RuntimeManager.PlayOneShot(hitSFX, transform.position);
+        if (!isHitStopping) StartCoroutine(HitStopCoroutine());
     }
 }
