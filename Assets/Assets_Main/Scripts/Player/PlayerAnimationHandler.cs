@@ -3,89 +3,57 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class PlayerAnimationHandler : MonoBehaviour
 {
-    private Animator animator;
+    public Animator animator { get; private set; }
+
+    [Header("Movement Settings")]
     private float currentSpeed = 0f;
+    [Tooltip("Smoothing speed for movement animations")]
+    public float smoothSpeed = 0.15f;
 
-    [Header("Settings")]
-    public float smoothSpeed = 0.1f;
-    public float idleDelay = 5f;
-
-    private float idleTimer = 0f;
-    private bool isIdle = false;
-    private bool hasPlayedSpecialIdle = false;
-
-    // Combo tracker
+    [Header("Combo Settings")]
     private int attackComboStep = 1;
-    private int maxCombo = 2; // Change to number of attack animations
+    private int maxCombo = 6;
+    [HideInInspector] public bool canQueueNext = true;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
     }
 
-    private void Update()
+    /// <summary>
+    /// Update movement animation
+    /// </summary>
+    /// <param name="targetSpeed">0 = idle, 0.3 walk, 0.5 run, 0.73 run with weapon</param>
+    /// <param name="hasWeapon">true if player holds weapon</param>
+    public void UpdateMovement(float targetSpeed, bool hasWeapon)
     {
-        HandleSpecialIdle();
-    }
-
-    public void UpdateMovement(float normalizedSpeed)
-    {
-        currentSpeed = Mathf.Lerp(currentSpeed, normalizedSpeed, smoothSpeed);
+        currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, smoothSpeed);
+        currentSpeed = Mathf.Clamp(currentSpeed, 0f, 1f);
         animator.SetFloat("Speed", currentSpeed);
-
-        if (normalizedSpeed <= 0.01f)
-        {
-            if (!isIdle)
-            {
-                isIdle = true;
-                idleTimer = 0f;
-                hasPlayedSpecialIdle = false;
-            }
-        }
-        else
-        {
-            isIdle = false;
-            idleTimer = 0f;
-            hasPlayedSpecialIdle = false;
-        }
     }
 
-    private void HandleSpecialIdle()
+    // ----------------- Combat & State Triggers -----------------
+    public void PlayAttack()
     {
-        if (isIdle && !hasPlayedSpecialIdle)
-        {
-            idleTimer += Time.deltaTime;
-            if (idleTimer >= idleDelay)
-            {
-                animator.SetTrigger("SpecialIdle");
-                hasPlayedSpecialIdle = true;
-            }
-        }
+        if (!canQueueNext) return;
+        animator.SetTrigger("Attack" + attackComboStep);
+        canQueueNext = false;
+
+        attackComboStep++;
+        if (attackComboStep > maxCombo) attackComboStep = 1;
     }
+
+    public void EnableNextAttack() => canQueueNext = true;
+
+    public void PlayHit() => animator.SetTrigger("Hit");
+    public void PlayLand() => animator.SetTrigger("Land");
+    public void PlayJump() => animator.SetTrigger("Jump");
+    public void PlayParry() => animator.SetTrigger("Parry");
 
     public void SetGrounded(bool grounded) => animator.SetBool("IsGrounded", grounded);
     public void SetDashing(bool isDashing) => animator.SetBool("IsDashing", isDashing);
     public void SetFalling(bool isFalling) => animator.SetBool("IsFalling", isFalling);
     public void SetBlocking(bool blocking) => animator.SetBool("IsBlocking", blocking);
-
-    public void PlayJump() => animator.SetTrigger("Jump");
-    public void PlayLand() => animator.SetTrigger("Land");
-    public void PlayHit() => animator.SetTrigger("Hit");
-
-    // -----------------------------
-    // COMBAT
-    // -----------------------------
-    public void PlayAttack()
-    {
-        animator.SetTrigger("Attack" + attackComboStep); // Trigger Attack1 or Attack2
-
-        // Increment combo for next attack
-        attackComboStep++;
-        if (attackComboStep > maxCombo)
-            attackComboStep = 1;
-    }
-
-    public void PlayParry() => animator.SetTrigger("Parry");
 
     public void SetSpeedMultiplier(float speed) => animator.speed = speed;
     public void ResetSpeed() => animator.speed = 1f;

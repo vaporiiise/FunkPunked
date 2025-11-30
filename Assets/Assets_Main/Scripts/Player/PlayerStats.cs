@@ -9,11 +9,12 @@ public class PlayerStats : MonoBehaviour
     [Header("Stats")]
     public float maxHealth = 100f;
     public float currentHealth;
-    public float maxStamina = 100f;
-    public float currentStamina;
+
+    [Header("Stamina Charges")]
+    public int maxStaminaCharges = 3;
+    public int currentStaminaCharges;
 
     [Header("Stamina Regen Settings")]
-    public float staminaRegenRate = 15f;
     public float regenDelay = 1.5f;
     private float regenTimer = 0f;
 
@@ -24,14 +25,13 @@ public class PlayerStats : MonoBehaviour
     public float parryWindow = 0.1f;
     public float parryDuration = 0.3f;
     public float parryCooldown = 1f;
-    public float parryStaminaCost = 20f;
+    public int parryStaminaCost = 1; // consumes 1 charge
     private bool canParry = true;
 
     [Header("UI")]
+    public Image[] staminaCharges; // assign 3 images in inspector
     public Image healthBar;
-    public Image staminaBar;
     public TMP_Text healthText;
-    public TMP_Text staminaText;
 
     [Header("Hit Feedback UI")]
     public Image hitOverlay;
@@ -52,7 +52,7 @@ public class PlayerStats : MonoBehaviour
     private void Start()
     {
         currentHealth = maxHealth;
-        currentStamina = maxStamina;
+        currentStaminaCharges = maxStaminaCharges;
         UpdateUI();
 
         if (hitOverlay != null)
@@ -123,16 +123,16 @@ public class PlayerStats : MonoBehaviour
         hitOverlay.color = new Color(hitColor.r, hitColor.g, hitColor.b, 0f);
     }
 
-    public void UseStamina(float amount)
+    public void UseStamina(int amount)
     {
-        currentStamina = Mathf.Clamp(currentStamina - amount, 0, maxStamina);
+        currentStaminaCharges = Mathf.Max(currentStaminaCharges - amount, 0);
         regenTimer = regenDelay;
         UpdateUI();
     }
 
-    public void RegainStamina(float amount)
+    public void RegainStamina(int amount)
     {
-        currentStamina = Mathf.Clamp(currentStamina + amount, 0, maxStamina);
+        currentStaminaCharges = Mathf.Min(currentStaminaCharges + amount, maxStaminaCharges);
         UpdateUI();
     }
 
@@ -142,10 +142,11 @@ public class PlayerStats : MonoBehaviour
         {
             regenTimer -= Time.deltaTime;
         }
-        else if (currentStamina < maxStamina)
+        else if (currentStaminaCharges < maxStaminaCharges)
         {
-            currentStamina += staminaRegenRate * Time.deltaTime;
-            currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
+            // regenerate 1 charge at a time
+            currentStaminaCharges++;
+            regenTimer = regenDelay;
             UpdateUI();
         }
     }
@@ -153,7 +154,7 @@ public class PlayerStats : MonoBehaviour
     public void TryParry()
     {
         if (!canParry) return;
-        if (currentStamina < parryStaminaCost) return;
+        if (currentStaminaCharges < parryStaminaCost) return;
 
         if (beatScheduler != null && !beatScheduler.IsInAttackWindow(parryWindow))
         {
@@ -193,13 +194,14 @@ public class PlayerStats : MonoBehaviour
         if (healthBar != null)
             healthBar.fillAmount = currentHealth / maxHealth;
 
-        if (staminaBar != null)
-            staminaBar.fillAmount = currentStamina / maxStamina;
-
         if (healthText != null)
             healthText.text = $"{currentHealth:0}/{maxHealth}";
 
-        if (staminaText != null)
-            staminaText.text = $"{currentStamina:0}/{maxStamina}";
+        // update stamina charges
+        for (int i = 0; i < staminaCharges.Length; i++)
+        {
+            if (staminaCharges[i] != null)
+                staminaCharges[i].enabled = i < currentStaminaCharges;
+        }
     }
 }

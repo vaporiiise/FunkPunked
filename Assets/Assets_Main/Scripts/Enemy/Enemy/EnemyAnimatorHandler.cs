@@ -8,7 +8,6 @@ public class EnemyAnimatorHandler : MonoBehaviour
     private int moveSpeedHash;
     private int attackTriggerHash;
     private int deathTriggerHash;
-    private int hitTriggerHash;
 
     private bool isDead = false;
 
@@ -20,13 +19,12 @@ public class EnemyAnimatorHandler : MonoBehaviour
         moveSpeedHash = Animator.StringToHash("MoveSpeed");
         attackTriggerHash = Animator.StringToHash("Attack");
         deathTriggerHash = Animator.StringToHash("Death");
-        hitTriggerHash = Animator.StringToHash("Hit");
     }
 
     public void SetMoveSpeed(float speed)
     {
         if (isDead) return;
-        animator.SetFloat(moveSpeedHash, speed, 0.1f, Time.deltaTime);
+        animator.SetFloat(moveSpeedHash, speed);
     }
 
     public void PlayAttack()
@@ -35,16 +33,12 @@ public class EnemyAnimatorHandler : MonoBehaviour
         animator.SetTrigger(attackTriggerHash);
     }
 
-    public void PlayHit()
-    {
-        if (isDead) return;
-        animator.SetTrigger(hitTriggerHash);
-    }
-
-    public void PlayDie()
+    public void PlayDeath()
     {
         if (isDead) return;
         isDead = true;
+
+        animator.ResetTrigger(attackTriggerHash);
         animator.SetTrigger(deathTriggerHash);
         animator.SetFloat(moveSpeedHash, 0);
     }

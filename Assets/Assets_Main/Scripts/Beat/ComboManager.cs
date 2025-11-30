@@ -7,10 +7,7 @@ using System.Collections.Generic;
 [System.Serializable]
 public class ComboMusicLevel
 {
-    [Tooltip("Minimum combo required to reach this level")]
     public int comboThreshold = 10;
-
-    [Tooltip("FMOD parameter value to set when this combo is reached")]
     public float musicLevel = 1f;
 }
 
@@ -19,47 +16,37 @@ public class ComboManager : MonoBehaviour
     [Header("UI")]
     public Image comboBar;
     public TextMeshProUGUI comboText;
-
-    [Header("Disc Animation")]
-    [Tooltip("Animator that controls the spinning discs")]
-    public Animator discAnimator;
-    public string stageParameter = "StageIndex";
-    public string nextStageTrigger = "NextStage";
-    public string failTrigger = "Fail";
+    public TextMeshProUGUI stageText;   // <-- show A / S / P
 
     [Header("Combo Settings")]
     public float comboResetTime = 3f;
 
     [Header("FMOD Parameter")]
-    [Tooltip("The FMOD parameter name to control (e.g., 'MusicState' or 'BossMusicState')")]
     public string parameterName = "MusicState";
 
     [Header("Combo → Music Mapping")]
-    [Tooltip("Define how combo thresholds affect music levels")]
     public List<ComboMusicLevel> musicLevels = new List<ComboMusicLevel>();
 
     private int comboCount = 0;
     private float comboTimer = 0f;
     private bool comboActive = false;
 
-    private int currentStage = 1;
-    private int maxStage = 3;
+    private char currentStage = 'A';   // <-- A, S, P
 
     public event Action OnComboReset;
 
     void Update()
     {
-        if (comboActive)
+        if (!comboActive) return;
+
+        comboTimer -= Time.deltaTime;
+
+        if (comboTimer <= 0f)
         {
-            comboTimer -= Time.deltaTime;
-
-            if (comboTimer <= 0f)
-            {
-                ResetCombo();
-            }
-
-            UpdateUI();
+            ResetCombo();
         }
+
+        UpdateUI();
     }
 
     public void AddCombo()
@@ -69,10 +56,8 @@ public class ComboManager : MonoBehaviour
         comboActive = true;
 
         UpdateUI();
-        //Debug.Log("x" + comboCount);
-
         UpdateMusicState();
-        UpdateDiscStage();
+        UpdateStageASP();
     }
 
     public void ResetCombo()
@@ -81,8 +66,11 @@ public class ComboManager : MonoBehaviour
         comboCount = 0;
         comboTimer = 0f;
 
+        currentStage = 'A';
+        if (stageText != null) stageText.text = "A";
+
         if (comboText != null)
-            comboText.text = "x0";
+            comboText.text = "0";
 
         if (comboBar != null)
             comboBar.fillAmount = 0f;
@@ -90,7 +78,6 @@ public class ComboManager : MonoBehaviour
         Debug.Log("Combo Reset!");
 
         MusicManager.Instance?.SetMusicState(parameterName, 0f);
-        ResetDiscStage();
 
         OnComboReset?.Invoke();
     }
@@ -98,7 +85,7 @@ public class ComboManager : MonoBehaviour
     private void UpdateUI()
     {
         if (comboText != null)
-            comboText.text = "x" + comboCount;
+            comboText.text = "" + comboCount;
 
         if (comboBar != null)
         {
@@ -113,6 +100,7 @@ public class ComboManager : MonoBehaviour
             return;
 
         float newLevel = 0f;
+
         foreach (var level in musicLevels)
         {
             if (comboCount >= level.comboThreshold)
@@ -122,34 +110,21 @@ public class ComboManager : MonoBehaviour
         MusicManager.Instance.SetMusicState(parameterName, newLevel);
     }
 
-    private void UpdateDiscStage()
+    private void UpdateStageASP()
     {
-        // Determine stage based on combo thresholds
-        int newStage = 1;
+        char newStage = 'A';
 
-        for (int i = 0; i < musicLevels.Count && i < maxStage; i++)
-        {
-            if (comboCount >= musicLevels[i].comboThreshold)
-                newStage = i + 1;
-        }
+        if (musicLevels.Count > 1 && comboCount >= musicLevels[1].comboThreshold)
+            newStage = 'S';
 
-        if (newStage > currentStage)
+        if (musicLevels.Count > 2 && comboCount >= musicLevels[2].comboThreshold)
+            newStage = 'P';
+
+        if (newStage != currentStage)
         {
             currentStage = newStage;
-            discAnimator.SetInteger(stageParameter, currentStage);
-            discAnimator.SetTrigger(nextStageTrigger);
-            Debug.Log("Entered Disc Stage " + currentStage);
-        }
-    }
-
-    private void ResetDiscStage()
-    {
-        if (currentStage != 1)
-        {
-            currentStage = 1;
-            discAnimator.SetInteger(stageParameter, currentStage);
-            discAnimator.SetTrigger(failTrigger);
-            Debug.Log("Disc Reset to Stage 1");
+            if (stageText != null) stageText.text = currentStage.ToString();
+            Debug.Log("Stage: " + currentStage);
         }
     }
 }
