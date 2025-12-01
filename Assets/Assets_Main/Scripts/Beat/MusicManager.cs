@@ -8,7 +8,7 @@ public class MusicManager : MonoBehaviour
     public static MusicManager Instance { get; private set; }
 
     [Header("FMOD Music Event")]
-    [SerializeField] private EventReference musicEvent;
+    [SerializeField] public EventReference musicEvent;
 
     [Header("Music Parameters")]
     [SerializeField] private MusicParameter[] parameters; // You can add multiple here

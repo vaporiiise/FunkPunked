@@ -1,73 +1,50 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class EnemyCombat : MonoBehaviour
 {
-    [Header("Combat Settings")]
     public float damage = 10f;
     public float attackCooldown = 2f;
-    public float attackHitDelay = 0.5f; // When hit actually lands
+    public float hitDelay = 0.4f;
 
-    [Header("References")]
-    public Transform player;
-
-    private EnemyAnimatorHandler animHandler;
-    private EnemyHealth health;
+    private Transform player;
+    private EnemyAnimatorHandler animator;
     private EnemyMovement movement;
+    private bool busy = false;
 
-    private bool canAttack = true;
-
-    private void Awake()
+    public void Initialize(Transform target)
     {
-        animHandler = GetComponentInChildren<EnemyAnimatorHandler>();
+        player = target;
+        animator = GetComponentInChildren<EnemyAnimatorHandler>();
         movement = GetComponent<EnemyMovement>();
-        health = GetComponent<EnemyHealth>();
-
-        if (player == null)
-        {
-            GameObject p = GameObject.FindGameObjectWithTag("Player");
-            if (p != null) player = p.transform;
-        }
     }
 
-    public bool CanAttack() => canAttack && player != null;
-
-    public void TriggerAttack()
+    public void DoAttack(Action onFinish)
     {
-        if (!CanAttack()) return;
-
-        StartCoroutine(AttackRoutine());
+        if (busy) return;
+        StartCoroutine(AttackRoutine(onFinish));
     }
 
-    private IEnumerator AttackRoutine()
+    IEnumerator AttackRoutine(Action onFinish)
     {
-        canAttack = false;
-        movement.SetStopForAttack(true);
+        busy = true;
 
-        // Play attack animation
-        animHandler?.PlayAttack();
+        movement.StopInstant();
+        animator.PlayAttack();
 
-        // Wait for animation peak / hit delay
-        yield return new WaitForSeconds(attackHitDelay);
+        yield return new WaitForSeconds(hitDelay);
 
-        // Deal damage to player if still in range
-        if (player != null)
+        if (Vector3.Distance(transform.position, player.position) <= movement.attackRange)
         {
-            float distance = Vector3.Distance(transform.position, player.position);
-            if (distance <= movement.attackRange)
-            {
-                // Example: assume player has AttackController with TakeDamage
-                var attackController = player.GetComponent<AttackController>();
-                if (attackController != null)
-                    attackController.playerStats.TakeDamage(damage);
-            }
+            player.GetComponent<PlayerStats>()?.TakeDamage(damage);
         }
 
-        // Optional downtime before next attack
-        yield return new WaitForSeconds(attackCooldown - attackHitDelay);
+        yield return new WaitForSeconds(attackCooldown - hitDelay);
 
-        movement.SetStopForAttack(false);
-        canAttack = true;
+        movement.Resume();
+        busy = false;
+
+        onFinish?.Invoke();
     }
-    
 }
