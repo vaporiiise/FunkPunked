@@ -35,6 +35,9 @@ public class ComboManager : MonoBehaviour
 
     public event Action OnComboReset;
 
+    private const float minFill = 0.5f;  // <-- minimum bar fill
+    private const float maxFill = 1f;    // <-- maximum bar fill
+
     void Update()
     {
         if (!comboActive) return;
@@ -73,7 +76,7 @@ public class ComboManager : MonoBehaviour
             comboText.text = "0";
 
         if (comboBar != null)
-            comboBar.fillAmount = 0f;
+            comboBar.fillAmount = minFill;   // <-- ALWAYS 0.5
 
         Debug.Log("Combo Reset!");
 
@@ -89,7 +92,11 @@ public class ComboManager : MonoBehaviour
 
         if (comboBar != null)
         {
-            float fill = Mathf.Clamp01(comboTimer / comboResetTime);
+            float t = Mathf.Clamp01(comboTimer / comboResetTime);
+
+            // Remap [0 → 1] into [0.5 → 1]
+            float fill = Mathf.Lerp(minFill, maxFill, t);
+
             comboBar.fillAmount = fill;
         }
     }
