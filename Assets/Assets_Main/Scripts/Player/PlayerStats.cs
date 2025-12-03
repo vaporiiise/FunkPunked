@@ -18,18 +18,12 @@ public class PlayerStats : MonoBehaviour
     public float regenDelay = 1.5f;
     private float regenTimer = 0f;
 
-    [Header("Defense Settings")]
-    public bool isBlocking = false;
-    public bool isParrying = false;
-    public float blockDamageReduction = 0.5f;
-    public float parryWindow = 0.1f;
-    public float parryDuration = 0.3f;
-    public float parryCooldown = 1f;
-    public int parryStaminaCost = 1; // consumes 1 charge
-    private bool canParry = true;
+    [Header("Parry Settings")]
+    public bool isParryingInput = false; // tracks if player pressed parry
+    public float parryDamageReduction = 0.5f; // previously blockDamageReduction
 
     [Header("UI")]
-    public Image[] staminaCharges; // assign 3 images in inspector
+    public Image[] staminaCharges;
     public Image healthBar;
     public TMP_Text healthText;
 
@@ -63,33 +57,21 @@ public class PlayerStats : MonoBehaviour
     {
         HandleStaminaRegen();
 
-        if (Input.GetMouseButton(1))
-        {
-            isBlocking = true;
-            attackController?.SetWeaponVisible(true);
-        }
-        else
-        {
-            isBlocking = false;
-        }
-
+        // Trigger parry on button press (right mouse button)
         if (Input.GetMouseButtonDown(1))
-            TryParry();
+        {
+            isParryingInput = true;
+            attackController?.SetWeaponVisible(true);
+            Debug.Log("Parry button pressed!");
+        }
     }
 
     public void TakeDamage(float amount)
     {
-        if (isParrying)
+        if (isParryingInput)
         {
-            Debug.Log("🟢 Parry Successful! No damage taken.");
-            attackController?.SetWeaponVisible(true);
-            return;
-        }
-
-        if (isBlocking)
-        {
-            amount *= blockDamageReduction;
-            Debug.Log($"🧱 Blocked attack! Damage reduced to {amount}.");
+            amount *= parryDamageReduction;
+            Debug.Log($"🛡️ Parry active! Damage reduced to {amount}.");
         }
 
         currentHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
@@ -108,6 +90,9 @@ public class PlayerStats : MonoBehaviour
 
         if (currentHealth <= 0)
             Die();
+
+        // reset parry input after processing damage
+        isParryingInput = false;
     }
 
     private IEnumerator HitPulse()
@@ -144,44 +129,10 @@ public class PlayerStats : MonoBehaviour
         }
         else if (currentStaminaCharges < maxStaminaCharges)
         {
-            // regenerate 1 charge at a time
             currentStaminaCharges++;
             regenTimer = regenDelay;
             UpdateUI();
         }
-    }
-
-    public void TryParry()
-    {
-        if (!canParry) return;
-        if (currentStaminaCharges < parryStaminaCost) return;
-
-        if (beatScheduler != null && !beatScheduler.IsInAttackWindow(parryWindow))
-        {
-            Debug.Log("❌ Parry failed – off-beat!");
-            return;
-        }
-
-        UseStamina(parryStaminaCost);
-        StartCoroutine(ParryRoutine());
-    }
-
-    private IEnumerator ParryRoutine()
-    {
-        canParry = false;
-        isParrying = true;
-        Debug.Log("🟢 Parry Active!");
-
-        attackController?.SetWeaponVisible(true);
-        animHandler?.PlayParry();
-
-        yield return new WaitForSeconds(parryDuration);
-        isParrying = false;
-        Debug.Log("🔴 Parry Ended.");
-
-        yield return new WaitForSeconds(parryCooldown);
-        canParry = true;
-        Debug.Log("✅ Parry Ready Again.");
     }
 
     private void Die()
@@ -197,7 +148,6 @@ public class PlayerStats : MonoBehaviour
         if (healthText != null)
             healthText.text = $"{currentHealth:0}/{maxHealth}";
 
-        // update stamina charges
         for (int i = 0; i < staminaCharges.Length; i++)
         {
             if (staminaCharges[i] != null)

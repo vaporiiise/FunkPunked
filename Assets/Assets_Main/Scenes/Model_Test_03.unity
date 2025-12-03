@@ -50919,9 +50919,9 @@ MonoBehaviour:
         z: 5.026121
       Rotation:
         value:
-          x: -0.005013204
-          y: 0.013102681
-          z: -0.00009089504
+          x: -0.005013205
+          y: 0.013102682
+          z: -0.000090988775
           w: 0.99990165
     - Position:
         x: 0.19999695
@@ -81185,18 +81185,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9294a255c12e9fe49830b400597acbec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  maxHealth: 500
+  maxHealth: 50
   currentHealth: 0
   maxStaminaCharges: 3
   currentStaminaCharges: 0
   regenDelay: 1.5
-  isBlocking: 0
-  isParrying: 0
-  blockDamageReduction: 0.5
-  parryWindow: 0.1
-  parryDuration: 0.3
-  parryCooldown: 1
-  parryStaminaCost: 20
+  isParryingInput: 0
+  parryDamageReduction: 0
   staminaCharges:
   - {fileID: 0}
   - {fileID: 0}
