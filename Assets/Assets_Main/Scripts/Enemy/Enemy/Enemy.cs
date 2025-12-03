@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
@@ -11,6 +12,8 @@ public class Enemy : MonoBehaviour
     private EnemyMovement movement;
     public EnemyCombat combat;
     private EnemyHealth health;
+    public Animator animator;
+
 
     private float stateTimer;
 
@@ -19,6 +22,8 @@ public class Enemy : MonoBehaviour
     public float strafeChangeInterval = 2f;  // How often to switch direction
     private Vector3 strafeDir;
     private float strafeTimer;
+    public bool isStaggered = false;
+
 
     void Awake()
     {
@@ -154,6 +159,13 @@ public class Enemy : MonoBehaviour
     {
         // Handled by combat
     }
+    
+    public void Stagger()
+    {
+        if (animator != null)
+            animator.SetTrigger("Stagger");
+        Debug.Log("Enemy staggered!");
+    }
 
     #endregion
 
@@ -189,6 +201,27 @@ public class Enemy : MonoBehaviour
         ChangeState(State.Dead);
         movement.StopInstant();
         combat.enabled = false;
+    }
+    
+    public void GetParried()
+    {
+        if (isStaggered) return; // prevent repeated stagger
+        isStaggered = true;
+
+        animator.SetTrigger("Stagger");
+        Debug.Log("Enemy staggered by parry!");
+
+        // Optional: cancel attack here
+        // StopCoroutine(AttackRoutine()) or reset attack state
+
+        // Automatically recover after stagger
+        StartCoroutine(StaggerRecovery(0.5f)); // adjust duration
+    }
+
+    private IEnumerator StaggerRecovery(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        isStaggered = false;
     }
 
     #endregion

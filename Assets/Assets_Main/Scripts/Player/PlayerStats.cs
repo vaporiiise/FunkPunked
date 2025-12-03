@@ -66,12 +66,16 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount, Enemy enemy = null)
     {
         if (isParryingInput)
         {
             amount *= parryDamageReduction;
             Debug.Log($"🛡️ Parry active! Damage reduced to {amount}.");
+
+            // Stagger the enemy
+            if (enemy != null)
+                enemy.GetParried();
         }
 
         currentHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
@@ -91,7 +95,6 @@ public class PlayerStats : MonoBehaviour
         if (currentHealth <= 0)
             Die();
 
-        // reset parry input after processing damage
         isParryingInput = false;
     }
 
