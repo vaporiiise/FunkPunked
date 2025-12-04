@@ -15042,12 +15042,48 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9189946175416338272, guid: 11a2da1365a002f4288ddd8857b91b66, type: 3}
   m_PrefabInstance: {fileID: 1679272915}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1217324065}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bf0d47ad5d13f348890743ca94d3821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackController
+--- !u!114 &1217324070
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9294a255c12e9fe49830b400597acbec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  maxHealth: 100
+  currentHealth: 0
+  maxStaminaCharges: 3
+  currentStaminaCharges: 0
+  regenDelay: 1.5
+  isParryingInput: 0
+  parryDamageReduction: 0.5
+  staminaCharges: []
+  healthBar: {fileID: 0}
+  healthText: {fileID: 0}
+  hitOverlay: {fileID: 0}
+  pulseDuration: 0.25
+  hitColor: {r: 1, g: 0, b: 0, a: 0.35}
+  gotHitEvent:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  feedbacks: {fileID: 0}
+  attackController: {fileID: 0}
+  beatScheduler: {fileID: 0}
+  animHandler: {fileID: 0}
 --- !u!95 &1217324071
 Animator:
   serializedVersion: 7
@@ -15065,12 +15101,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'B-upperArm.L'\n\tTransform 'B-toe.L'\n\tTransform
-    'B-upperArm.R'\n\tTransform 'B-thigh.L'\n\tTransform 'B-shoulder.L'\n\tTransform
-    'B-spine'\n\tTransform 'B-shoulder.R'\n\tTransform 'B-chest'\n\tTransform 'B-thigh.R'\n\tTransform
-    'B-hips'\n\tand more ...\n\tFrom animation clip 'HumanF@Fall01'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -15088,7 +15119,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationHandler
   smoothSpeed: 0.1
-  idleDelay: 5
+  canQueueNext: 1
 --- !u!1001 &1251065863
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15528,11 +15559,6 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: de0d69882c535ec4ba9976b535abf6f1, type: 3}
   m_PrefabInstance: {fileID: 1338935591}
-  m_PrefabAsset: {fileID: 0}
---- !u!225 &1328379138 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 840869147061755387, guid: 48262fabca197474a98f4002495f04da, type: 3}
-  m_PrefabInstance: {fileID: 3357156200324780731}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1330033144
 GameObject:
@@ -19507,17 +19533,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1352007218}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1788736250 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7855076944151565374, guid: 48262fabca197474a98f4002495f04da, type: 3}
-  m_PrefabInstance: {fileID: 3357156200324780731}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1001 &1801277722
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22691,7 +22706,7 @@ PrefabInstance:
     - target: {fileID: 4924137721860488960, guid: 48262fabca197474a98f4002495f04da, type: 3}
       propertyPath: healthFill
       value: 
-      objectReference: {fileID: 1788736250}
+      objectReference: {fileID: 0}
     - target: {fileID: 4924137721860488960, guid: 48262fabca197474a98f4002495f04da, type: 3}
       propertyPath: barOffset.y
       value: 2.05
@@ -22707,11 +22722,11 @@ PrefabInstance:
     - target: {fileID: 5880515830306194064, guid: 48262fabca197474a98f4002495f04da, type: 3}
       propertyPath: healthBarFill
       value: 
-      objectReference: {fileID: 1788736250}
+      objectReference: {fileID: 0}
     - target: {fileID: 5880515830306194064, guid: 48262fabca197474a98f4002495f04da, type: 3}
       propertyPath: healthCanvasGroup
       value: 
-      objectReference: {fileID: 1328379138}
+      objectReference: {fileID: 0}
     - target: {fileID: 8365548269398463729, guid: 48262fabca197474a98f4002495f04da, type: 3}
       propertyPath: m_LocalPosition.x
       value: -52.010002

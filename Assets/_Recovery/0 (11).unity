@@ -50921,7 +50921,7 @@ MonoBehaviour:
         value:
           x: -0.005013204
           y: 0.013102681
-          z: -0.00009086853
+          z: -0.00009086869
           w: 0.99990165
     - Position:
         x: 0.19999695
@@ -65043,7 +65043,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1812611084}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 99a9c787e5d1bbf48a389834c4a9641c, type: 3}
   m_Name: 
@@ -65068,12 +65068,12 @@ MonoBehaviour:
   m_SplineSettings:
     Spline: {fileID: 1397229065}
     Position: 0
-    Units: 1
+    Units: 0
   UpdateMethod: 0
   AutomaticDolly:
     Enabled: 1
     Method:
-      rid: 1166728766975639652
+      rid: 1098129639229096147
   TrackingTarget: {fileID: 3369491001395812339}
   m_LegacyPosition: -1
   m_LegacyUnits: 0
@@ -65081,12 +65081,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1166728766975639652
-      type: {class: SplineAutoDolly/NearestPointToTarget, ns: Unity.Cinemachine, asm: Unity.Cinemachine}
+    - rid: 1098129639229096147
+      type: {class: SplineAutoDolly/FixedSpeed, ns: Unity.Cinemachine, asm: Unity.Cinemachine}
       data:
-        PositionOffset: 0
-        SearchResolution: 100
-        SearchIteration: 100
+        Speed: 0
 --- !u!114 &1812611089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81190,13 +81188,8 @@ MonoBehaviour:
   maxStaminaCharges: 3
   currentStaminaCharges: 0
   regenDelay: 1.5
-  isBlocking: 0
-  isParrying: 0
-  blockDamageReduction: 0.5
-  parryWindow: 0.1
-  parryDuration: 0.3
-  parryCooldown: 1
-  parryStaminaCost: 20
+  isParryingInput: 0
+  parryDamageReduction: 0.5
   staminaCharges:
   - {fileID: 0}
   - {fileID: 0}

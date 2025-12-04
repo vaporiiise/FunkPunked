@@ -51788,9 +51788,9 @@ MonoBehaviour:
         z: 3.6599731
       Rotation:
         value:
-          x: -0.013038121
+          x: -0.013038122
           y: -0.6829235
-          z: 0.04222527
+          z: 0.042225275
           w: 0.72915196
     - Position:
         x: -36.4
@@ -51880,7 +51880,7 @@ MonoBehaviour:
         value:
           x: -0.000042013984
           y: 0.008835903
-          z: 0.000008195613
+          z: 0.000008195624
           w: 0.999961
     - Position:
         x: -124.4
@@ -66221,7 +66221,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1812611084}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 99a9c787e5d1bbf48a389834c4a9641c, type: 3}
   m_Name: 
@@ -66246,12 +66246,12 @@ MonoBehaviour:
   m_SplineSettings:
     Spline: {fileID: 1397229065}
     Position: 0
-    Units: 1
+    Units: 0
   UpdateMethod: 0
   AutomaticDolly:
     Enabled: 1
     Method:
-      rid: 1166728766975639652
+      rid: 1098129639229096146
   TrackingTarget: {fileID: 3369491001395812339}
   m_LegacyPosition: -1
   m_LegacyUnits: 0
@@ -66259,12 +66259,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1166728766975639652
-      type: {class: SplineAutoDolly/NearestPointToTarget, ns: Unity.Cinemachine, asm: Unity.Cinemachine}
+    - rid: 1098129639229096146
+      type: {class: SplineAutoDolly/FixedSpeed, ns: Unity.Cinemachine, asm: Unity.Cinemachine}
       data:
-        PositionOffset: 0
-        SearchResolution: 100
-        SearchIteration: 100
+        Speed: 0
 --- !u!114 &1812611089
 MonoBehaviour:
   m_ObjectHideFlags: 0

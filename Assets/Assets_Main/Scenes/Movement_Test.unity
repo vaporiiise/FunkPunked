@@ -2573,9 +2573,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AttackController
   weaponCollider: {fileID: 0}
   weaponModel: {fileID: 0}
-  scheduler: {fileID: 0}
-  comboManager: {fileID: 0}
   animHandler: {fileID: 0}
+  beatScheduler: {fileID: 0}
+  playerStats: {fileID: 0}
   attackSFX:
     Guid:
       Data1: 0
@@ -2597,11 +2597,13 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
-  attackCooldown: 0.4
   inCombatDuration: 2
-  comboResetTime: 1
   hitStopDuration: 0.1
   hitSlowFactor: 0.05
+  attackLeadTime: 0.1
+  parryClickThreshold: 0.25
+  attackTrails: []
+  isBlocking: 0
   isParrying: 0
 --- !u!114 &1992303015
 MonoBehaviour:
@@ -2617,21 +2619,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   maxHealth: 100
   currentHealth: 0
-  maxStamina: 100
-  currentStamina: 0
-  staminaRegenRate: 15
+  maxStaminaCharges: 3
+  currentStaminaCharges: 0
   regenDelay: 1.5
-  isBlocking: 0
-  isParrying: 0
-  blockDamageReduction: 0.5
-  parryWindow: 0.1
-  parryDuration: 0.3
-  parryCooldown: 1
-  parryStaminaCost: 20
+  isParryingInput: 0
+  parryDamageReduction: 0.5
+  staminaCharges: []
   healthBar: {fileID: 0}
-  staminaBar: {fileID: 0}
   healthText: {fileID: 0}
-  staminaText: {fileID: 0}
   hitOverlay: {fileID: 0}
   pulseDuration: 0.25
   hitColor: {r: 1, g: 0, b: 0, a: 0.35}
@@ -2658,19 +2653,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ca0977de75d1dc4895197d9a959c001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  jumpAnticipationDelay: 0.2
   moveSpeed: 5
-  rotationSpeed: 50
   runMultiplier: 1.8
+  rotationSpeed: 50
   jumpForce: 7
   dashForce: 15
   dashDuration: 0.2
-  fallMultiplier: 2.5
-  lowJumpMultiplier: 2
-  attackController: {fileID: 1992303014}
-  playerStats: {fileID: 1992303015}
-  feedbacks: {fileID: 0}
+  jumpAnticipationDelay: 0.2
   animHandler: {fileID: 1992303019}
+  attackController: {fileID: 1992303014}
+  feedbacks: {fileID: 0}
 --- !u!54 &1992303017
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2728,7 +2720,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationHandler
   smoothSpeed: 0.1
-  idleDelay: 5
+  canQueueNext: 1
 --- !u!1 &2041496484
 GameObject:
   m_ObjectHideFlags: 0

@@ -1659,13 +1659,8 @@ MonoBehaviour:
   maxStaminaCharges: 3
   currentStaminaCharges: 0
   regenDelay: 1.5
-  isBlocking: 0
-  isParrying: 0
-  blockDamageReduction: 0.5
-  parryWindow: 0.1
-  parryDuration: 0.3
-  parryCooldown: 1
-  parryStaminaCost: 20
+  isParryingInput: 0
+  parryDamageReduction: 0.5
   staminaCharges:
   - {fileID: 0}
   - {fileID: 0}
@@ -4764,7 +4759,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationHandler
   smoothSpeed: 0.1
   canQueueNext: 1
-  layerSmoothSpeed: 10
 --- !u!4 &1555160894685590120
 Transform:
   m_ObjectHideFlags: 0
@@ -5798,29 +5792,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ca0977de75d1dc4895197d9a959c001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  jumpAnticipationDelay: 0.2
   moveSpeed: 5
-  rotationSpeed: 10
   runMultiplier: 1.8
+  rotationSpeed: 10
   jumpForce: 7
   dashForce: 15
   dashDuration: 0.2
-  dashSprite: {fileID: 5904383615299423345, guid: 83a0c4c3ee84b9945b2c301ec2094892, type: 3}
-  dashTrails:
-  - {fileID: 4995550178756577687}
-  - {fileID: 7536275237111611547}
-  - {fileID: 8800129815430132402}
-  - {fileID: 5459967293674625509}
-  - {fileID: 7349957462780973289}
-  - {fileID: 8409951453377962688}
-  fallMultiplier: 2.5
-  lowJumpMultiplier: 2
-  attackController: {fileID: 859953370928279481}
-  playerStats: {fileID: 62089277449630341}
-  feedbacks: {fileID: 0}
+  jumpAnticipationDelay: 0.2
   animHandler: {fileID: 1530986156200761594}
-  routePoints: []
-  routeFollowSpeed: 3
+  attackController: {fileID: 859953370928279481}
+  feedbacks: {fileID: 0}
 --- !u!4 &2007774743684533788
 Transform:
   m_ObjectHideFlags: 0
