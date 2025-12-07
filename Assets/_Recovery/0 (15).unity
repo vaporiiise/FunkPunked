@@ -57211,9 +57211,9 @@ MonoBehaviour:
         z: 3.6599731
       Rotation:
         value:
-          x: -0.013038121
+          x: -0.013038122
           y: -0.6829235
-          z: 0.04222527
+          z: 0.042225275
           w: 0.72915196
     - Position:
         x: -36.4
@@ -57301,9 +57301,9 @@ MonoBehaviour:
         z: 8.889175
       Rotation:
         value:
-          x: -0.00004201396
+          x: -0.000042013962
           y: 0.008835903
-          z: 0.000008198425
+          z: 0.000008198436
           w: 0.999961
     - Position:
         x: -124.4
@@ -72991,7 +72991,7 @@ MonoBehaviour:
   AutomaticDolly:
     Enabled: 1
     Method:
-      rid: 1098129639229096150
+      rid: 5048464979945848905
   TrackingTarget: {fileID: 3369491001395812339}
   m_LegacyPosition: -1
   m_LegacyUnits: 0
@@ -72999,12 +72999,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1098129639229096150
-      type: {class: SplineAutoDolly/NearestPointToTarget, ns: Unity.Cinemachine, asm: Unity.Cinemachine}
+    - rid: 5048464979945848905
+      type: {class: SplineAutoDolly/FixedSpeed, ns: Unity.Cinemachine, asm: Unity.Cinemachine}
       data:
-        PositionOffset: 0
-        SearchResolution: 10
-        SearchIteration: 5
+        Speed: 0
 --- !u!114 &1812611089
 MonoBehaviour:
   m_ObjectHideFlags: 0

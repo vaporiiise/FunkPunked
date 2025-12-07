@@ -2705,7 +2705,7 @@ MonoBehaviour:
         value:
           x: -0.0050131963
           y: 0.013102683
-          z: -0.00009029594
+          z: -0.00009029611
           w: 0.99990165
     - Position:
         x: 0.19999695
@@ -2723,7 +2723,7 @@ MonoBehaviour:
         value:
           x: 0.010267251
           y: -0.017919648
-          z: -0.00066218915
+          z: -0.0006621888
           w: 0.99978644
     - Position:
         x: -1.5999985
@@ -2885,7 +2885,7 @@ MonoBehaviour:
         value:
           x: 0.000010786411
           y: -0.0035686533
-          z: -0.00000001996212
+          z: -0.000000019962142
           w: 0.9999937
     - Position:
         x: -134.6
@@ -30897,7 +30897,7 @@ MonoBehaviour:
   AutomaticDolly:
     Enabled: 1
     Method:
-      rid: 1098129639229096148
+      rid: 5048464979945848910
   TrackingTarget: {fileID: 1181970146}
   m_LegacyPosition: -1
   m_LegacyUnits: 0
@@ -30905,7 +30905,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1098129639229096148
+    - rid: 5048464979945848910
       type: {class: SplineAutoDolly/FixedSpeed, ns: Unity.Cinemachine, asm: Unity.Cinemachine}
       data:
         Speed: 0

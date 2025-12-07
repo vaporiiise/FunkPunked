@@ -1,5 +1,33 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9193827217724352615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Boss1
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Boss1
+  Guid:
+    Data1: 826774123
+    Data2: 1145213462
+    Data3: -753387897
+    Data4: 1837270957
+  Banks:
+  - {fileID: -7090693318059335686}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 8257454661632013409}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 13715
 --- !u!114 &-9127076042902280806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23,6 +51,26 @@ MonoBehaviour:
   Type: 0
   IsGlobal: 0
   Labels: []
+  Exists: 1
+--- !u!114 &-7090693318059335686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: Assets/FMOD/FunkPunk_FMOD/Build/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 639001550331397828
+  FileSizes:
+  - Name: Desktop
+    Value: 10807616
   Exists: 1
 --- !u!114 &-6713146225718594719
 MonoBehaviour:
@@ -76,6 +124,33 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
+--- !u!114 &-4076533996144259063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BatHit
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/BatHit
+  Guid:
+    Data1: 1295498301
+    Data2: 1127798245
+    Data3: -650971770
+    Data4: -1499950379
+  Banks:
+  - {fileID: -7090693318059335686}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-2974029671095260049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,6 +178,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-2685805546886892236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: Assets/FMOD/FunkPunk_FMOD/Build/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 638990763812316445
+  FileSizes:
+  - Name: Desktop
+    Value: 1242
+  Exists: 0
 --- !u!114 &-2468417285269933471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,29 +294,26 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EventCache
   EditorBanks:
-  - {fileID: 6483144266357668634}
-  - {fileID: 5334218250672621209}
+  - {fileID: -2685805546886892236}
+  - {fileID: -7090693318059335686}
+  - {fileID: 4424313535175006855}
   EditorEvents:
-  - {fileID: 8564995857123609537}
-  - {fileID: -2468417285269933471}
-  - {fileID: 1553458549939404864}
-  - {fileID: 1835841510347394934}
-  - {fileID: -473591531172365072}
-  - {fileID: 1985416003992952475}
-  - {fileID: 4088097691688627712}
-  - {fileID: 5849073659884061708}
-  - {fileID: 5276461614139208304}
-  - {fileID: -2974029671095260049}
-  - {fileID: -6713146225718594719}
-  - {fileID: 6589810519902549736}
-  - {fileID: 7116254118348532880}
-  - {fileID: -1674779643853666417}
+  - {fileID: 5801415795933763024}
+  - {fileID: 3782262509683173060}
+  - {fileID: 5933495958959511114}
+  - {fileID: -4076533996144259063}
+  - {fileID: 0}
+  - {fileID: 3834503891367779409}
+  - {fileID: -9193827217724352615}
+  - {fileID: 7508342150285780275}
+  - {fileID: 2844040736554982617}
   EditorParameters: []
   MasterBanks:
-  - {fileID: 5334218250672621209}
+  - {fileID: -7090693318059335686}
   StringsBanks:
-  - {fileID: 6483144266357668634}
-  cacheTime: 639002033264409190
+  - {fileID: 5418814102633582914}
+  - {fileID: 4424313535175006855}
+  cacheTime: 639001550331417889
   cacheVersion: 131633
 --- !u!114 &1553458549939404864
 MonoBehaviour:
@@ -376,6 +468,87 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
+--- !u!114 &2844040736554982617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BattleBGM1
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/BattleBGM1
+  Guid:
+    Data1: 299760821
+    Data2: 1198224607
+    Data3: -1190028631
+    Data4: 703737085
+  Banks:
+  - {fileID: -7090693318059335686}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 252081
+--- !u!114 &3782262509683173060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BatSwing
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/BatSwing
+  Guid:
+    Data1: -698428136
+    Data2: 1300064973
+    Data3: -213030007
+    Data4: -1852483503
+  Banks:
+  - {fileID: -7090693318059335686}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &3834503891367779409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/BatParry
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/BatParry
+  Guid:
+    Data1: -2036001725
+    Data2: 1297067087
+    Data3: 1909356206
+    Data4: 1704569211
+  Banks:
+  - {fileID: -7090693318059335686}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &4088097691688627712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,6 +576,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &4424313535175006855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: Assets/FMOD/FunkPunk_FMOD/Build/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 639001550331417889
+  FileSizes:
+  - Name: Desktop
+    Value: 1542
+  Exists: 1
 --- !u!114 &5177295523703596043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -502,6 +695,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 16024
+--- !u!114 &5933495958959511114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GotHit
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/GotHit
+  Guid:
+    Data1: -1256066784
+    Data2: 1104731417
+    Data3: -137008246
+    Data4: -58800658
+  Banks:
+  - {fileID: -7090693318059335686}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &6483144266357668634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -577,6 +797,57 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 143296
+--- !u!114 &7508342150285780275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Beat
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Beat
+  Guid:
+    Data1: -1618178903
+    Data2: 1166376441
+    Data3: -1820951635
+    Data4: 739336724
+  Banks:
+  - {fileID: -7090693318059335686}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 143296
+--- !u!114 &8257454661632013409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Boss1/BossMusicState
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: BossMusicState
+  StudioPath: 
+  Min: 0
+  Max: 3
+  Default: 0
+  ID:
+    data1: 1443775212
+    data2: 23741389
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
 --- !u!114 &8564995857123609537
 MonoBehaviour:
   m_ObjectHideFlags: 0
