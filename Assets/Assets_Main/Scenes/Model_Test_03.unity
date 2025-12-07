@@ -23261,11 +23261,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 885114915}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!222 &541282104
+CanvasRenderer:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_CullTransparentMesh: 1
 --- !u!1 &543223782
 GameObject:
   m_ObjectHideFlags: 0
@@ -34954,11 +34962,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 885114915}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!222 &842117401
+CanvasRenderer:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_CullTransparentMesh: 1
 --- !u!4 &842574990 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 37243a6524d59474583c64362b92d67e, type: 3}
@@ -57301,9 +57317,9 @@ MonoBehaviour:
         z: 8.889175
       Rotation:
         value:
-          x: -0.00004201384
+          x: -0.000042013693
           y: 0.008835903
-          z: 0.000008212529
+          z: 0.00000822909
           w: 0.999961
     - Position:
         x: -124.4
@@ -70144,6 +70160,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 3b81b17ffb6292540bf1fc9da82e2a64, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0f36631652ae5924f9f3c1605eddbdfd, type: 2}
     - target: {fileID: 919132149155446097, guid: 3b81b17ffb6292540bf1fc9da82e2a64, type: 3}
       propertyPath: m_Name
       value: Boss_Ext
