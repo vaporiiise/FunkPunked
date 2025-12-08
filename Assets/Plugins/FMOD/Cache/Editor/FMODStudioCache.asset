@@ -22,11 +22,11 @@ MonoBehaviour:
   - {fileID: -1342040942544053764}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
+  IsOneShot: 0
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 252081
+  Length: 57374
 --- !u!114 &-5415193041272825216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,7 +124,7 @@ MonoBehaviour:
   Path: Assets/FMOD/FunkPunk_FMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639007493075814379
+  lastModified: 639008288041345354
   FileSizes:
   - Name: Desktop
     Value: 1542
@@ -254,10 +254,10 @@ MonoBehaviour:
   Path: Assets/FMOD/FunkPunk_FMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639007493075759192
+  lastModified: 639008288041320358
   FileSizes:
   - Name: Desktop
-    Value: 12445568
+    Value: 9541152
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -294,7 +294,7 @@ MonoBehaviour:
   - {fileID: -1342040942544053764}
   StringsBanks:
   - {fileID: -3679400326048122200}
-  cacheTime: 639007493075814379
+  cacheTime: 639008288041345354
   cacheVersion: 131633
 --- !u!114 &932008209022793291
 MonoBehaviour:

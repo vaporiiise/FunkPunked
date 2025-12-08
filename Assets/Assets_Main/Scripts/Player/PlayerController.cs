@@ -27,8 +27,16 @@ public class PlayerController : MonoBehaviour
     private bool isJumping;
     private bool isFalling;
     private bool wasGrounded;
+    [SerializeField] private KnockbackHandler knockback;
 
-    private bool movementLocked => attackController != null && attackController.IsAttacking;
+    
+    
+
+    private bool movementLocked => 
+        (attackController != null && attackController.IsAttacking) ||
+        (knockback != null && knockback.IsKnocked);
+  
+    
 
     private void Start()
     {

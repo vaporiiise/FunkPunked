@@ -5,14 +5,9 @@ public class PlayerAnimationHandler : MonoBehaviour
 {
     public Animator animator { get; private set; }
 
-    [Header("Movement Settings")]
-    private float currentSpeed = 0f;
-    [Tooltip("Smoothing speed for movement animations")]
-    public float smoothSpeed = 0.15f;
-
     [Header("Combo Settings")]
-    private int attackComboStep = 1;
-    private int maxCombo = 6;
+    public int maxCombo = 6;
+    private int lastAttackIndex = -1;
     [HideInInspector] public bool canQueueNext = true;
 
     private void Awake()
@@ -20,11 +15,10 @@ public class PlayerAnimationHandler : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    /// <summary>
-    /// Update movement animation
-    /// </summary>
-    /// <param name="targetSpeed">0 = idle, 0.3 walk, 0.5 run, 0.73 run with weapon</param>
-    /// <param name="hasWeapon">true if player holds weapon</param>
+    // ---------------- MOVEMENT ----------------
+    private float currentSpeed = 0f;
+    public float smoothSpeed = 0.15f;
+
     public void UpdateMovement(float targetSpeed, bool hasWeapon)
     {
         currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, smoothSpeed);
@@ -32,19 +26,36 @@ public class PlayerAnimationHandler : MonoBehaviour
         animator.SetFloat("Speed", currentSpeed);
     }
 
-    // ----------------- Combat & State Triggers -----------------
+    // ---------------- ATTACK ----------------
     public void PlayAttack()
     {
         if (!canQueueNext) return;
-        animator.SetTrigger("Attack" + attackComboStep);
         canQueueNext = false;
 
-        attackComboStep++;
-        if (attackComboStep > maxCombo) attackComboStep = 1;
+        int chosenIndex = GetRandomAttackIndex();
+
+        // trigger animation
+        animator.SetTrigger("Attack" + chosenIndex);
+
+        lastAttackIndex = chosenIndex;
+    }
+
+    private int GetRandomAttackIndex()
+    {
+        int randomIndex = Random.Range(1, maxCombo + 1);
+
+        // Make sure we don't repeat the last attack
+        while (randomIndex == lastAttackIndex)
+        {
+            randomIndex = Random.Range(1, maxCombo + 1);
+        }
+
+        return randomIndex;
     }
 
     public void EnableNextAttack() => canQueueNext = true;
 
+    // ---------------- OTHER TRIGGERS ----------------
     public void PlayHit() => animator.SetTrigger("Hit");
     public void PlayLand() => animator.SetTrigger("Land");
     public void PlayJump() => animator.SetTrigger("Jump");
@@ -57,4 +68,13 @@ public class PlayerAnimationHandler : MonoBehaviour
 
     public void SetSpeedMultiplier(float speed) => animator.speed = speed;
     public void ResetSpeed() => animator.speed = 1f;
+    
+    public void SetMagnet(bool value)
+    {
+        animator.SetBool("IsMagnet", value);
+    }
+    public void PlayKnockback()
+    {
+        animator.SetTrigger("Knockback");
+    }
 }

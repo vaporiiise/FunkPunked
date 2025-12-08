@@ -11,27 +11,33 @@ public class EnemyMagnet : MonoBehaviour
 
     private Transform targetEnemy;
     private bool isLockingOn;
+    [SerializeField] private PlayerAnimationHandler animHandler;
+
 
     void Update()
     {
         DetectClosestEnemy();
 
-        if (Input.GetMouseButtonDown(0)) 
+        if (Input.GetMouseButtonDown(0))
         {
             if (targetEnemy != null)
             {
                 isLockingOn = true;
+                animHandler?.SetMagnet(true);   // ← START MAGNET ANIMATION
             }
         }
-
+        
         if (isLockingOn && targetEnemy != null)
         {
             FaceTarget();
             MoveTowardTarget();
-
+        
             float dist = Vector3.Distance(transform.position, targetEnemy.position);
             if (dist <= minAttackRange + 0.1f)
+            {
                 isLockingOn = false;
+                animHandler?.SetMagnet(false);  // ← END MAGNET ANIMATION
+            }
         }
     }
 

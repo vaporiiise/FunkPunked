@@ -19,8 +19,7 @@ public class PlayerStats : MonoBehaviour
     private float regenTimer = 0f;
 
     [Header("Parry Settings")]
-    public bool isParryingInput = false; // tracks if player pressed parry
-    public float parryDamageReduction = 0.5f; // previously blockDamageReduction
+    public float parryDamageReduction = 0.5f; 
 
     [Header("UI")]
     public Image[] staminaCharges;
@@ -38,7 +37,6 @@ public class PlayerStats : MonoBehaviour
     [Header("References")]
     [SerializeField] private PlayerFeedbacks feedbacks;
     [SerializeField] private AttackController attackController;
-    [SerializeField] private BeatScheduler beatScheduler;
     [SerializeField] private PlayerAnimationHandler animHandler;
 
     private Coroutine pulseRoutine;
@@ -57,27 +55,32 @@ public class PlayerStats : MonoBehaviour
     {
         HandleStaminaRegen();
 
-        // Trigger parry on button press (right mouse button)
-        if (Input.GetMouseButtonDown(1))
+        // Trigger parry on right mouse button
+        if (Input.GetMouseButtonDown(1) && attackController != null)
         {
-            isParryingInput = true;
-            attackController?.SetWeaponVisible(true);
+            attackController.isParrying = true;
+            attackController.SetWeaponVisible(true);
             Debug.Log("Parry button pressed!");
         }
     }
 
     public void TakeDamage(float amount, Enemy enemy = null)
     {
-        if (isParryingInput)
+        if (attackController != null && attackController.isParrying)
         {
+            // Successful parry
             amount *= parryDamageReduction;
-            Debug.Log($"🛡️ Parry active! Damage reduced to {amount}.");
+            Debug.Log($"🛡️ Parry success! Damage reduced to {amount}");
 
-            // Stagger the enemy
+            // Player plays knockback animation
+            animHandler?.PlayKnockback();
+
+            // Enemy just staggers (no knockback)
             if (enemy != null)
                 enemy.GetParried();
         }
 
+        // Apply health damage
         currentHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
         UpdateUI();
 
@@ -86,16 +89,20 @@ public class PlayerStats : MonoBehaviour
         if (!gotHitEvent.IsNull)
             RuntimeManager.PlayOneShot(gotHitEvent, transform.position);
 
+        // Hit feedback UI
         if (hitOverlay != null)
         {
             if (pulseRoutine != null) StopCoroutine(pulseRoutine);
             pulseRoutine = StartCoroutine(HitPulse());
         }
 
+        // Death check
         if (currentHealth <= 0)
             Die();
 
-        isParryingInput = false;
+        // Reset parry
+        if (attackController != null)
+            attackController.isParrying = false;
     }
 
     private IEnumerator HitPulse()

@@ -110,10 +110,11 @@ public class AttackController : MonoBehaviour
         {
             if (rmbHoldTime <= parryClickThreshold)
             {
-                isParrying = true;
+                isParrying = true;  
                 animHandler.PlayParry();
                 PlayParrySound();
             }
+
             rmbHoldTime = 0f;
             isBlocking = false;
             animHandler.SetBlocking(false);

@@ -16,6 +16,8 @@ public class Enemy : MonoBehaviour
 
 
     private float stateTimer;
+    
+    [HideInInspector] public EnemyAnimatorHandler animHandler;
 
     [Header("Strafe Settings")]
     public float strafeDistance = 2f;        // Sideways movement distance
@@ -30,6 +32,8 @@ public class Enemy : MonoBehaviour
         movement = GetComponent<EnemyMovement>();
         combat = GetComponent<EnemyCombat>();
         health = GetComponent<EnemyHealth>();
+        animHandler = GetComponent<EnemyAnimatorHandler>();
+
 
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player").transform;
