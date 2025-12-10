@@ -10,20 +10,18 @@ public class PlayerStats : MonoBehaviour
     public float maxHealth = 100f;
     public float currentHealth;
 
-    [Header("Stamina Charges")]
-    public int maxStaminaCharges = 3;
-    public int currentStaminaCharges;
-
-    [Header("Stamina Regen Settings")]
+    [Header("Stamina")]
+    public float maxStamina = 3f; // total stamina points
+    public float currentStamina;
     public float regenDelay = 1.5f;
     private float regenTimer = 0f;
 
     [Header("Parry Settings")]
-    public float parryDamageReduction = 0.5f; 
+    public float parryDamageReduction = 0.5f;
 
     [Header("UI")]
-    public Image[] staminaCharges;
     public Image healthBar;
+    public Image staminaBar;
     public TMP_Text healthText;
 
     [Header("Hit Feedback UI")]
@@ -44,7 +42,7 @@ public class PlayerStats : MonoBehaviour
     private void Start()
     {
         currentHealth = maxHealth;
-        currentStaminaCharges = maxStaminaCharges;
+        currentStamina = maxStamina;
         UpdateUI();
 
         if (hitOverlay != null)
@@ -66,30 +64,37 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(float amount, Enemy enemy = null)
     {
-        if (attackController != null && attackController.isParrying)
+        bool parrySuccess = attackController != null && attackController.isParrying;
+
+        if (parrySuccess)
         {
-            // Successful parry
             amount *= parryDamageReduction;
             Debug.Log($"🛡️ Parry success! Damage reduced to {amount}");
 
-            // Player plays knockback animation
-            animHandler?.PlayKnockback();
+            // Stagger enemy immediately
+            enemy?.GetParried();
 
-            // Enemy just staggers (no knockback)
-            if (enemy != null)
-                enemy.GetParried();
+            // Start coroutine to play parry then knockback
+            StartCoroutine(PlayParryThenKnockback());
+        }
+        else
+        {
+            // Directly play knockback if not parrying
+            animHandler?.PlayKnockback();
+            animHandler?.PlayHit(); // optional: still play hit
         }
 
         // Apply health damage
         currentHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
         UpdateUI();
 
+        // Weapon visibility
         attackController?.SetWeaponVisible(true);
 
+        // Hit feedback UI
         if (!gotHitEvent.IsNull)
             RuntimeManager.PlayOneShot(gotHitEvent, transform.position);
 
-        // Hit feedback UI
         if (hitOverlay != null)
         {
             if (pulseRoutine != null) StopCoroutine(pulseRoutine);
@@ -100,9 +105,19 @@ public class PlayerStats : MonoBehaviour
         if (currentHealth <= 0)
             Die();
 
-        // Reset parry
+        // Reset parry flag
         if (attackController != null)
             attackController.isParrying = false;
+    }
+
+    private IEnumerator PlayParryThenKnockback()
+    {
+        animHandler?.PlayParry();
+
+        // Wait for parry animation duration (adjust this to match your clip length)
+        yield return new WaitForSeconds(0.3f);
+
+        animHandler?.PlayKnockback();
     }
 
     private IEnumerator HitPulse()
@@ -118,16 +133,16 @@ public class PlayerStats : MonoBehaviour
         hitOverlay.color = new Color(hitColor.r, hitColor.g, hitColor.b, 0f);
     }
 
-    public void UseStamina(int amount)
+    public void UseStamina(float amount)
     {
-        currentStaminaCharges = Mathf.Max(currentStaminaCharges - amount, 0);
+        currentStamina = Mathf.Max(currentStamina - amount, 0f);
         regenTimer = regenDelay;
         UpdateUI();
     }
 
-    public void RegainStamina(int amount)
+    public void RegainStamina(float amount)
     {
-        currentStaminaCharges = Mathf.Min(currentStaminaCharges + amount, maxStaminaCharges);
+        currentStamina = Mathf.Min(currentStamina + amount, maxStamina);
         UpdateUI();
     }
 
@@ -137,9 +152,9 @@ public class PlayerStats : MonoBehaviour
         {
             regenTimer -= Time.deltaTime;
         }
-        else if (currentStaminaCharges < maxStaminaCharges)
+        else if (currentStamina < maxStamina)
         {
-            currentStaminaCharges++;
+            currentStamina += 1f;
             regenTimer = regenDelay;
             UpdateUI();
         }
@@ -155,13 +170,10 @@ public class PlayerStats : MonoBehaviour
         if (healthBar != null)
             healthBar.fillAmount = currentHealth / maxHealth;
 
+        if (staminaBar != null)
+            staminaBar.fillAmount = currentStamina / maxStamina;
+
         if (healthText != null)
             healthText.text = $"{currentHealth:0}/{maxHealth}";
-
-        for (int i = 0; i < staminaCharges.Length; i++)
-        {
-            if (staminaCharges[i] != null)
-                staminaCharges[i].enabled = i < currentStaminaCharges;
-        }
     }
 }
