@@ -28,6 +28,8 @@ public class EnemyHealth : MonoBehaviour
 
     private Coroutine fadeRoutine;
     private bool dead = false;
+    
+
 
     public float currentHealth { get { return hp; } }
 
@@ -50,10 +52,13 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
+        
+        
         if (dead) return;
 
         hp -= amount;
         if (hp < 0) hp = 0;
+        PlayGuardHitAnimation();
 
         UpdateBar();
         ShowBar();
@@ -142,4 +147,13 @@ public class EnemyHealth : MonoBehaviour
 
         Destroy(gameObject, destroyDelay);
     }
+    
+    private void PlayGuardHitAnimation()
+    {
+        animator.PlayGuardHit();
+
+        //play spark FX
+        //shake enemy slightly
+    }
+
 }

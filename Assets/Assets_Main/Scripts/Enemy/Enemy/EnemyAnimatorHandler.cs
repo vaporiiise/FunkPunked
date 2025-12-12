@@ -50,4 +50,9 @@ public class EnemyAnimatorHandler : MonoBehaviour
         if (isDead) return;
         animator.SetTrigger(knockbackTriggerHash);
     }
+    
+    public void PlayGuardHit()
+    {
+        animator.SetTrigger("GuardHit");
+    }
 }

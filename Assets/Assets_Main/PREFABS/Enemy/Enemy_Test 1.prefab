@@ -255,8 +255,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   currentState: 0
   player: {fileID: 0}
-  combat: {fileID: 0}
-  animator: {fileID: 0}
+  combat: {fileID: 4712562795170873627}
+  animator: {fileID: 5032572206537647092}
   animHandler: {fileID: 0}
   strafeDistance: 2
   strafeChangeInterval: 2
@@ -555,7 +555,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5355322458205135015}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.003, y: 0.003, z: 0.003}
   m_ConstrainProportionsScale: 1
@@ -563,10 +563,10 @@ RectTransform:
   - {fileID: 7029925024850757605}
   - {fileID: 2355897851337640942}
   m_Father: {fileID: 5482379825857083494}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.93, y: 2.19}
+  m_AnchoredPosition: {x: -0.493, y: 2.084}
   m_SizeDelta: {x: 247.1764, y: 745.7186}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1075894141853215079
@@ -2251,6 +2251,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9b33b182046ffa943816be44abfdb793, type: 3}
   m_PrefabInstance: {fileID: 1494593007485099621}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &5032572206537647092 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 9b33b182046ffa943816be44abfdb793, type: 3}
+  m_PrefabInstance: {fileID: 1494593007485099621}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8446515597719007310 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2196119149775098325, guid: 9b33b182046ffa943816be44abfdb793, type: 3}
@@ -2367,7 +2372,7 @@ PrefabInstance:
     - target: {fileID: 3847285271484476143, guid: 3aa017e1b63e66748ae88871a8035763, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 4cb7921d5fe0c604aa7a4f574293b960, type: 2}
+      objectReference: {fileID: 2100000, guid: fd7b136a80225934c9899ec74fbbdf53, type: 2}
     - target: {fileID: 5169459150420066793, guid: 3aa017e1b63e66748ae88871a8035763, type: 3}
       propertyPath: m_Layer
       value: 6
