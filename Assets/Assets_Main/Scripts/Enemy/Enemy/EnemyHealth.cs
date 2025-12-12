@@ -28,11 +28,9 @@ public class EnemyHealth : MonoBehaviour
 
     private Coroutine fadeRoutine;
     private bool dead = false;
-    
+
     public float currentHealth { get { return hp; } }
 
-
-    // ----------------------------------------------------------
     public void Initialize(Enemy c)
     {
         enemyCore = c;
@@ -50,7 +48,6 @@ public class EnemyHealth : MonoBehaviour
             staggerSprite.SetActive(false);
     }
 
-    // ----------------------------------------------------------
     public void TakeDamage(float amount)
     {
         if (dead) return;
@@ -61,21 +58,16 @@ public class EnemyHealth : MonoBehaviour
         UpdateBar();
         ShowBar();
 
-        // If you later add a Hit trigger, you can call animator.PlayHit()
-        // Right now your animator has NO Hit parameter.
-
         if (hp <= 0)
             Die();
     }
 
-    // ----------------------------------------------------------
     private void UpdateBar()
     {
         if (healthBarFill != null)
             healthBarFill.fillAmount = hp / maxHealth;
     }
 
-    // ----------------------------------------------------------
     private void ShowBar()
     {
         if (healthCanvas == null) return;
@@ -114,7 +106,6 @@ public class EnemyHealth : MonoBehaviour
         fadeRoutine = StartCoroutine(FadeCanvas(0f, fadeOutDuration, true));
     }
 
-    // ----------------------------------------------------------
     public void ApplyStagger()
     {
         if (dead) return;
@@ -134,13 +125,11 @@ public class EnemyHealth : MonoBehaviour
             staggerSprite.SetActive(false);
     }
 
-    // ----------------------------------------------------------
     private void Die()
     {
         dead = true;
 
         animator.PlayDeath();
-        //enemyCore.OnEnemyDeath();
 
         if (deathFX != null)
         {
@@ -148,7 +137,6 @@ public class EnemyHealth : MonoBehaviour
             Destroy(fx, 3f);
         }
 
-        // Hide UI
         if (healthCanvas != null)
             healthCanvas.alpha = 0f;
 

@@ -20,7 +20,7 @@ public class EnemyAnimatorHandler : MonoBehaviour
         moveSpeedHash = Animator.StringToHash("MoveSpeed");
         attackTriggerHash = Animator.StringToHash("Attack");
         deathTriggerHash = Animator.StringToHash("Death");
-        knockbackTriggerHash = Animator.StringToHash("Knockback"); // NEW
+        knockbackTriggerHash = Animator.StringToHash("Knockback");
     }
 
     public void SetMoveSpeed(float speed)
@@ -45,7 +45,6 @@ public class EnemyAnimatorHandler : MonoBehaviour
         animator.SetFloat(moveSpeedHash, 0);
     }
 
-    // NEW: Knockback animation
     public void PlayKnockback()
     {
         if (isDead) return;

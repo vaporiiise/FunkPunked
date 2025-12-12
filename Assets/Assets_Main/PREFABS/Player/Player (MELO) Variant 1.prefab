@@ -26276,6 +26276,7 @@ GameObject:
   - component: {fileID: 178857585595740407}
   - component: {fileID: 6158822950693587300}
   - component: {fileID: 2003825237595293993}
+  - component: {fileID: 2946094618491910624}
   m_Layer: 0
   m_Name: Player (MELO) Variant 1
   m_TagString: Player
@@ -26350,6 +26351,7 @@ MonoBehaviour:
   animHandler: {fileID: 178857585595740407}
   attackController: {fileID: 6149532538641322078}
   feedbacks: {fileID: 0}
+  knockback: {fileID: 0}
 --- !u!114 &624936377560342744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26364,16 +26366,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   maxHealth: 50
   currentHealth: 0
-  maxStaminaCharges: 3
-  currentStaminaCharges: 0
+  maxStamina: 3
+  currentStamina: 0
   regenDelay: 1.5
-  isParryingInput: 0
-  parryDamageReduction: 0
-  staminaCharges:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   healthBar: {fileID: 0}
+  staminaBar: {fileID: 0}
   healthText: {fileID: 0}
   hitOverlay: {fileID: 0}
   pulseDuration: 0.25
@@ -26387,7 +26384,6 @@ MonoBehaviour:
     Path: event:/GotHit
   feedbacks: {fileID: 0}
   attackController: {fileID: 6149532538641322078}
-  beatScheduler: {fileID: 0}
   animHandler: {fileID: 178857585595740407}
 --- !u!114 &6149532538641322078
 MonoBehaviour:
@@ -26420,24 +26416,14 @@ MonoBehaviour:
       Data3: -93535859
       Data4: 1045689982
     Path: event:/AttackHit
-  parrySFX:
-    Guid:
-      Data1: -2036001725
-      Data2: 1297067087
-      Data3: 1909356206
-      Data4: 1704569211
-    Path: event:/BatParry
   inCombatDuration: 2
   hitStopDuration: 0.002
   hitSlowFactor: 0.05
   attackLeadTime: 0.1
-  parryClickThreshold: 0.25
   attackTrails:
   - {fileID: 8407166704849117762}
   - {fileID: 7320592307643592738}
   - {fileID: 821741334675932602}
-  isBlocking: 0
-  isParrying: 0
 --- !u!95 &5614821193233174949
 Animator:
   serializedVersion: 7
@@ -26472,8 +26458,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4f730b0ceb04374288c064157ded9f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationHandler
-  smoothSpeed: 0.1
+  maxCombo: 6
   canQueueNext: 1
+  smoothSpeed: 0.1
 --- !u!114 &6158822950693587300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26506,6 +26493,24 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
+  animHandler: {fileID: 0}
+--- !u!114 &2946094618491910624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6393048713213456946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7913f4fec959c1439ee3459e19dfdee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerParry
+  parryKey: 324
+  parryWindow: 0.15
+  perfectParryWindow: 0.1
+  anim: {fileID: 5614821193233174949}
+  beatScheduler: {fileID: 0}
 --- !u!1 &6434358834215203722
 GameObject:
   m_ObjectHideFlags: 0

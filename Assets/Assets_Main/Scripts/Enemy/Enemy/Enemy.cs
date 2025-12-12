@@ -10,30 +10,32 @@ public class Enemy : MonoBehaviour
     [Header("References")]
     public Transform player;
     private EnemyMovement movement;
-    public EnemyCombat combat;
+    public GuardCombat combat;
     private EnemyHealth health;
     public Animator animator;
-
+    private Rigidbody rb;
 
     private float stateTimer;
-    
+
     [HideInInspector] public EnemyAnimatorHandler animHandler;
 
     [Header("Strafe Settings")]
-    public float strafeDistance = 2f;        // Sideways movement distance
-    public float strafeChangeInterval = 2f;  // How often to switch direction
+    public float strafeDistance = 2f;
+    public float strafeChangeInterval = 2f;
     private Vector3 strafeDir;
     private float strafeTimer;
     public bool isStaggered = false;
 
+    [Header("Parry Settings")]
+    public float knockbackForce = 10f;
 
     void Awake()
     {
         movement = GetComponent<EnemyMovement>();
-        combat = GetComponent<EnemyCombat>();
+        combat = GetComponent<GuardCombat>();
         health = GetComponent<EnemyHealth>();
         animHandler = GetComponent<EnemyAnimatorHandler>();
-
+        rb = GetComponent<Rigidbody>();
 
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -43,6 +45,15 @@ public class Enemy : MonoBehaviour
         health.Initialize(this);
 
         strafeTimer = strafeChangeInterval;
+
+        PlayerParry.OnParrySuccessful += OnParrySuccess;
+        PlayerParry.OnParryBurst += OnParryBurst;
+    }
+
+    void OnDestroy()
+    {
+        PlayerParry.OnParrySuccessful -= OnParrySuccess;
+        PlayerParry.OnParryBurst -= OnParryBurst;
     }
 
     void Update()
@@ -92,11 +103,8 @@ public class Enemy : MonoBehaviour
 
         movement.Chase();
 
-        // Randomly strafe if somewhat close
         if (distanceToPlayer < 6f && Random.value < 0.01f)
-        {
             ChangeState(State.Strafe);
-        }
     }
 
     void StateStrafe()
@@ -105,7 +113,6 @@ public class Enemy : MonoBehaviour
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        // Attack if very close
         if (distanceToPlayer <= movement.attackRange)
         {
             ChangeState(State.Attack);
@@ -113,7 +120,6 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        // Change strafe direction periodically
         strafeTimer -= Time.deltaTime;
         if (strafeTimer <= 0f)
         {
@@ -121,11 +127,9 @@ public class Enemy : MonoBehaviour
             strafeTimer = strafeChangeInterval;
         }
 
-        // Move sideways relative to player
         Vector3 targetPos = transform.position + strafeDir * strafeDistance;
         movement.MoveTo(targetPos);
 
-        // Always face player
         Vector3 lookDir = player.position - transform.position;
         if (lookDir != Vector3.zero)
             transform.rotation = Quaternion.Slerp(transform.rotation,
@@ -161,14 +165,7 @@ public class Enemy : MonoBehaviour
 
     void StateAttack()
     {
-        // Handled by combat
-    }
-    
-    public void Stagger()
-    {
-        if (animator != null)
-            animator.SetTrigger("Stagger");
-        Debug.Log("Enemy staggered!");
+        // Attack handled by GuardCombat
     }
 
     #endregion
@@ -206,26 +203,38 @@ public class Enemy : MonoBehaviour
         movement.StopInstant();
         combat.enabled = false;
     }
-    
+
     public void GetParried()
     {
-        if (isStaggered) return; // prevent repeated stagger
+        if (isStaggered) return;
         isStaggered = true;
 
-        animator.SetTrigger("Stagger");
+        animHandler.PlayKnockback();
         Debug.Log("Enemy staggered by parry!");
 
-        // Optional: cancel attack here
-        // StopCoroutine(AttackRoutine()) or reset attack state
+        if (rb != null)
+        {
+            Vector3 dir = (transform.position - player.position).normalized;
+            rb.AddForce(dir * knockbackForce, ForceMode.Impulse);
+        }
 
-        // Automatically recover after stagger
-        StartCoroutine(StaggerRecovery(0.5f)); // adjust duration
+        StartCoroutine(StaggerRecovery(0.5f));
     }
 
     private IEnumerator StaggerRecovery(float duration)
     {
         yield return new WaitForSeconds(duration);
         isStaggered = false;
+    }
+
+    private void OnParrySuccess()
+    {
+        Debug.Log("Enemy registered a parry hit!");
+    }
+
+    private void OnParryBurst()
+    {
+        GetParried();
     }
 
     #endregion

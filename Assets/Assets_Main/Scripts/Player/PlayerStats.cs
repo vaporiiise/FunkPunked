@@ -4,6 +4,7 @@ using TMPro;
 using System.Collections;
 using FMODUnity;
 
+[RequireComponent(typeof(PlayerParry))]
 public class PlayerStats : MonoBehaviour
 {
     [Header("Stats")]
@@ -11,7 +12,7 @@ public class PlayerStats : MonoBehaviour
     public float currentHealth;
 
     [Header("Stamina")]
-    public float maxStamina = 3f; // total stamina points
+    public float maxStamina = 3f;
     public float currentStamina;
     public float regenDelay = 1.5f;
     private float regenTimer = 0f;
@@ -33,14 +34,14 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private EventReference gotHitEvent;
 
     [Header("References")]
-    [SerializeField] private PlayerFeedbacks feedbacks;
-    [SerializeField] private AttackController attackController;
     [SerializeField] private PlayerAnimationHandler animHandler;
 
+    private PlayerParry playerParry;
     private Coroutine pulseRoutine;
 
-    private void Start()
+    void Start()
     {
+        playerParry = GetComponent<PlayerParry>();
         currentHealth = maxHealth;
         currentStamina = maxStamina;
         UpdateUI();
@@ -49,49 +50,42 @@ public class PlayerStats : MonoBehaviour
             hitOverlay.color = new Color(1, 0, 0, 0);
     }
 
-    private void Update()
+    void Update()
     {
         HandleStaminaRegen();
-
-        // Trigger parry on right mouse button
-        if (Input.GetMouseButtonDown(1) && attackController != null)
-        {
-            attackController.isParrying = true;
-            attackController.SetWeaponVisible(true);
-            Debug.Log("Parry button pressed!");
-        }
     }
 
     public void TakeDamage(float amount, Enemy enemy = null)
     {
-        bool parrySuccess = attackController != null && attackController.isParrying;
+        bool parrySuccess = playerParry != null && playerParry.IsParryWindowActive() && Input.GetMouseButtonDown(1);
 
         if (parrySuccess)
         {
+            Debug.Log("🟦 Player parried!");
             amount *= parryDamageReduction;
-            Debug.Log($"🛡️ Parry success! Damage reduced to {amount}");
 
-            // Stagger enemy immediately
-            enemy?.GetParried();
+            if (enemy != null)
+            {
+                enemy.GetParried(); // Only called if player actually parried
+                Debug.Log("⚡ Enemy stunned by parry!");
+            }
 
-            // Start coroutine to play parry then knockback
+            playerParry.TryParry(); // Registers successful parry and burst
+
+            // Optional: play parry animation then knockback
             StartCoroutine(PlayParryThenKnockback());
         }
         else
         {
-            // Directly play knockback if not parrying
+            playerParry?.ResetParryStreak();
+            Debug.Log("🟥 Player got hit!");
             animHandler?.PlayKnockback();
-            animHandler?.PlayHit(); // optional: still play hit
+            animHandler?.PlayHit();
         }
 
-        // Apply health damage
         currentHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
         UpdateUI();
 
-        // Weapon visibility
-        attackController?.SetWeaponVisible(true);
-
-        // Hit feedback UI
         if (!gotHitEvent.IsNull)
             RuntimeManager.PlayOneShot(gotHitEvent, transform.position);
 
@@ -101,22 +95,14 @@ public class PlayerStats : MonoBehaviour
             pulseRoutine = StartCoroutine(HitPulse());
         }
 
-        // Death check
         if (currentHealth <= 0)
             Die();
-
-        // Reset parry flag
-        if (attackController != null)
-            attackController.isParrying = false;
     }
 
     private IEnumerator PlayParryThenKnockback()
     {
         animHandler?.PlayParry();
-
-        // Wait for parry animation duration (adjust this to match your clip length)
         yield return new WaitForSeconds(0.3f);
-
         animHandler?.PlayKnockback();
     }
 
@@ -137,12 +123,6 @@ public class PlayerStats : MonoBehaviour
     {
         currentStamina = Mathf.Max(currentStamina - amount, 0f);
         regenTimer = regenDelay;
-        UpdateUI();
-    }
-
-    public void RegainStamina(float amount)
-    {
-        currentStamina = Mathf.Min(currentStamina + amount, maxStamina);
         UpdateUI();
     }
 

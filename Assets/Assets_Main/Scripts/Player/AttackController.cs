@@ -20,20 +20,13 @@ public class AttackController : MonoBehaviour
 
     [SerializeField] private EventReference attackSFX;
     [SerializeField] private EventReference hitSFX;
-    [SerializeField] private EventReference parrySFX;
 
     public float inCombatDuration = 2f;
     public float hitStopDuration = 0.1f;
     public float hitSlowFactor = 0.05f;
     public float attackLeadTime = 0.1f;
 
-    public float parryClickThreshold = 0.25f;
-    private float rmbHoldTime = 0f;
-
     [SerializeField] private TrailRenderer[] attackTrails;
-
-    [HideInInspector] public bool isBlocking = false;
-    [HideInInspector] public bool isParrying = false;
 
     private float combatTimer = 0f;
 
@@ -51,8 +44,8 @@ public class AttackController : MonoBehaviour
     private void Update()
     {
         HandleAttackInput();
-        HandleRMBInput();
         UpdateCombatTimer();
+
         if (!isAttacking && attackTrails != null)
         {
             foreach (TrailRenderer trail in attackTrails)
@@ -86,49 +79,34 @@ public class AttackController : MonoBehaviour
         isAttacking = true;
         queuedAttack = false;
         combatTimer = inCombatDuration;
+
         SetWeaponVisible(true);
         animHandler.PlayAttack();
-        if (!attackSFX.IsNull) RuntimeManager.PlayOneShot(attackSFX, transform.position);
+
+        if (!attackSFX.IsNull)
+            RuntimeManager.PlayOneShot(attackSFX, transform.position);
+
         yield return new WaitUntil(() => animHandler.canQueueNext);
+
         isAttacking = false;
-        if (queuedAttack) StartCoroutine(PerformAttack());
-    }
 
-    private void HandleRMBInput()
-    {
-        if (Input.GetMouseButton(1))
-        {
-            rmbHoldTime += Time.deltaTime;
-            if (rmbHoldTime > parryClickThreshold && !isBlocking)
-            {
-                isBlocking = true;
-                animHandler.SetBlocking(true);
-            }
-        }
-
-        if (Input.GetMouseButtonUp(1))
-        {
-            if (rmbHoldTime <= parryClickThreshold)
-            {
-                isParrying = true;  
-                animHandler.PlayParry();
-                PlayParrySound();
-            }
-
-            rmbHoldTime = 0f;
-            isBlocking = false;
-            animHandler.SetBlocking(false);
-        }
+        if (queuedAttack)
+            StartCoroutine(PerformAttack());
     }
 
     private IEnumerator HitStopCoroutine()
     {
         isHitStopping = true;
+
         float originalTimeScale = Time.timeScale;
         Time.timeScale = hitSlowFactor;
+
         animHandler.SetSpeedMultiplier(0f);
-        if (rb != null) rb.linearVelocity = Vector3.zero;
+        if (rb != null)
+            rb.linearVelocity = Vector3.zero;
+
         yield return new WaitForSecondsRealtime(hitStopDuration);
+
         Time.timeScale = originalTimeScale;
         animHandler.ResetSpeed();
         isHitStopping = false;
@@ -139,7 +117,9 @@ public class AttackController : MonoBehaviour
         if (combatTimer > 0f)
         {
             combatTimer -= Time.deltaTime;
-            if (combatTimer <= 0f && !isAttacking) SetWeaponVisible(!weaponHolstered);
+
+            if (combatTimer <= 0f && !isAttacking)
+                SetWeaponVisible(!weaponHolstered);
         }
     }
 
@@ -149,17 +129,14 @@ public class AttackController : MonoBehaviour
 
     public void SetWeaponVisible(bool visible)
     {
-        if (weaponModel != null) weaponModel.SetActive(visible);
-    }
-
-    public void PlayParrySound()
-    {
-        if (!parrySFX.IsNull) RuntimeManager.PlayOneShot(parrySFX, transform.position);
+        if (weaponModel != null)
+            weaponModel.SetActive(visible);
     }
 
     public void StartAttackTrails()
     {
         if (attackTrails == null) return;
+
         foreach (TrailRenderer trail in attackTrails)
         {
             if (trail == null) continue;
@@ -171,6 +148,7 @@ public class AttackController : MonoBehaviour
     public void StopAttackTrails()
     {
         if (attackTrails == null) return;
+
         foreach (TrailRenderer trail in attackTrails)
         {
             if (trail == null) continue;
@@ -181,8 +159,11 @@ public class AttackController : MonoBehaviour
     public void TryHit()
     {
         if (beatScheduler == null) return;
-        if (beatScheduler.IsInAttackWindow(attackLeadTime)) OnSuccessfulHit();
-        else StartCoroutine(DelayedHitToNextBeat());
+
+        if (beatScheduler.IsInAttackWindow(attackLeadTime))
+            OnSuccessfulHit();
+        else
+            StartCoroutine(DelayedHitToNextBeat());
     }
 
     private IEnumerator DelayedHitToNextBeat()
@@ -196,7 +177,11 @@ public class AttackController : MonoBehaviour
     {
         combatTimer = inCombatDuration;
         SetWeaponVisible(true);
-        if (!hitSFX.IsNull) RuntimeManager.PlayOneShot(hitSFX, transform.position);
-        if (!isHitStopping) StartCoroutine(HitStopCoroutine());
+
+        if (!hitSFX.IsNull)
+            RuntimeManager.PlayOneShot(hitSFX, transform.position);
+
+        if (!isHitStopping)
+            StartCoroutine(HitStopCoroutine());
     }
 }

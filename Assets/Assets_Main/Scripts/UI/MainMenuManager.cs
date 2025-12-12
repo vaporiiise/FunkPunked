@@ -59,4 +59,13 @@ public class MainMenuManager : MonoBehaviour
 
         SceneManager.LoadScene(sceneName);
     }
+    
+    /// <summary>
+    /// Quit the application
+    /// </summary>
+    public void QuitGame()
+    {
+        Debug.Log("Quitting game..."); // optional, useful for testing in editor
+        Application.Quit();
+    }
 }
