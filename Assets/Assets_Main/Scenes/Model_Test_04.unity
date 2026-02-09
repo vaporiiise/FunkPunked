@@ -104240,9 +104240,9 @@ MonoBehaviour:
         z: 3.6599731
       Rotation:
         value:
-          x: -0.013038121
+          x: -0.013038122
           y: -0.6829235
-          z: 0.04222527
+          z: 0.042225275
           w: 0.72915196
     - Position:
         x: -36.4
@@ -161414,6 +161414,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 831785881837886570, guid: f62b3aa8c268c0844b78f5f61b74b4f4, type: 3}
   m_PrefabInstance: {fileID: 2144849208}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2144854794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 7f516b811c3070243a6ae6423d55a754, type: 3}
+  m_PrefabInstance: {fileID: 1484575497}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2144854795}
+  m_Layer: 0
+  m_Name: BossExt4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2144854795
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7f516b811c3070243a6ae6423d55a754, type: 3}
+  m_PrefabInstance: {fileID: 1484575497}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144854794}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -31.031002, y: -0.099998474, z: 95.14262}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2144876699
 PrefabInstance:
   m_ObjectHideFlags: 0
