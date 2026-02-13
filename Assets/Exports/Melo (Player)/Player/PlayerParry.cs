@@ -2,48 +2,61 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 using Unity.Cinemachine; 
-using UnityEngine.Rendering;
-using TMPro; // Required for TextMeshPro
+using TMPro; 
 
 public class CinematicParry : MonoBehaviour
 {
     [Header("Input & Settings")]
     [SerializeField] private InputActionProperty parryAction;
-    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private PlayerInput playerInput; 
     [SerializeField] private float parryWindow = 0.25f;
 
-    [Header("Cinematic Camera")]
-    [SerializeField] private CinemachineCamera parryCamera;
-    [SerializeField] private Volume blackAndWhiteVolume;
-    [SerializeField] private float slowMotionScale = 0.05f;
-    [SerializeField] private float cinematicDuration = 2.0f; // Made longer for typing
+    [Header("Animation")]
+    [SerializeField] private Animator animator; 
+    [SerializeField] private string parryTriggerName = "Parry"; 
+    [SerializeField] private string successTriggerName = "ParrySuccess"; 
 
-    [Header("Shader Highlight (Fade-In)")]
-    [SerializeField] private Renderer playerRenderer;
-    [SerializeField] private Material outlineMaterial; // The material to add/swap
-    [Tooltip("The Reference Name of the float property in your shader (e.g. _Alpha, _Intensity, _Split)")]
-    [SerializeField] private string shaderFloatName = "_ParryIntensity"; 
-    [SerializeField] private float shaderFadeSpeed = 2.0f;
+    [Header("Cinematic Camera")]
+    [SerializeField] private CinemachineCamera parryCamera; 
+    [SerializeField] private float slowMotionScale = 0.05f; 
+    [SerializeField] private float cinematicDuration = 2.0f; 
+    [SerializeField] private float slowMotionDelay = 0.1f; // The new delay!
 
     [Header("Typing Text Effect")]
-    [SerializeField] private GameObject floatingTextPrefab; // A prefab with a TextMeshPro component
+    [SerializeField] private GameObject floatingTextPrefab; 
     [SerializeField] private string textMessage = "PERFECT!";
-    [SerializeField] private Vector3 textOffset = new Vector3(1f, 1.5f, 0f);
-    [SerializeField] private float typingSpeed = 0.05f; // Seconds per character
+    [SerializeField] private Vector3 textOffset = new Vector3(0f, 2f, 0f); 
+    [SerializeField] private float typingSpeed = 0.05f; 
 
-    // Internal State
-    private bool _isParrying;
-    private float _parryTimer;
-    private Material _instancedOutlineMat; // To avoid modifying the asset on disk
+    private bool _isParrying = false;
+    private float _parryTimer = 0f;
 
-    void OnEnable() { parryAction.action.Enable(); parryAction.action.performed += _ => AttemptParry(); }
-    void OnDisable() { parryAction.action.Disable(); }
+    void Awake()
+    {
+        if (animator == null) animator = GetComponent<Animator>();
+        if (parryCamera != null) parryCamera.gameObject.SetActive(false);
+    }
+
+    void OnEnable() 
+    { 
+        parryAction.action.Enable(); 
+        parryAction.action.performed += _ => AttemptParry(); 
+    }
+
+    void OnDisable() 
+    { 
+        parryAction.action.Disable(); 
+    }
 
     void AttemptParry()
     {
         if (_isParrying) return;
+        
         _isParrying = true;
         _parryTimer = parryWindow;
+
+        // Play the "Brace" animation immediately
+        if (animator != null) animator.SetTrigger(parryTriggerName);
     }
 
     void Update()
@@ -57,6 +70,7 @@ public class CinematicParry : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Only trigger if we actually hit an enemy while parrying
         if (_isParrying && other.CompareTag("EnemyHitbox"))
         {
             StartCoroutine(ExecuteSequence());
@@ -65,123 +79,87 @@ public class CinematicParry : MonoBehaviour
 
     IEnumerator ExecuteSequence()
     {
-        _isParrying = false;
+        // 1. SUCCESS! (Close window immediately)
+        _isParrying = false; 
 
-        // 1. SETUP: Lock Input & Create Material Instance
-        if (playerInput) playerInput.DeactivateInput();
-        
-        // Add the outline material as a SECOND material so we don't lose the player's texture
-        if (playerRenderer && outlineMaterial)
+        // 2. PLAY IMPACT ANIMATION (At full speed first)
+        if (animator != null)
         {
-            Material[] currentMats = playerRenderer.materials;
-            Material[] newMats = new Material[currentMats.Length + 1];
-            System.Array.Copy(currentMats, newMats, currentMats.Length);
-            
-            // Create a temporary instance so we can tween it without affecting other objects
-            _instancedOutlineMat = new Material(outlineMaterial);
-            _instancedOutlineMat.SetFloat(shaderFloatName, 0f); // Start invisible
-            newMats[newMats.Length - 1] = _instancedOutlineMat;
-            
-            playerRenderer.materials = newMats;
+            animator.SetTrigger(successTriggerName);
+            // Ensure animator keeps playing even when we slow down later
+            animator.updateMode = AnimatorUpdateMode.UnscaledTime;
         }
 
-        // 2. SNAP: Camera Cut & Time Freeze
-        if (parryCamera) parryCamera.Priority = 20;
-        if (blackAndWhiteVolume) blackAndWhiteVolume.weight = 1f;
+        // 3. WAIT FOR IMPACT (The 0.1f delay you asked for)
+        // We use Realtime so this 0.1s happens at normal speed
+        yield return new WaitForSecondsRealtime(slowMotionDelay);
+
+
+        // --- NOW THE CINEMATIC STARTS ---
+
+        // 4. LOCK INPUT & CUT CAMERA
+        if (playerInput) playerInput.DeactivateInput();
+        if (parryCamera != null) parryCamera.gameObject.SetActive(true);
+
+        // 5. FREEZE TIME
         Time.timeScale = slowMotionScale;
 
-        // 3. SPAWN TEXT
+        // 6. SPAWN TEXT
         GameObject textObj = null;
         TextMeshPro tmpComponent = null;
 
         if (floatingTextPrefab)
         {
-            // Spawn at player position + offset
             textObj = Instantiate(floatingTextPrefab, transform.position + textOffset, Quaternion.identity);
             tmpComponent = textObj.GetComponent<TextMeshPro>();
-            if (tmpComponent) tmpComponent.text = ""; // Start empty
+            if (tmpComponent) tmpComponent.text = ""; 
         }
 
-        // --- ANIMATION LOOP (Runs during the freeze) ---
+        // 7. CINEMATIC LOOP (Duration = cinematicDuration)
         float timer = 0f;
         int charIndex = 0;
         float typeTimer = 0f;
 
         while (timer < cinematicDuration)
         {
-            // Use unscaled delta time because TimeScale is near zero
+            // Use unscaledDeltaTime because Time.timeScale is now ~0
             float dt = Time.unscaledDeltaTime; 
             timer += dt;
 
-            // A. Billboard the Text (Always face camera)
-            if (textObj != null)
+            // Billboarding & Typing Logic
+            if (textObj != null && Camera.main != null)
             {
-                // Simple billboard technique: Forward matches Camera Forward
-                textObj.transform.forward = Camera.main.transform.forward;
-                // Optional: Keep it near player if player moves (though they shouldn't be moving)
+                textObj.transform.rotation = Camera.main.transform.rotation;
                 textObj.transform.position = transform.position + textOffset;
             }
 
-            // B. Typing Effect
             if (tmpComponent != null && charIndex < textMessage.Length)
             {
                 typeTimer += dt;
                 if (typeTimer >= typingSpeed)
                 {
-                    typeTimer = 0f;
+                    typeTimer = 0f; 
                     tmpComponent.text += textMessage[charIndex];
                     charIndex++;
-                    // Optional: Play a typing sound here
                 }
             }
 
-            // C. Fade In Shader Highlight
-            if (_instancedOutlineMat != null)
-            {
-                float currentVal = _instancedOutlineMat.GetFloat(shaderFloatName);
-                float newVal = Mathf.MoveTowards(currentVal, 1f, dt * shaderFadeSpeed);
-                _instancedOutlineMat.SetFloat(shaderFloatName, newVal);
-            }
-
             yield return null;
         }
 
-        // --- CLEANUP (Fade Out) ---
+        // 8. CLEANUP (Reset everything)
+        
+        // Disable Parry Camera
+        if (parryCamera != null) parryCamera.gameObject.SetActive(false);
 
-        if (parryCamera) parryCamera.Priority = 0; // Cut back to main cam
-
-        // Smoothly restore time and remove B&W
-        float blendBack = 0f;
-        while (blendBack < 1f)
-        {
-            blendBack += Time.unscaledDeltaTime * 2f; // 0.5s fade out
-            Time.timeScale = Mathf.Lerp(slowMotionScale, 1f, blendBack);
-            if (blackAndWhiteVolume) blackAndWhiteVolume.weight = Mathf.Lerp(1f, 0f, blendBack);
-            
-            // Fade out the shader as well
-            if (_instancedOutlineMat != null)
-                _instancedOutlineMat.SetFloat(shaderFloatName, 1f - blendBack);
-
-            yield return null;
-        }
-
-        // Final Reset
-        if (playerRenderer && _instancedOutlineMat != null)
-        {
-            // Revert to original material array (Remove the outline pass)
-            Material[] mats = playerRenderer.materials;
-            if (mats.Length > 1)
-            {
-                Material[] originalMats = new Material[mats.Length - 1];
-                System.Array.Copy(mats, originalMats, mats.Length - 1);
-                playerRenderer.materials = originalMats;
-            }
-            Destroy(_instancedOutlineMat); // Clean up memory
-        }
-
-        if (textObj) Destroy(textObj); // Remove the text
-        if (playerInput) playerInput.ActivateInput();
+        // Restore Game Speed
         Time.timeScale = 1f;
-        if (blackAndWhiteVolume) blackAndWhiteVolume.weight = 0f;
+
+        // Restore Animator to normal game time
+        if (animator != null) animator.updateMode = AnimatorUpdateMode.Normal;
+
+        // Cleanup Objects
+        if (textObj) Destroy(textObj);
+        if (playerInput) playerInput.ActivateInput();
     }
 }
