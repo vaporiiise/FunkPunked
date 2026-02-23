@@ -11,16 +11,19 @@ public class CinematicParry : MonoBehaviour
     [SerializeField] private PlayerInput playerInput; 
     [SerializeField] private float parryWindow = 0.25f;
 
-    [Header("Animation")]
+    [Header("Player Animation")]
     [SerializeField] private Animator animator; 
     [SerializeField] private string parryTriggerName = "Parry"; 
     [SerializeField] private string successTriggerName = "ParrySuccess"; 
+
+    [Header("Enemy Animation")]
+    [SerializeField] private string enemyParriedTriggerName = "GotParried"; // <-- NEW: Trigger for the enemy
 
     [Header("Cinematic Camera")]
     [SerializeField] private CinemachineCamera parryCamera; 
     [SerializeField] private float slowMotionScale = 0.05f; 
     [SerializeField] private float cinematicDuration = 2.0f; 
-    [SerializeField] private float slowMotionDelay = 0.1f; // The new delay!
+    [SerializeField] private float slowMotionDelay = 0.1f; 
 
     [Header("Typing Text Effect")]
     [SerializeField] private GameObject floatingTextPrefab; 
@@ -73,24 +76,37 @@ public class CinematicParry : MonoBehaviour
         // Only trigger if we actually hit an enemy while parrying
         if (_isParrying && other.CompareTag("EnemyHitbox"))
         {
-            StartCoroutine(ExecuteSequence());
+            // <-- NEW: Grab the enemy's animator. 
+            // We use GetComponentInParent in case the hitbox is on a child object (like a weapon or hand).
+            Animator enemyAnimator = other.GetComponentInParent<Animator>();
+            
+            StartCoroutine(ExecuteSequence(enemyAnimator));
         }
     }
 
-    IEnumerator ExecuteSequence()
+    // <-- NEW: Passed the enemyAnimator into the coroutine
+    IEnumerator ExecuteSequence(Animator enemyAnimator) 
     {
         // 1. SUCCESS! (Close window immediately)
         _isParrying = false; 
 
-        // 2. PLAY IMPACT ANIMATION (At full speed first)
+        // 2. PLAY IMPACT ANIMATIONS (Player & Enemy)
         if (animator != null)
         {
             animator.SetTrigger(successTriggerName);
-            // Ensure animator keeps playing even when we slow down later
+            // Ensure player animator keeps playing even when we slow down later
             animator.updateMode = AnimatorUpdateMode.UnscaledTime;
         }
 
-        // 3. WAIT FOR IMPACT (The 0.1f delay you asked for)
+        if (enemyAnimator != null)
+        {
+            // <-- NEW: Trigger enemy reaction instantly
+            enemyAnimator.SetTrigger(enemyParriedTriggerName);
+            // <-- NEW: Allow enemy animation to play smoothly during the slow-mo cinematic
+            enemyAnimator.updateMode = AnimatorUpdateMode.UnscaledTime; 
+        }
+
+        // 3. WAIT FOR IMPACT
         // We use Realtime so this 0.1s happens at normal speed
         yield return new WaitForSecondsRealtime(slowMotionDelay);
 
@@ -155,8 +171,11 @@ public class CinematicParry : MonoBehaviour
         // Restore Game Speed
         Time.timeScale = 1f;
 
-        // Restore Animator to normal game time
+        // Restore Animators to normal game time
         if (animator != null) animator.updateMode = AnimatorUpdateMode.Normal;
+        
+        // <-- NEW: Reset enemy animator back to normal time
+        if (enemyAnimator != null) enemyAnimator.updateMode = AnimatorUpdateMode.Normal; 
 
         // Cleanup Objects
         if (textObj) Destroy(textObj);
