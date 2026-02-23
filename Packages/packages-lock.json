@@ -117,6 +117,15 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.bindings.openimageio": {
+      "version": "1.0.2",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.collections": "1.2.4"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.burst": {
       "version": "1.8.28",
       "depth": 2,
@@ -145,8 +154,13 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collections": {
+<<<<<<< HEAD
       "version": "2.6.2",
       "depth": 2,
+=======
+      "version": "2.5.7",
+      "depth": 1,
+>>>>>>> Modelling
       "source": "registry",
       "dependencies": {
         "com.unity.burst": "1.8.23",
@@ -222,10 +236,38 @@
       }
     },
     "com.unity.nuget.mono-cecil": {
+<<<<<<< HEAD
       "version": "1.11.6",
       "depth": 3,
+=======
+      "version": "1.11.5",
+      "depth": 2,
+>>>>>>> Modelling
       "source": "registry",
       "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.probuilder": {
+      "version": "6.0.8",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.shadergraph": "17.0.3",
+        "com.unity.modules.imgui": "1.0.0",
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.settings-manager": "1.0.3"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.recorder": {
+      "version": "5.1.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.timeline": "1.8.7",
+        "com.unity.collections": "1.2.4",
+        "com.unity.bindings.openimageio": "1.0.2"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
@@ -268,8 +310,13 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.settings-manager": {
+<<<<<<< HEAD
       "version": "2.1.1",
       "depth": 2,
+=======
+      "version": "2.1.0",
+      "depth": 1,
+>>>>>>> Modelling
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -305,8 +352,13 @@
       }
     },
     "com.unity.test-framework.performance": {
+<<<<<<< HEAD
       "version": "3.2.0",
       "depth": 3,
+=======
+      "version": "3.1.0",
+      "depth": 2,
+>>>>>>> Modelling
       "source": "registry",
       "dependencies": {
         "com.unity.test-framework": "1.1.33",
