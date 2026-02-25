@@ -34,20 +34,47 @@ public class EnemyAI : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
+        // 1. Auto-assign the player if missing
         if (player == null)
-            player = GameObject.FindGameObjectWithTag("Player").transform;
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null) player = playerObj.transform;
+        }
+
+        // 2. Auto-find and assign all patrol points
+        GameObject[] points = GameObject.FindGameObjectsWithTag("Patrol Points");
+    
+        // Initialize the array size based on how many objects were found
+        patrolPoints = new Transform[points.Length];
+
+        for (int i = 0; i < points.Length; i++)
+        {
+            patrolPoints[i] = points[i].transform;
+        }
+    
+        // Optional: Sort them by name or distance if order matters
+        // System.Array.Sort(patrolPoints, (a, b) => string.Compare(a.name, b.name));
     }
 
     void Update()
     {
         float distance = Vector3.Distance(transform.position, player.position);
 
-        if (distance <= attackRange && Time.time >= nextAttackTime)
+        // 1. If in attack range, stop moving and attack
+        if (distance <= attackRange)
         {
-            Attack();
-            return;
+            // Stop movement animations immediately
+            animator.SetFloat("Speed", 0f);
+            animator.SetBool("IsRunning", false);
+
+            if (Time.time >= nextAttackTime)
+            {
+                Attack();
+            }
+            return; // Exit Update so we don't call ChasePlayer()
         }
 
+        // 2. If close but not in attack range, chase
         if (distance <= detectionRange)
         {
             ChasePlayer();

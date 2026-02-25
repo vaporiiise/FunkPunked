@@ -7,52 +7,33 @@ public class PlayerAnimationHandler : MonoBehaviour
     [Header("Locomotion")]
     [SerializeField] private float speedDamp = 0.1f;
 
-    public bool IsComboWindowOpen =>
-        animator.GetBool("CanNextCombo");
-
     void Awake()
     {
         animator = GetComponent<Animator>();
     }
-    
 
     public void UpdateMovement(float normalizedSpeed)
     {
         animator.SetFloat("Speed", normalizedSpeed, speedDamp, Time.deltaTime);
+        // Use this bool for instant transition triggers
+        animator.SetBool("IsMoving", normalizedSpeed > 0.05f);
     }
 
-    public void SetAttacking(bool value)
+    public void PlayMove()
     {
-        animator.SetBool("IsAttacking", value);
+        animator.SetBool("IsMoving", true);
+        animator.CrossFadeInFixedTime("Locomotion", 0.1f);
+        ResetComboWindow();
     }
 
-    // =========================
-    // COMBAT
-    // =========================
+    public void PlayAttack1() { animator.CrossFadeInFixedTime("Attack1", 0.05f); ResetComboWindow(); }
+    public void PlayAttack2() { animator.CrossFadeInFixedTime("Attack2", 0.05f); ResetComboWindow(); }
+    public void PlayAttack3() { animator.CrossFadeInFixedTime("Attack3", 0.05f); ResetComboWindow(); }
+    public void PlayAttack4() { animator.CrossFadeInFixedTime("Attack4", 0.05f); ResetComboWindow(); }
+    public void PlayAttack5() { animator.CrossFadeInFixedTime("Attack5", 0.05f); ResetComboWindow(); }
+    public void PlayAttack6() { animator.CrossFadeInFixedTime("Attack6", 0.05f); ResetComboWindow(); }
 
-    public void PlayAttack1() { animator.Play("Attack1"); ResetComboWindow(); }
-    public void PlayAttack2() { animator.Play("Attack2"); ResetComboWindow(); }
-    public void PlayAttack3() { animator.Play("Attack3"); ResetComboWindow(); }
-    public void PlayAttack4() { animator.Play("Attack4"); ResetComboWindow(); }
-    public void PlayAttack5() { animator.Play("Attack5"); ResetComboWindow(); }
-    public void PlayAttack6() { animator.Play("Attack6"); ResetComboWindow(); }
-
-    // =========================
-    // COMBO WINDOW
-    // =========================
-
-    public void OpenComboWindow()
-    {
-        animator.SetBool("CanNextCombo", true);
-    }
-
-    public void CloseComboWindow()
-    {
-        animator.SetBool("CanNextCombo", false);
-    }
-
-    public void ResetComboWindow()
-    {
-        animator.SetBool("CanNextCombo", false);
-    }
+    public void OpenComboWindow() => animator.SetBool("CanNextCombo", true);
+    public void CloseComboWindow() => animator.SetBool("CanNextCombo", false);
+    public void ResetComboWindow() => animator.SetBool("CanNextCombo", false);
 }

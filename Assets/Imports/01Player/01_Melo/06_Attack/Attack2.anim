@@ -24029,7 +24029,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 4.65
+    m_StopTime: 4.633333
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -155793,6 +155793,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 1.4166666
+    functionName: DisableHitbox
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 1.5666667
     functionName: OnAttackFinished
     data: 
@@ -155800,14 +155807,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.9333333
-    functionName: DisableHitbox
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 4.65
+  - time: 1.6833333
     functionName: CloseComboWindow
     data: 
     objectReferenceParameter: {fileID: 0}

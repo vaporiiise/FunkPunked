@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Combo")]
     public int maxComboStep = 6;
+    public PlayerCombo comboSystem; // Drag PlayerCombo here in Inspector
 
     [Header("Combo Timing")]
     public float comboWindowOpenDelay = 0.15f;
@@ -21,7 +22,6 @@ public class PlayerController : MonoBehaviour
 
     private int comboStep = 0;
     private bool isAttacking;
-
     private bool comboWindowOpen;
     private bool bufferedNextAttack;
     private float comboWindowTimer;
@@ -43,7 +43,6 @@ public class PlayerController : MonoBehaviour
 
     private PlayerControls controls;
     private PlayerAnimationHandler animationHandler;
-    
 
     private void Awake()
     {
@@ -66,15 +65,8 @@ public class PlayerController : MonoBehaviour
         HandleComboWindow();
     }
 
-    public float GetCurrentDamage()
-    {
-        return baseDamage * currentDamageMultiplier;
-    }
-
-    public void SetDamageMultiplier(float multiplier)
-    {
-        currentDamageMultiplier = multiplier;
-    }
+    public float GetCurrentDamage() => baseDamage * currentDamageMultiplier;
+    public void SetDamageMultiplier(float multiplier) => currentDamageMultiplier = multiplier;
 
     private void OnAttackInput()
     {
@@ -106,14 +98,10 @@ public class PlayerController : MonoBehaviour
         comboWindowTimer += Time.deltaTime;
 
         if (!comboWindowOpen && comboWindowTimer >= comboWindowOpenDelay)
-        {
             comboWindowOpen = true;
-        }
 
         if (comboWindowOpen && comboWindowTimer >= comboWindowOpenDelay + comboWindowDuration)
-        {
             comboWindowOpen = false;
-        }
     }
 
     public void OnAttackFinished()
@@ -121,6 +109,14 @@ public class PlayerController : MonoBehaviour
         DisableHitbox();
         isAttacking = false;
         comboWindowOpen = false;
+
+        // If player is already holding move keys when anim ends, reset combo
+        if (moveInput.sqrMagnitude > 0.01f)
+        {
+            comboStep = 0;
+            bufferedNextAttack = false;
+            return; 
+        }
 
         if (bufferedNextAttack)
         {
@@ -156,25 +152,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void EnableHitbox()
-    {
-        if (attackHitbox) attackHitbox.SetActive(true);
-        if (attackTrail) attackTrail.emitting = true;
-        if (audioSource && attackSFX) audioSource.PlayOneShot(attackSFX);
-    }
-
-    public void DisableHitbox()
-    {
-        if (attackHitbox) attackHitbox.SetActive(false);
-        if (attackTrail) attackTrail.emitting = false;
-    }
-
     private void HandleMovement()
     {
+        float inputMag = moveInput.sqrMagnitude;
+
+        // CANCEL LOGIC: If moving, kill attack and reset sequence
+        if (isAttacking && inputMag > 0.05f)
+        {
+            CancelAttackForMovement();
+        }
+
         float verticalVelocity = gravity;
         if (isAttacking)
         {
             controller.Move(Vector3.up * verticalVelocity * Time.deltaTime);
+            animationHandler.UpdateMovement(0f); // Force IsMoving false in animator
             return;
         }
 
@@ -189,6 +181,30 @@ public class PlayerController : MonoBehaviour
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(move.normalized), 12f * Time.deltaTime);
         }
+    }
+
+    private void CancelAttackForMovement()
+    {
+        isAttacking = false;
+        comboStep = 0; // Ensures next attack starts at step 1
+        bufferedNextAttack = false;
+        comboWindowOpen = false;
+        
+        DisableHitbox();
+        animationHandler.PlayMove(); // Force transition to Locomotion
+    }
+
+    public void EnableHitbox()
+    {
+        if (attackHitbox) attackHitbox.SetActive(true);
+        if (attackTrail) attackTrail.emitting = true;
+        if (audioSource && attackSFX) audioSource.PlayOneShot(attackSFX);
+    }
+
+    public void DisableHitbox()
+    {
+        if (attackHitbox) attackHitbox.SetActive(false);
+        if (attackTrail) attackTrail.emitting = false;
     }
 
     private void HandleTargeting()
