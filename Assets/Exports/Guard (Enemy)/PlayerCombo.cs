@@ -8,19 +8,13 @@ public class PlayerCombo : MonoBehaviour
     [Header("Dependencies")]
     public PlayerController playerController;
     public CinemachineCamera faceCamera; 
-    [Tooltip("Assign the Player's Animator here")]
-    public Animator playerAnimator; // <--- NEW: Reference to Animator
-
-    [Header("Animation Settings")]
-    public string feverAnimTrigger = "FeverTime"; // <--- NEW: Name of the trigger
-
-    [Header("Effects")]
-    public ParticleSystem feverVFX; 
+    public Animator playerAnimator;
 
     [Header("UI")]
     public TextMeshProUGUI comboText;
 
     [Header("Fever Mode Settings")]
+    public string feverAnimTrigger = "FeverTime";
     public int feverTriggerCount = 15;      
     public float feverDuration = 10f;       
     public float feverPanDuration = 1.5f;   
@@ -35,9 +29,6 @@ public class PlayerCombo : MonoBehaviour
     {
         if(comboText != null) comboText.text = "0 HIT";
         if(faceCamera != null) faceCamera.gameObject.SetActive(false);
-        if(feverVFX != null) feverVFX.Stop();
-        
-        // Auto-find animator if not assigned
         if(playerAnimator == null) playerAnimator = GetComponentInChildren<Animator>();
     }
 
@@ -46,10 +37,7 @@ public class PlayerCombo : MonoBehaviour
         if(currentCombo > 0 && !isFeverActive)
         {
             comboTimer += Time.deltaTime;
-            if(comboTimer >= comboResetTime)
-            {
-                ResetCombo();
-            }
+            if(comboTimer >= comboResetTime) ResetCombo();
         }
     }
 
@@ -58,51 +46,30 @@ public class PlayerCombo : MonoBehaviour
         currentCombo++;
         comboTimer = 0f;
         UpdateUI();
-
-        if (currentCombo >= feverTriggerCount && !isFeverActive)
-        {
-            StartCoroutine(ActivateFeverMode());
-        }
+        if (currentCombo >= feverTriggerCount && !isFeverActive) StartCoroutine(ActivateFeverMode());
     }
 
     private IEnumerator ActivateFeverMode()
     {
         isFeverActive = true;
-
-        // 1. Play the "FeverTime" Animation
-        if (playerAnimator != null)
-        {
-            playerAnimator.SetTrigger(feverAnimTrigger);
-        }
-
-        // 2. Cut to Camera & Play VFX
+        if (playerAnimator != null) playerAnimator.SetTrigger(feverAnimTrigger);
         if (faceCamera != null) faceCamera.gameObject.SetActive(true);
-        if (feverVFX != null) feverVFX.Play();
         if (playerController != null) playerController.SetDamageMultiplier(feverDamageMultiplier);
-        if (comboText != null) comboText.color = Color.red;
-
-        // 3. Wait for the cinematic pan duration
+        
         yield return new WaitForSeconds(feverPanDuration);
-
-        // 4. Cut back to Main Camera
         if (faceCamera != null) faceCamera.gameObject.SetActive(false);
-
-        // 5. Wait for the rest of the Fever duration
         yield return new WaitForSeconds(feverDuration - feverPanDuration);
-
         EndFeverMode();
     }
 
     private void EndFeverMode()
     {
         isFeverActive = false;
-        if (feverVFX != null) feverVFX.Stop();
         if (playerController != null) playerController.SetDamageMultiplier(1f);
-        if (comboText != null) comboText.color = Color.white;
         ResetCombo(); 
     }
 
-    private void ResetCombo()
+    public void ResetCombo()
     {
         currentCombo = 0;
         UpdateUI();
@@ -110,9 +77,6 @@ public class PlayerCombo : MonoBehaviour
 
     private void UpdateUI()
     {
-        if(comboText != null)
-        {
-            comboText.text = isFeverActive ? "FEVER!" : currentCombo + " HIT"; 
-        }
+        if(comboText != null) comboText.text = isFeverActive ? "FEVER!" : currentCombo + " HIT"; 
     }
 }
