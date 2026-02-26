@@ -1,184 +1,91 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
-using Unity.Cinemachine; 
-using TMPro; 
+using Unity.Cinemachine;
 
 public class CinematicParry : MonoBehaviour
 {
-    [Header("Input & Settings")]
+    [Header("Settings")]
     [SerializeField] private InputActionProperty parryAction;
-    [SerializeField] private PlayerInput playerInput; 
-    [SerializeField] private float parryWindow = 0.25f;
+    [SerializeField] private float parryWindow = 0.35f; 
+    [SerializeField] private CinemachineCamera parryCamera;
 
-    [Header("Player Animation")]
-    [SerializeField] private Animator animator; 
-    [SerializeField] private string parryTriggerName = "Parry"; 
-    [SerializeField] private string successTriggerName = "ParrySuccess"; 
-
-    [Header("Enemy Animation")]
-    [SerializeField] private string enemyParriedTriggerName = "GotParried"; // <-- NEW: Trigger for the enemy
-
-    [Header("Cinematic Camera")]
-    [SerializeField] private CinemachineCamera parryCamera; 
-    [SerializeField] private float slowMotionScale = 0.05f; 
-    [SerializeField] private float cinematicDuration = 2.0f; 
-    [SerializeField] private float slowMotionDelay = 0.1f; 
-
-    [Header("Typing Text Effect")]
-    [SerializeField] private GameObject floatingTextPrefab; 
-    [SerializeField] private string textMessage = "PERFECT!";
-    [SerializeField] private Vector3 textOffset = new Vector3(0f, 2f, 0f); 
-    [SerializeField] private float typingSpeed = 0.05f; 
-
+    private Animator animator;
+    private PlayerController playerController;
     private bool _isParrying = false;
-    private float _parryTimer = 0f;
+    private float _timer = 0f;
+    private bool _inCinematic = false;
 
-    void Awake()
-    {
-        if (animator == null) animator = GetComponent<Animator>();
-        if (parryCamera != null) parryCamera.gameObject.SetActive(false);
+    // The logic: If timer > 0, we ARE parrying.
+    public bool IsParrying => _timer > 0 && !_inCinematic;
+
+    void Awake() {
+        animator = GetComponentInChildren<Animator>();
+        playerController = GetComponent<PlayerController>();
     }
 
-    void OnEnable() 
-    { 
+    void OnEnable() { 
         parryAction.action.Enable(); 
         parryAction.action.performed += _ => AttemptParry(); 
     }
 
-    void OnDisable() 
-    { 
-        parryAction.action.Disable(); 
-    }
-
-    void AttemptParry()
-    {
-        if (_isParrying) return;
+    public void AttemptParry() {
+        if (_timer > 0 || _inCinematic || Time.timeScale < 1f) return;
         
+        _timer = parryWindow;
         _isParrying = true;
-        _parryTimer = parryWindow;
 
-        // Play the "Brace" animation immediately
-        if (animator != null) animator.SetTrigger(parryTriggerName);
-    }
-
-    void Update()
-    {
-        if (_isParrying)
-        {
-            _parryTimer -= Time.deltaTime;
-            if (_parryTimer <= 0) _isParrying = false;
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        // Only trigger if we actually hit an enemy while parrying
-        if (_isParrying && other.CompareTag("EnemyHitbox"))
-        {
-            // <-- NEW: Grab the enemy's animator. 
-            // We use GetComponentInParent in case the hitbox is on a child object (like a weapon or hand).
-            Animator enemyAnimator = other.GetComponentInParent<Animator>();
-            
-            StartCoroutine(ExecuteSequence(enemyAnimator));
-        }
-    }
-
-    // <-- NEW: Passed the enemyAnimator into the coroutine
-    IEnumerator ExecuteSequence(Animator enemyAnimator) 
-    {
-        // 1. SUCCESS! (Close window immediately)
-        _isParrying = false; 
-
-        // 2. PLAY IMPACT ANIMATIONS (Player & Enemy)
-        if (animator != null)
-        {
-            animator.SetTrigger(successTriggerName);
-            // Ensure player animator keeps playing even when we slow down later
-            animator.updateMode = AnimatorUpdateMode.UnscaledTime;
-        }
-
-        if (enemyAnimator != null)
-        {
-            // <-- NEW: Trigger enemy reaction instantly
-            enemyAnimator.SetTrigger(enemyParriedTriggerName);
-            // <-- NEW: Allow enemy animation to play smoothly during the slow-mo cinematic
-            enemyAnimator.updateMode = AnimatorUpdateMode.UnscaledTime; 
-        }
-
-        // 3. WAIT FOR IMPACT
-        // We use Realtime so this 0.1s happens at normal speed
-        yield return new WaitForSecondsRealtime(slowMotionDelay);
-
-
-        // --- NOW THE CINEMATIC STARTS ---
-
-        // 4. LOCK INPUT & CUT CAMERA
-        if (playerInput) playerInput.DeactivateInput();
-        if (parryCamera != null) parryCamera.gameObject.SetActive(true);
-
-        // 5. FREEZE TIME
-        Time.timeScale = slowMotionScale;
-
-        // 6. SPAWN TEXT
-        GameObject textObj = null;
-        TextMeshPro tmpComponent = null;
-
-        if (floatingTextPrefab)
-        {
-            textObj = Instantiate(floatingTextPrefab, transform.position + textOffset, Quaternion.identity);
-            tmpComponent = textObj.GetComponent<TextMeshPro>();
-            if (tmpComponent) tmpComponent.text = ""; 
-        }
-
-        // 7. CINEMATIC LOOP (Duration = cinematicDuration)
-        float timer = 0f;
-        int charIndex = 0;
-        float typeTimer = 0f;
-
-        while (timer < cinematicDuration)
-        {
-            // Use unscaledDeltaTime because Time.timeScale is now ~0
-            float dt = Time.unscaledDeltaTime; 
-            timer += dt;
-
-            // Billboarding & Typing Logic
-            if (textObj != null && Camera.main != null)
-            {
-                textObj.transform.rotation = Camera.main.transform.rotation;
-                textObj.transform.position = transform.position + textOffset;
-            }
-
-            if (tmpComponent != null && charIndex < textMessage.Length)
-            {
-                typeTimer += dt;
-                if (typeTimer >= typingSpeed)
-                {
-                    typeTimer = 0f; 
-                    tmpComponent.text += textMessage[charIndex];
-                    charIndex++;
-                }
-            }
-
-            yield return null;
-        }
-
-        // 8. CLEANUP (Reset everything)
+        if (playerController) playerController.StartParryLock();
+        if (animator) animator.SetTrigger("Parry");
         
-        // Disable Parry Camera
-        if (parryCamera != null) parryCamera.gameObject.SetActive(false);
+        Debug.Log("<color=cyan><b>[PARRY]</b> Window Opened! Timer: " + parryWindow + "</color>");
+    }
 
-        // Restore Game Speed
+    void Update() {
+        if (_timer > 0) {
+            _timer -= Time.deltaTime;
+
+            // REMOVED TAG CHECK: The window is now purely timer-based.
+            // If you press parry, the window IS open for 0.35s no matter what.
+        
+            if (_timer <= 0) {
+                Debug.Log("<color=red><b>[PARRY]</b> Window Expired.</color>");
+                if (playerController) playerController.EndParryLock();
+            }
+        }
+    }
+
+    public void TriggerSuccessfulParry(Animator enemyAnimator) {
+        if (_inCinematic) return;
+        _timer = 0; // Close the active window
+        StartCoroutine(ExecuteSequence(enemyAnimator));
+    }
+
+    IEnumerator ExecuteSequence(Animator enemyAnimator) {
+        _inCinematic = true;
+        Debug.Log("<color=green><b>[SUCCESS]</b> Handshake Complete. Starting Cinematic!</color>");
+
+        PlayerHealth health = GetComponent<PlayerHealth>();
+        if (health) health.IsInvulnerable = true;
+
+        if (parryCamera) parryCamera.gameObject.SetActive(true);
+        if (animator) animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+        
+        if (enemyAnimator) {
+            enemyAnimator.SetTrigger("GotParried");
+            enemyAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+        }
+
+        Time.timeScale = 0.05f;
+        yield return new WaitForSecondsRealtime(1.5f);
+        
         Time.timeScale = 1f;
-
-        // Restore Animators to normal game time
-        if (animator != null) animator.updateMode = AnimatorUpdateMode.Normal;
+        if (parryCamera) parryCamera.gameObject.SetActive(false);
+        if (animator) animator.updateMode = AnimatorUpdateMode.Normal;
+        if (enemyAnimator) enemyAnimator.updateMode = AnimatorUpdateMode.Normal;
         
-        // <-- NEW: Reset enemy animator back to normal time
-        if (enemyAnimator != null) enemyAnimator.updateMode = AnimatorUpdateMode.Normal; 
-
-        // Cleanup Objects
-        if (textObj) Destroy(textObj);
-        if (playerInput) playerInput.ActivateInput();
+        if (playerController) playerController.EndParryLock();
+        if (health) health.IsInvulnerable = false;
+        _inCinematic = false;
     }
 }

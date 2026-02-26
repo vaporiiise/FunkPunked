@@ -283,6 +283,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &155613309
 MeshFilter:
@@ -941,6 +942,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &464065274
 MeshFilter:
@@ -1854,6 +1856,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2179,7 +2182,7 @@ MonoBehaviour:
   AutomaticDolly:
     Enabled: 1
     Method:
-      rid: 1098129639704887370
+      rid: 7472464137628942590
   TrackingTarget: {fileID: 676955993}
   m_LegacyPosition: -1
   m_LegacyUnits: 0
@@ -2187,12 +2190,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1098129639704887370
-      type: {class: SplineAutoDolly/NearestPointToTarget, ns: Unity.Cinemachine, asm: Unity.Cinemachine}
+    - rid: 7472464137628942590
+      type: {class: SplineAutoDolly/FixedSpeed, ns: Unity.Cinemachine, asm: Unity.Cinemachine}
       data:
-        PositionOffset: 0
-        SearchResolution: 10
-        SearchIteration: 10
+        Speed: 0
 --- !u!114 &1116806586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5066,14 +5067,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1291629405}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 2
     m_Resolution: -1
@@ -5337,6 +5338,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -5562,9 +5564,9 @@ MonoBehaviour:
         z: 11.064342
       Rotation:
         value:
-          x: -0.00009688111
-          y: 0.001133361
-          z: 0.045488052
+          x: -0.00009688112
+          y: 0.0011333612
+          z: 0.04548806
           w: 0.9989642
     - Position:
         x: 0.3
@@ -5598,9 +5600,9 @@ MonoBehaviour:
         z: 10.991602
       Rotation:
         value:
-          x: 0.0022802684
+          x: 0.0022802697
           y: 0.99999386
-          z: -0.000015447487
+          z: -0.000015447491
           w: -0.0026554775
     - Position:
         x: 0.2
@@ -5825,6 +5827,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -5961,6 +5964,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -6606,6 +6610,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -6884,6 +6889,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

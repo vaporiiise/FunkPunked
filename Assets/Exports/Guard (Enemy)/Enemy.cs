@@ -40,6 +40,9 @@ public class Enemy : MonoBehaviour
 
     public void TakeHit(Transform attacker = null)
     {
+        // Safety: If the 'attacker' isn't the Player, don't process the hit
+        if (attacker != null && !attacker.CompareTag("Player")) return;
+
         currentHits++;
         UpdateHealthBar();
 

@@ -1,63 +1,79 @@
 using UnityEngine;
-using System.Collections;
 
 public class EnemyAttack : MonoBehaviour
 {
-    [SerializeField] private GameObject goldenFlashVFX;
-    [SerializeField] private GameObject parryHitbox;
-    [SerializeField] private float knockbackForce = 10f;
-    
-    [Header("Audio")]
-    [SerializeField] private AudioSource enemyAudioSource;
-    [SerializeField] private AudioClip flashSound;
+    [Header("Detection")]
+    public LayerMask playerLayer; // Set this to "Player" in Inspector
+    public GameObject attackHitbox;
+
+    [Header("VFX Settings")]
+    public ParticleSystem bodyPartParticle; // Drag your VFX prefab here
+    public Transform bodyPartTransform;     // Drag a bone (e.g., Hand/Chest) here
 
     private Animator _animator;
-    private Rigidbody _rb;
     private bool _isParryable = false;
-    public bool IsParryable => _isParryable;
+    private bool _hasDealtDamageThisSwing = false;
 
-    void Awake()
+    void Awake() 
     {
         _animator = GetComponent<Animator>();
-        _rb = GetComponent<Rigidbody>();
+        if (attackHitbox) attackHitbox.SetActive(false);
     }
 
-    public void GetParried(Vector3 playerPosition)
+    private void OnTriggerEnter(Collider other) 
     {
-        if (_animator) _animator.SetTrigger("GotParried");
+        if (_hasDealtDamageThisSwing) return;
 
-        AE_EndAttack();
-
-        if (_rb)
+        // 1. Team Check: Only process if the hit object is on the Player Layer
+        if (((1 << other.gameObject.layer) & playerLayer) != 0) 
         {
-            Vector3 pushDirection = (transform.position - playerPosition).normalized;
-            pushDirection.y = 0; 
-            _rb.AddForce(pushDirection * knockbackForce, ForceMode.Impulse);
+            CinematicParry playerParry = other.GetComponentInParent<CinematicParry>();
+
+            // Parry Logic
+            if (playerParry != null && playerParry.IsParrying && _isParryable) 
+            {
+                _hasDealtDamageThisSwing = true;
+                playerParry.TriggerSuccessfulParry(_animator);
+                AE_EndAttack();
+                return;
+            }
+
+            // Damage Logic
+            PlayerHealth health = other.GetComponentInParent<PlayerHealth>();
+            if (health != null) 
+            {
+                _hasDealtDamageThisSwing = true;
+                health.TakeDamage(10f);
+            }
         }
     }
 
-    public void AE_ShowFlash()
-    {
-        Debug.Log("Enemy Golden Flash!");
-        if(goldenFlashVFX) goldenFlashVFX.SetActive(true);
-    
-        if (enemyAudioSource && flashSound)
-        {
-            enemyAudioSource.PlayOneShot(flashSound);
-        }
-    }
-    
+    // --- ANIMATION EVENTS ---
+
     public void AE_StartAttack() 
-    {
-        Debug.Log("Hitbox is now ACTIVE"); 
-        goldenFlashVFX?.SetActive(false);
-        _isParryable = true;
-        parryHitbox.SetActive(true);
+    { 
+        _isParryable = true; 
+        _hasDealtDamageThisSwing = false; 
+        if (attackHitbox) attackHitbox.SetActive(true); 
     }
 
     public void AE_EndAttack() 
+    { 
+        _isParryable = false; 
+        if (attackHitbox) attackHitbox.SetActive(false); 
+    }
+
+    // This is the function you call from the Animation Window
+    public void AE_PlayParticleOnBody() 
     {
-        _isParryable = false;
-        parryHitbox.SetActive(false);
+        if (bodyPartParticle != null && bodyPartTransform != null) 
+        {
+            // Position the particle exactly on the hand/body part
+            ParticleSystem effect = Instantiate(bodyPartParticle, bodyPartTransform.position, bodyPartTransform.rotation);
+            effect.Play();
+            
+            // Cleanup: Destroy the particle object after it finishes playing
+            Destroy(effect.gameObject, effect.main.duration);
+        }
     }
 }
