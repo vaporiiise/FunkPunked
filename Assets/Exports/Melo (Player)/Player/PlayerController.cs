@@ -94,8 +94,18 @@ public class PlayerController : MonoBehaviour
         PlayAttackAnimation();
     }
 
-    public void StartParryLock() { _isParryLocked = true; velocity = Vector3.zero; isAttacking = false; DisableHitbox(); }
-    public void EndParryLock() { _isParryLocked = false; }
+    public void StartParryLock() 
+    { 
+        _isParryLocked = true; 
+        velocity = Vector3.zero; 
+        isAttacking = false; 
+        DisableHitbox(); 
+    }
+
+    public void EndParryLock() 
+    { 
+        _isParryLocked = false; 
+    }
 
     public void TriggerHitStop(float duration, float scale)
     {
@@ -158,10 +168,13 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
-        // Safety: If animator is not parrying, force unlock
-        if (_isParryLocked && !animator.GetCurrentAnimatorStateInfo(0).IsTag("ParryTag")) _isParryLocked = false;
+        if (_isParryLocked)
+        {
+            animationHandler.UpdateMovement(0f);
+            return;
+        }
 
-        if ((isAttacking && !canMoveCancel) || _isParryLocked) 
+        if (isAttacking && !canMoveCancel) 
         {
             animationHandler.UpdateMovement(0f);
             return; 

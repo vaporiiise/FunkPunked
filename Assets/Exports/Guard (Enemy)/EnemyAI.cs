@@ -28,14 +28,23 @@ public class EnemyAI : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        if (player == null) player = GameObject.FindGameObjectWithTag("Player").transform;
         
-        if(attackHitbox) attackHitbox.SetActive(false);
+        player = null; 
+        
+        if (attackHitbox) attackHitbox.SetActive(false);
+        
+        animator.Rebind();
+        animator.Update(0f);
     }
 
     void Update()
     {
-        // 1. Animation Guard: If playing Attack or GotParried, don't move
+        if (player == null)
+        {
+            FindPlayerInstance();
+            return;
+        }
+
         AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
         if (state.IsName("Attack") || state.IsName("GotParried")) return;
 
@@ -50,6 +59,19 @@ public class EnemyAI : MonoBehaviour
         {
             ChasePlayer();
         }
+        else
+        {
+            StopMoving();
+        }
+    }
+
+    void FindPlayerInstance()
+    {
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            player = playerObj.transform;
+        }
     }
 
     void Attack()
@@ -57,18 +79,24 @@ public class EnemyAI : MonoBehaviour
         nextAttackTime = Time.time + attackCooldown;
         animator.SetTrigger("Attack");
         
-        // Face player on start of attack
         Vector3 dir = (player.position - transform.position).normalized;
         dir.y = 0;
-        transform.rotation = Quaternion.LookRotation(dir);
+        if (dir != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(dir);
+        }
     }
 
     void ChasePlayer()
     {
         Vector3 dir = (player.position - transform.position).normalized;
         dir.y = 0;
-        transform.position += dir * runSpeed * Time.deltaTime;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), rotationSpeed * Time.deltaTime);
+        
+        if (dir != Vector3.zero)
+        {
+            transform.position += dir * runSpeed * Time.deltaTime;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), rotationSpeed * Time.deltaTime);
+        }
         
         animator.SetFloat("Speed", 1f);
         animator.SetBool("IsRunning", true);
@@ -80,7 +108,6 @@ public class EnemyAI : MonoBehaviour
         animator.SetBool("IsRunning", false);
     }
 
-    // --- Animation Events (Call these in your Attack Animation) ---
     public void AE_StartAttack() 
     { 
         _isParryable = true; 
@@ -93,12 +120,14 @@ public class EnemyAI : MonoBehaviour
         if(attackHitbox) attackHitbox.SetActive(false); 
     }
 
-    // --- Hit Detection ---
     private void OnTriggerEnter(Collider other)
     {
         if (((1 << other.gameObject.layer) & playerLayer) != 0)
         {
-            if (other.TryGetComponent(out PlayerHealth ph)) ph.TakeDamage(15f);
+            if (other.TryGetComponent(out PlayerHealth ph))
+            {
+                ph.TakeDamage(15f);
+            }
         }
     }
 }

@@ -3,12 +3,12 @@ using UnityEngine;
 public class EnemyAttack : MonoBehaviour
 {
     [Header("Detection")]
-    public LayerMask playerLayer; // Set this to "Player" in Inspector
+    public LayerMask playerLayer;
     public GameObject attackHitbox;
 
     [Header("VFX Settings")]
-    public ParticleSystem bodyPartParticle; // Drag your VFX prefab here
-    public Transform bodyPartTransform;     // Drag a bone (e.g., Hand/Chest) here
+    public ParticleSystem bodyPartParticle;
+    public Transform bodyPartTransform;
 
     private Animator _animator;
     private bool _isParryable = false;
@@ -17,19 +17,27 @@ public class EnemyAttack : MonoBehaviour
     void Awake() 
     {
         _animator = GetComponent<Animator>();
-        if (attackHitbox) attackHitbox.SetActive(false);
+        if (attackHitbox) 
+        {
+            attackHitbox.SetActive(false);
+            if (!attackHitbox.CompareTag("EnemyAttack"))
+            {
+                Debug.LogWarning("Hitbox on " + name + " is missing the EnemyAttack tag!");
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other) 
     {
         if (_hasDealtDamageThisSwing) return;
 
-        // 1. Team Check: Only process if the hit object is on the Player Layer
         if (((1 << other.gameObject.layer) & playerLayer) != 0) 
         {
+            float distance = Vector3.Distance(transform.position, other.transform.position);
+            if (distance > 5f) return;
+
             CinematicParry playerParry = other.GetComponentInParent<CinematicParry>();
 
-            // Parry Logic
             if (playerParry != null && playerParry.IsParrying && _isParryable) 
             {
                 _hasDealtDamageThisSwing = true;
@@ -38,7 +46,6 @@ public class EnemyAttack : MonoBehaviour
                 return;
             }
 
-            // Damage Logic
             PlayerHealth health = other.GetComponentInParent<PlayerHealth>();
             if (health != null) 
             {
@@ -47,8 +54,6 @@ public class EnemyAttack : MonoBehaviour
             }
         }
     }
-
-    // --- ANIMATION EVENTS ---
 
     public void AE_StartAttack() 
     { 
@@ -63,17 +68,18 @@ public class EnemyAttack : MonoBehaviour
         if (attackHitbox) attackHitbox.SetActive(false); 
     }
 
-    // This is the function you call from the Animation Window
     public void AE_PlayParticleOnBody() 
     {
         if (bodyPartParticle != null && bodyPartTransform != null) 
         {
-            // Position the particle exactly on the hand/body part
             ParticleSystem effect = Instantiate(bodyPartParticle, bodyPartTransform.position, bodyPartTransform.rotation);
             effect.Play();
-            
-            // Cleanup: Destroy the particle object after it finishes playing
             Destroy(effect.gameObject, effect.main.duration);
         }
+    }
+
+    private void OnDisable()
+    {
+        AE_EndAttack();
     }
 }
