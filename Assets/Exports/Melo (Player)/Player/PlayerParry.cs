@@ -15,6 +15,14 @@ public class CinematicParry : MonoBehaviour
     [Range(0.01f, 1f)] public float slowMoTimeScale = 0.05f;
     public float slowMoDuration = 1.5f;
 
+    [Header("VFX Calibration")]
+    [SerializeField] private GameObject parryVFXPrefab; 
+    [Tooltip("How far forward from the player pivot")]
+    [SerializeField] private float vfxSpawnDistance = 0.5f; // Reduced default
+    [Tooltip("How high from the player feet")]
+    [SerializeField] private float vfxSpawnHeight = 1.1f;   // Typical chest height
+    [SerializeField] private float vfxDestroyDelay = 2f;
+
     private Animator animator;
     private PlayerController playerController;
     private float _timer = 0f;
@@ -67,7 +75,29 @@ public class CinematicParry : MonoBehaviour
     {
         if (_inCinematic) return;
         _timer = 0; 
+
+        SpawnParryVFX();
         StartCoroutine(ExecuteSequence(enemyAnimator));
+    }
+
+    private void SpawnParryVFX()
+    {
+        if (parryVFXPrefab != null)
+        {
+            // Calculate position relative to player's current facing
+            Vector3 spawnPos = transform.position + (transform.forward * vfxSpawnDistance) + (Vector3.up * vfxSpawnHeight);
+            
+            GameObject vfx = Instantiate(parryVFXPrefab, spawnPos, Quaternion.identity);
+            
+            var ps = vfx.GetComponent<ParticleSystem>();
+            if (ps != null) 
+            { 
+                var main = ps.main; 
+                main.useUnscaledTime = true; 
+            }
+            
+            Destroy(vfx, vfxDestroyDelay);
+        }
     }
 
     IEnumerator ExecuteSequence(Animator enemyAnimator) 
@@ -118,5 +148,14 @@ public class CinematicParry : MonoBehaviour
     {
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
+    }
+
+    // THIS HELPS YOU SEE THE SPAWN POINT IN THE SCENE VIEW
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Vector3 previewPos = transform.position + (transform.forward * vfxSpawnDistance) + (Vector3.up * vfxSpawnHeight);
+        Gizmos.DrawWireSphere(previewPos, 0.1f);
+        Gizmos.DrawLine(transform.position + Vector3.up * vfxSpawnHeight, previewPos);
     }
 }
