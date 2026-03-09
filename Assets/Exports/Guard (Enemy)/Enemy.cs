@@ -1,94 +1,60 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
-    [Header("Health")]
-    public int maxHits = 5;
+    public int maxHits = 50;
     private int currentHits = 0;
+    private int consecutiveHits = 0;
+    private float hitWindowTimer;
 
-    [Header("Knockback")]
-    public float knockbackForce = 2f;   
-    public float knockbackDuration = 0.2f; 
+    private BossAnimationHandler _animHandler;
+    private BossAI _brain;
 
-    private Vector3 knockbackVelocity;
-
-    [Header("UI")]
-    public Image healthBarFill;
-    
-    [Header("Impact VFX")]
-    public ParticleSystem hitImpactPrefab;
-    
-    [Header("Audio")]
-    public AudioClip hitSFX;
-    public AudioSource audioSource;
-
-    private void Start()
+    void Awake()
     {
-        currentHits = 0;
-        UpdateHealthBar();
+        _animHandler = GetComponent<BossAnimationHandler>();
+        _brain = GetComponent<BossAI>();
     }
 
-    private void Update()
+    void Update()
     {
-        if(knockbackVelocity.magnitude > 0.01f)
+        // Reset combo counter if player stops attacking for 2 seconds
+        if (hitWindowTimer > 0)
         {
-            transform.position += knockbackVelocity * Time.deltaTime;
-            knockbackVelocity = Vector3.Lerp(knockbackVelocity, Vector3.zero, Time.deltaTime / knockbackDuration);
+            hitWindowTimer -= Time.deltaTime;
+            if (hitWindowTimer <= 0) consecutiveHits = 0;
         }
     }
 
     public void TakeHit(Transform attacker = null)
     {
-        // Safety: If the 'attacker' isn't the Player, don't process the hit
-        if (attacker != null && !attacker.CompareTag("Player")) return;
-
         currentHits++;
-        UpdateHealthBar();
+        consecutiveHits++;
+        hitWindowTimer = 2.0f;
 
-        if(attacker != null)
-            ApplyKnockback(attacker);
-
-        if(hitImpactPrefab != null)
+        // Logic for 3 different Got Hits
+        if (consecutiveHits >= 6) // Heavy Stagger
         {
-            ParticleSystem impact = Instantiate(hitImpactPrefab, transform.position + Vector3.up, Quaternion.identity);
-            impact.Play();
-            Destroy(impact.gameObject, impact.main.duration);
+            _animHandler.TriggerHit(2);
+            if (_brain) _brain.EnterStagger(3.0f);
+            consecutiveHits = 0;
+        }
+        else if (consecutiveHits >= 3) // Normal Hit
+        {
+            _animHandler.TriggerHit(1);
+        }
+        else // Subtle Flinch
+        {
+            _animHandler.TriggerHit(0);
         }
 
-        if(audioSource != null && hitSFX != null)
-            audioSource.PlayOneShot(hitSFX);
-
-        if(attacker != null)
-        {
-            PlayerCombo combo = attacker.GetComponent<PlayerCombo>();
-            if(combo != null)
-                combo.AddComboHit();
-        }
-
-        if(currentHits >= maxHits)
-            Die();
-    }
-
-
-
-
-    private void ApplyKnockback(Transform attacker)
-    {
-        Vector3 dir = transform.position - attacker.position;
-        dir.y = 0; 
-        dir.Normalize();
-        knockbackVelocity = dir * knockbackForce;
-    }
-
-    private void UpdateHealthBar()
-    {
-        if (healthBarFill != null)
-            healthBarFill.fillAmount = 1f - ((float)currentHits / maxHits);
+        if (currentHits >= maxHits) Die();
     }
 
     private void Die()
     {
-        Destroy(gameObject);
+        _animHandler.ResetMovement();
+        // Trigger your death logic/animation here
+        if (_brain) _brain.enabled = false;
     }
 }
