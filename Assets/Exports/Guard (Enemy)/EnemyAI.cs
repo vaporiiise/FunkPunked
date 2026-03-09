@@ -130,4 +130,10 @@ public class EnemyAI : MonoBehaviour
             }
         }
     }
+    
+    public void AddForceForward()
+    {
+        rb.isKinematic = false;
+        rb.AddForce(transform.forward * 100f, ForceMode.Impulse);
+    }
 }
