@@ -1,11 +1,17 @@
 using UnityEngine;
+using UnityEngine.UI; // Required for Image component
 
 public class Enemy : MonoBehaviour
 {
+    [Header("Combat Stats")]
     public int maxHits = 50;
     private int currentHits = 0;
     private int consecutiveHits = 0;
     private float hitWindowTimer;
+
+    [Header("UI References")]
+    [SerializeField] private Image healthBarFill; // Drag your 'Fill' image here
+    [SerializeField] private bool hideUIOnDeath = true;
 
     private BossAnimationHandler _animHandler;
     private BossAI _brain;
@@ -14,6 +20,9 @@ public class Enemy : MonoBehaviour
     {
         _animHandler = GetComponent<BossAnimationHandler>();
         _brain = GetComponent<BossAI>();
+        
+        // Initialize UI
+        UpdateHealthUI();
     }
 
     void Update()
@@ -31,6 +40,9 @@ public class Enemy : MonoBehaviour
         currentHits++;
         consecutiveHits++;
         hitWindowTimer = 2.0f;
+
+        // Update the UI image fill
+        UpdateHealthUI();
 
         // Logic for 3 different Got Hits
         if (consecutiveHits >= 6) // Heavy Stagger
@@ -51,10 +63,26 @@ public class Enemy : MonoBehaviour
         if (currentHits >= maxHits) Die();
     }
 
+    private void UpdateHealthUI()
+    {
+        if (healthBarFill != null)
+        {
+            // Health % = (MaxHits - CurrentHits) / MaxHits
+            float healthPercent = (float)(maxHits - currentHits) / maxHits;
+            healthBarFill.fillAmount = Mathf.Clamp01(healthPercent);
+        }
+    }
+
     private void Die()
     {
         _animHandler.ResetMovement();
-        // Trigger your death logic/animation here
+        
+        if (hideUIOnDeath && healthBarFill != null)
+        {
+            // Hide the parent canvas or the bar itself
+            healthBarFill.transform.parent.gameObject.SetActive(false);
+        }
+
         if (_brain) _brain.enabled = false;
     }
 }
