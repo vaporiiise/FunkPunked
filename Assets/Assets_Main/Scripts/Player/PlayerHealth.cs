@@ -30,11 +30,9 @@ public class PlayerHealth : MonoBehaviour
 
         if (distance > 5f)
         {
-            Debug.LogWarning("<color=orange>GHOST HIT BLOCKED:</color> " + other.gameObject.name + " tried to hit from " + distance + "m away.");
             return;
         }
 
-        Debug.Log("<color=yellow>VALID HIT:</color> Player hit by " + other.gameObject.name);
         TakeDamage(15f);
     }
 
@@ -42,9 +40,8 @@ public class PlayerHealth : MonoBehaviour
     {
         if (_isDead) return;
 
-        if ((_parryScript != null && _parryScript.IsParrying) || _isInvulnerable)
+        if (_isInvulnerable || (_parryScript != null && _parryScript.IsParrying))
         {
-            Debug.Log("<color=green>ZERO DAMAGE: Parry Shield Active.</color>");
             return;
         }
 
@@ -65,7 +62,6 @@ public class PlayerHealth : MonoBehaviour
     {
         if (_isDead) return;
         _isDead = true;
-        Debug.Log("<color=red>PLAYER DIED. Restarting Level...</color>");
         
         if (GameManager.Instance != null)
         {

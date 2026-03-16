@@ -40,27 +40,41 @@ public class CinematicParry : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         audioSource = GetComponent<AudioSource>();
         
-        // This ensures the AudioSource reacts to the changing Time.timeScale
-        audioSource.velocityUpdateMode = AudioVelocityUpdateMode.Fixed;
+        if (audioSource != null)
+            audioSource.velocityUpdateMode = AudioVelocityUpdateMode.Fixed;
         
         ResetTimeScale();
     }
 
     void OnEnable() 
     { 
-        parryAction.action.Enable(); 
-        parryAction.action.performed += _ => AttemptParry(); 
+        // CRITICAL: Check if action is assigned to avoid NullReference
+        if (parryAction.action != null)
+        {
+            parryAction.action.Enable(); 
+            parryAction.action.performed += OnParryPressed; 
+        }
     }
 
     void OnDisable() 
     {
         ResetTimeScale();
-        parryAction.action.Disable();
+        if (parryAction.action != null)
+        {
+            parryAction.action.performed -= OnParryPressed;
+            parryAction.action.Disable();
+        }
+    }
+
+    private void OnParryPressed(InputAction.CallbackContext context)
+    {
+        AttemptParry();
     }
 
     public void AttemptParry() 
     {
-        if (_timer > 0 || _inCinematic || Time.timeScale < 1f) return;
+        // Don't parry if already doing it, or in slow-mo hitstop
+        if (_timer > 0 || _inCinematic || Time.timeScale < 0.2f) return;
         
         _timer = parryWindow;
 
@@ -73,6 +87,7 @@ public class CinematicParry : MonoBehaviour
         if (_timer > 0) 
         {
             _timer -= Time.deltaTime;
+            // If the window expires without a hit, unlock the player
             if (_timer <= 0 && !_inCinematic) 
             {
                 if (playerController) playerController.EndParryLock();
@@ -102,8 +117,6 @@ public class CinematicParry : MonoBehaviour
             if (ps != null) 
             { 
                 var main = ps.main; 
-                // We keep this as 'true' so the VISUALS stay snappy
-                // even if the AUDIO slows down.
                 main.useUnscaledTime = true; 
             }
             
@@ -115,9 +128,6 @@ public class CinematicParry : MonoBehaviour
     {
         if (audioSource != null && parrySuccessSound != null)
         {
-            // REMOVED: audioSource.pitch = 1f;
-            // By NOT setting the pitch here, Unity will naturally
-            // pitch the sound down when Time.timeScale is low.
             audioSource.PlayOneShot(parrySuccessSound, sfxVolume);
         }
     }
@@ -126,6 +136,7 @@ public class CinematicParry : MonoBehaviour
     {
         _inCinematic = true;
 
+        // Safety check for health script
         PlayerHealth health = GetComponent<PlayerHealth>();
         if (health) health.IsInvulnerable = true;
 
@@ -170,13 +181,5 @@ public class CinematicParry : MonoBehaviour
     {
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Vector3 previewPos = transform.position + (transform.forward * vfxSpawnDistance) + (Vector3.up * vfxSpawnHeight);
-        Gizmos.DrawWireSphere(previewPos, 0.1f);
-        Gizmos.DrawLine(transform.position + Vector3.up * vfxSpawnHeight, previewPos);
     }
 }

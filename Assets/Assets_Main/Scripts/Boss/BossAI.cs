@@ -105,7 +105,6 @@ public class BossAI : MonoBehaviour
         _isTracking = true; 
         if (_animHandler) _animHandler.ResetMovement();
 
-        // Weighted Selection: 70% chance for Index 2 (Normal Attack)
         int attackIndex = (Random.Range(0f, 100f) <= normalAttackChance) ? 2 : Random.Range(0, 2);
 
         if (_animHandler) _animHandler.TriggerSpecificAttack(attackIndex);
@@ -114,7 +113,6 @@ public class BossAI : MonoBehaviour
 
     public void EnterStagger(float duration)
     {
-        // Kill any active Strafe or Chase logic immediately
         if (_activeRoutine != null) StopCoroutine(_activeRoutine);
         StopAllCoroutines(); 
 
@@ -130,7 +128,7 @@ public class BossAI : MonoBehaviour
         if (_animHandler) 
         {
             _animHandler.ResetMovement();
-            _animHandler.TriggerHit(2); // Play Stagger Loop
+            _animHandler.TriggerHit(2); 
         }
 
         yield return new WaitForSeconds(d);
@@ -176,7 +174,6 @@ public class BossAI : MonoBehaviour
 
     private void FindPlayer() { GameObject p = GameObject.FindGameObjectWithTag("Player"); if (p) player = p.transform; }
 
-    // --- PHYSICS HELPERS ---
     public void AddForceBackwards() { rbForce(-transform.forward * 50f); }
     public void AddForceBackwardsPlus() { rbForce(-transform.forward * 100f); }
     public void AddForceForwardATK1() { rbForce(transform.forward * 500f); }

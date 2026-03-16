@@ -7,22 +7,35 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed = 6f;
-    public float gravity = -9.81f;
+    public float gravity = -20f; 
+    public float drag = 5f;      
     public Transform cameraTransform;
+    
     private CharacterController controller;
     private Vector2 moveInput;
-    private Vector3 velocity;
+    private Vector3 verticalVelocity; 
+    private Vector3 impact; 
+
+    [Header("Dash Settings")]
+    public float dashSpeed = 20f;
+    public float dashDuration = 0.2f;
+    public float dashCooldown = 0.5f;
+    public float dashEnemyDetectionRange = 5f;
+    private bool isDashing;
+    private float lastDashTime;
 
     [Header("Combo Configuration")]
     public int maxComboStep = 6;
     public float comboWindowOpenDelay = 0.15f;
     public float comboWindowDuration = 0.6f;
+    public float comboResetTime = 1.0f; // Time in seconds before combo resets to Step 1
 
     private int comboStep = 0;
     private bool isAttacking;
     private bool comboWindowOpen;
     private bool bufferedNextAttack;
     private float comboWindowTimer;
+    private float lastAttackEndTime; // Tracked to handle combo expiration
     private bool canMoveCancel; 
     private bool _isParryLocked; 
 
@@ -30,7 +43,7 @@ public class PlayerController : MonoBehaviour
     public float baseDamage = 10f;
     private float currentDamageMultiplier = 1f;
 
-    [Header("Combat Extras")]
+    [Header("Combat Assets")]
     public GameObject attackHitbox;
     public TrailRenderer attackTrail;
     public AudioSource audioSource;
@@ -43,6 +56,7 @@ public class PlayerController : MonoBehaviour
 
     private PlayerControls controls;
     private PlayerAnimationHandler animationHandler;
+    private PlayerHealth health;
     private Animator animator;
     private Coroutine hitStopCoroutine;
 
@@ -50,12 +64,14 @@ public class PlayerController : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         animationHandler = GetComponent<PlayerAnimationHandler>();
+        health = GetComponent<PlayerHealth>();
         animator = GetComponentInChildren<Animator>();
+        
         controls = new PlayerControls();
-
         controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         controls.Player.Move.canceled += _ => moveInput = Vector2.zero;
         controls.Player.Attack.performed += _ => OnAttackInput();
+        controls.Player.Dash.performed += _ => StartDash();
     }
 
     private void OnEnable() => controls.Player.Enable();
@@ -64,48 +80,60 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         HandleGravity();
+        HandleImpactDecay(); 
         HandleMovement();
         HandleTargeting();
         HandleComboWindow();
+        CheckComboExpiration();
     }
 
     private void HandleGravity()
     {
-        if (controller.isGrounded && velocity.y < 0) velocity.y = -2f;
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        if (controller.isGrounded && verticalVelocity.y < 0) 
+            verticalVelocity.y = -2f;
+
+        verticalVelocity.y += gravity * Time.deltaTime;
+        controller.Move(verticalVelocity * Time.deltaTime);
     }
 
-    private void OnAttackInput()
+    private void HandleImpactDecay()
     {
-        if (_isParryLocked) return;
-        if (isAttacking && comboWindowOpen) { bufferedNextAttack = true; return; }
-        if (!isAttacking) StartAttack();
+        if (impact.magnitude > 0.2f) 
+            controller.Move(impact * Time.deltaTime);
+
+        impact = Vector3.Lerp(impact, Vector3.zero, drag * Time.deltaTime);
     }
 
-    private void StartAttack() { isAttacking = true; comboStep = 1; ExecuteAttack(); }
-
-    private void ExecuteAttack()
+    private void CheckComboExpiration()
     {
-        comboWindowTimer = 0f;
-        comboWindowOpen = false;
-        bufferedNextAttack = false;
-        canMoveCancel = false; 
-        PlayAttackAnimation();
+        // Reset combo step if player waits too long after an attack ends
+        if (!isAttacking && comboStep > 0)
+        {
+            if (Time.time > lastAttackEndTime + comboResetTime)
+            {
+                comboStep = 0;
+            }
+        }
     }
+
+    public void AddForce(Vector3 direction, float force)
+    {
+        direction.Normalize();
+        impact += direction * force;
+    }
+
+    public void AddForceForward() => AddForce(transform.forward, 15f);
+    public void AddForceBackward() => AddForce(-transform.forward, 10f);
 
     public void StartParryLock() 
     { 
         _isParryLocked = true; 
-        velocity = Vector3.zero; 
-        isAttacking = false; 
+        verticalVelocity = Vector3.zero;
+        impact = Vector3.zero;
         DisableHitbox(); 
     }
 
-    public void EndParryLock() 
-    { 
-        _isParryLocked = false; 
-    }
+    public void EndParryLock() => _isParryLocked = false;
 
     public void TriggerHitStop(float duration, float scale)
     {
@@ -124,34 +152,90 @@ public class PlayerController : MonoBehaviour
         hitStopCoroutine = null;
     }
 
-    public void EnableHitbox() 
-    { 
-        if (attackHitbox) attackHitbox.SetActive(true); 
-        if (attackTrail) attackTrail.emitting = true; 
-        if (audioSource && attackSFX) audioSource.PlayOneShot(attackSFX); 
+    private void HandleMovement()
+    {
+        if (_isParryLocked || isDashing)
+        {
+            animationHandler.UpdateMovement(0f);
+            return;
+        }
+
+        if (isAttacking)
+        {
+            if (canMoveCancel && moveInput.sqrMagnitude > 0.1f) 
+                ResetToLocomotion();
+            else
+            {
+                animationHandler.UpdateMovement(0f);
+                return; 
+            }
+        }
+
+        Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
+        move = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * move;
+
+        if (move.sqrMagnitude > 0.01f)
+        {
+            controller.Move(move.normalized * moveSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(move.normalized), 12f * Time.deltaTime);
+        }
+        
+        animationHandler.UpdateMovement(moveInput.magnitude);
     }
 
-    public void DisableHitbox() 
+    private void OnAttackInput()
+    {
+        if (_isParryLocked || isDashing) return;
+        
+        if (isAttacking)
+        {
+            if (comboWindowOpen) bufferedNextAttack = true;
+            return;
+        }
+
+        // If comboStep is 0 (expired) or at max, start fresh at 1. Otherwise, increment.
+        comboStep = (comboStep >= maxComboStep || comboStep == 0) ? 1 : comboStep + 1;
+        StartAttack();
+    }
+
+    private void StartAttack() 
     { 
-        if (attackHitbox) attackHitbox.SetActive(false); 
-        if (attackTrail) attackTrail.emitting = false; 
+        isAttacking = true; 
+        ExecuteAttack(); 
+    }
+
+    private void ExecuteAttack()
+    {
+        comboWindowTimer = 0f;
+        comboWindowOpen = false;
+        bufferedNextAttack = false;
+        canMoveCancel = false; 
+        AddForce(transform.forward, 5f);
+        PlayAttackAnimation();
     }
 
     public void OnAttackFinished()
     {
         DisableHitbox();
+        lastAttackEndTime = Time.time;
         canMoveCancel = true; 
+
         if (bufferedNextAttack)
         {
-            comboStep++;
-            if (comboStep > maxComboStep) comboStep = 1;
+            comboStep = (comboStep % maxComboStep) + 1;
             ExecuteAttack();
         }
+        else
+        {
+            // Stop active attack state but keep comboStep for potential continuation
+            isAttacking = false;
+        }
     }
-    
+
+    // BRIDGE FUNCTION: For Animation Events named 'OnAnimationReset'
     public void OnAnimationReset() 
     { 
-        ResetToLocomotion(); 
+        if (!bufferedNextAttack) ResetToLocomotion(); 
     }
 
     public void ResetToLocomotion()
@@ -166,53 +250,74 @@ public class PlayerController : MonoBehaviour
         animationHandler.PlayMove();
     }
 
-    private void HandleMovement()
+    public void SetDamageMultiplier(float m) => currentDamageMultiplier = m;
+    public float GetCurrentDamage() => baseDamage * currentDamageMultiplier;
+
+    private void StartDash()
     {
-        if (_isParryLocked)
+        if (isDashing || Time.time < lastDashTime + dashCooldown || _isParryLocked) return;
+        if (isAttacking) ResetToLocomotion();
+        StartCoroutine(DashRoutine());
+    }
+
+    private IEnumerator DashRoutine()
+    {
+        isDashing = true;
+        lastDashTime = Time.time;
+        health.IsInvulnerable = true;
+
+        Vector3 dashDir = (moveInput.sqrMagnitude < 0.01f) ? transform.forward : 
+            (Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * new Vector3(moveInput.x, 0, moveInput.y)).normalized;
+
+        bool enemyNearby = false;
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemyTag);
+        foreach (var e in enemies)
         {
-            animationHandler.UpdateMovement(0f);
-            return;
+            if (e != null && Vector3.Distance(transform.position, e.transform.position) < dashEnemyDetectionRange)
+            {
+                enemyNearby = true;
+                break;
+            }
         }
 
-        if (isAttacking && !canMoveCancel) 
+        if (enemyNearby) animationHandler.PlayDashBack();
+        else animationHandler.PlayDashForward();
+
+        float timer = 0;
+        while (timer < dashDuration)
         {
-            animationHandler.UpdateMovement(0f);
-            return; 
+            controller.Move(dashDir * dashSpeed * Time.deltaTime);
+            timer += Time.deltaTime;
+            yield return null;
         }
 
-        if (isAttacking && canMoveCancel && moveInput.sqrMagnitude > 0.1f) ResetToLocomotion();
-        if (isAttacking) return;
-
-        Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
-        move = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * move;
-        if (move.sqrMagnitude > 0.01f)
-        {
-            controller.Move(move.normalized * moveSpeed * Time.deltaTime);
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(move.normalized), 12f * Time.deltaTime);
-        }
-        animationHandler.UpdateMovement(moveInput.magnitude);
+        health.IsInvulnerable = false;
+        isDashing = false;
     }
 
     private void HandleComboWindow()
     {
         if (!isAttacking) return;
         comboWindowTimer += Time.deltaTime;
-        if (!comboWindowOpen && comboWindowTimer >= comboWindowOpenDelay) comboWindowOpen = true;
-        if (comboWindowOpen && comboWindowTimer >= comboWindowOpenDelay + comboWindowDuration) comboWindowOpen = false;
+        comboWindowOpen = (comboWindowTimer >= comboWindowOpenDelay && comboWindowTimer <= comboWindowOpenDelay + comboWindowDuration);
     }
 
     private void HandleTargeting()
     {
-        if (!isAttacking || canMoveCancel || _isParryLocked) return;
+        if (!isAttacking || canMoveCancel || _isParryLocked || isDashing) return;
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemyTag);
         Transform nearest = null; float minDist = targetRange;
-        foreach (var e in GameObject.FindGameObjectsWithTag(enemyTag))
+        foreach (var e in enemies)
         {
+            if (e == null) continue;
             float d = Vector3.Distance(transform.position, e.transform.position);
             if (d < minDist) { minDist = d; nearest = e.transform; }
         }
-        if (nearest == null) return;
-        Vector3 dir = (nearest.position - transform.position).normalized; dir.y = 0;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), targetRotationSpeed * Time.deltaTime);
+        if (nearest != null)
+        {
+            Vector3 dir = (nearest.position - transform.position).normalized; dir.y = 0;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), targetRotationSpeed * Time.deltaTime);
+        }
     }
 
     private void PlayAttackAnimation()
@@ -224,9 +329,10 @@ public class PlayerController : MonoBehaviour
             case 4: animationHandler.PlayAttack4(); break;
             case 5: animationHandler.PlayAttack5(); break;
             case 6: animationHandler.PlayAttack6(); break;
+            default: animationHandler.PlayAttack1(); break;
         }
     }
 
-    public void SetDamageMultiplier(float m) => currentDamageMultiplier = m;
-    public float GetCurrentDamage() => baseDamage * currentDamageMultiplier;
+    public void EnableHitbox() { if (attackHitbox) attackHitbox.SetActive(true); if (attackTrail) attackTrail.emitting = true; if (audioSource && attackSFX) audioSource.PlayOneShot(attackSFX); }
+    public void DisableHitbox() { if (attackHitbox) attackHitbox.SetActive(false); if (attackTrail) attackTrail.emitting = false; }
 }
