@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Animator), typeof(Rigidbody))]
 public class EnemyAI : MonoBehaviour
 {
     [Header("Detection & Combat")]
@@ -11,39 +11,38 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private LayerMask playerLayer;
 
     [Header("Movement")]
-    public float walkSpeed = 1.5f;
     public float runSpeed = 3.5f;
     public float rotationSpeed = 8f;
 
+    [Header("Physics Burst Settings")]
+    [Tooltip("How long the enemy stays non-kinematic after a push")]
+    public float physicsUnlockDuration = 0.2f; 
+    private float physicsTimer = 0f;
+
     [Header("References")]
     [SerializeField] private GameObject attackHitbox;
-    [SerializeField] private GameObject goldenFlashVFX;
 
     private Animator animator;
     private Rigidbody rb;
     private float nextAttackTime;
-    private bool _isParryable;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         
-        player = null; 
-        
-        if (attackHitbox) attackHitbox.SetActive(false);
-        
-        animator.Rebind();
-        animator.Update(0f);
+        LockPhysics();
+
+        if (player == null) FindPlayerInstance();
     }
 
     void Update()
     {
-        if (player == null)
-        {
-            FindPlayerInstance();
-            return;
-        }
+        HandlePhysicsTimer();
+
+        if (!rb.isKinematic) return;
+
+        if (player == null) { FindPlayerInstance(); return; }
 
         AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
         if (state.IsName("Attack") || state.IsName("GotParried")) return;
@@ -65,26 +64,35 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    void FindPlayerInstance()
+    private void HandlePhysicsTimer()
     {
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        if (playerObj != null)
+        if (physicsTimer > 0)
         {
-            player = playerObj.transform;
+            physicsTimer -= Time.deltaTime;
+
+            if (physicsTimer <= 0)
+            {
+                LockPhysics();
+            }
         }
     }
 
-    void Attack()
+    public void AddForceForward()
     {
-        nextAttackTime = Time.time + attackCooldown;
-        animator.SetTrigger("Attack");
+        rb.isKinematic = false;
         
-        Vector3 dir = (player.position - transform.position).normalized;
-        dir.y = 0;
-        if (dir != Vector3.zero)
-        {
-            transform.rotation = Quaternion.LookRotation(dir);
-        }
+        rb.AddForce(transform.forward * 100f, ForceMode.Impulse);
+        
+        physicsTimer = physicsUnlockDuration;
+    }
+
+    private void LockPhysics()
+    {
+        rb.isKinematic = true;
+        
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
 
     void ChasePlayer()
@@ -108,26 +116,26 @@ public class EnemyAI : MonoBehaviour
         animator.SetBool("IsRunning", false);
     }
 
-    public void AE_StartAttack() 
-    { 
-        _isParryable = true; 
-        if(attackHitbox) attackHitbox.SetActive(true); 
-    }
-
-    public void AE_EndAttack() 
-    { 
-        _isParryable = false; 
-        if(attackHitbox) attackHitbox.SetActive(false); 
-    }
-
-    private void OnTriggerEnter(Collider other)
+    void Attack()
     {
-        if (((1 << other.gameObject.layer) & playerLayer) != 0)
+        nextAttackTime = Time.time + attackCooldown;
+        animator.SetTrigger("Attack");
+        
+        Vector3 dir = (player.position - transform.position).normalized;
+        dir.y = 0;
+        if (dir != Vector3.zero)
         {
-            if (other.TryGetComponent(out PlayerHealth ph))
-            {
-                ph.TakeDamage(15f);
-            }
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), rotationSpeed * Time.deltaTime);
         }
     }
+
+    void FindPlayerInstance()
+    {
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null) player = playerObj.transform;
+    }
+
+    // Animation Event Methods
+    public void AE_StartAttack() { if(attackHitbox) attackHitbox.SetActive(true); }
+    public void AE_EndAttack() { if(attackHitbox) attackHitbox.SetActive(false); }
 }

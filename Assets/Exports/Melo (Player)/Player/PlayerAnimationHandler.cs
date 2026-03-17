@@ -15,7 +15,6 @@ public class PlayerAnimationHandler : MonoBehaviour
     public void UpdateMovement(float normalizedSpeed)
     {
         animator.SetFloat("Speed", normalizedSpeed, speedDamp, Time.deltaTime);
-        // Use this bool for instant transition triggers
         animator.SetBool("IsMoving", normalizedSpeed > 0.05f);
     }
 
@@ -23,6 +22,18 @@ public class PlayerAnimationHandler : MonoBehaviour
     {
         animator.SetBool("IsMoving", true);
         animator.CrossFadeInFixedTime("Locomotion", 0.1f);
+        ResetComboWindow();
+    }
+
+    public void PlayDashForward()
+    {
+        animator.CrossFadeInFixedTime("DashForward", 0.05f);
+        ResetComboWindow();
+    }
+
+    public void PlayDashBack()
+    {
+        animator.CrossFadeInFixedTime("DashBackward", 0.05f);
         ResetComboWindow();
     }
 

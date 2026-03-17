@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using Unity.Cinemachine;
 
+[RequireComponent(typeof(AudioSource))]
 public class CinematicParry : MonoBehaviour
 {
     [Header("Settings")]
@@ -15,8 +16,19 @@ public class CinematicParry : MonoBehaviour
     [Range(0.01f, 1f)] public float slowMoTimeScale = 0.05f;
     public float slowMoDuration = 1.5f;
 
+    [Header("VFX Calibration")]
+    [SerializeField] private GameObject parryVFXPrefab; 
+    [SerializeField] private float vfxSpawnDistance = 0.5f; 
+    [SerializeField] private float vfxSpawnHeight = 1.1f;   
+    [SerializeField] private float vfxDestroyDelay = 2f;
+
+    [Header("SFX Settings")]
+    [SerializeField] private AudioClip parrySuccessSound;
+    [Range(0f, 1f)] [SerializeField] private float sfxVolume = 1f;
+
     private Animator animator;
     private PlayerController playerController;
+    private AudioSource audioSource;
     private float _timer = 0f;
     private bool _inCinematic = false;
 
@@ -26,24 +38,43 @@ public class CinematicParry : MonoBehaviour
     {
         animator = GetComponentInChildren<Animator>();
         playerController = GetComponent<PlayerController>();
+        audioSource = GetComponent<AudioSource>();
+        
+        if (audioSource != null)
+            audioSource.velocityUpdateMode = AudioVelocityUpdateMode.Fixed;
+        
         ResetTimeScale();
     }
 
     void OnEnable() 
     { 
-        parryAction.action.Enable(); 
-        parryAction.action.performed += _ => AttemptParry(); 
+        // CRITICAL: Check if action is assigned to avoid NullReference
+        if (parryAction.action != null)
+        {
+            parryAction.action.Enable(); 
+            parryAction.action.performed += OnParryPressed; 
+        }
     }
 
     void OnDisable() 
     {
         ResetTimeScale();
-        parryAction.action.Disable();
+        if (parryAction.action != null)
+        {
+            parryAction.action.performed -= OnParryPressed;
+            parryAction.action.Disable();
+        }
+    }
+
+    private void OnParryPressed(InputAction.CallbackContext context)
+    {
+        AttemptParry();
     }
 
     public void AttemptParry() 
     {
-        if (_timer > 0 || _inCinematic || Time.timeScale < 1f) return;
+        // Don't parry if already doing it, or in slow-mo hitstop
+        if (_timer > 0 || _inCinematic || Time.timeScale < 0.2f) return;
         
         _timer = parryWindow;
 
@@ -56,6 +87,7 @@ public class CinematicParry : MonoBehaviour
         if (_timer > 0) 
         {
             _timer -= Time.deltaTime;
+            // If the window expires without a hit, unlock the player
             if (_timer <= 0 && !_inCinematic) 
             {
                 if (playerController) playerController.EndParryLock();
@@ -67,13 +99,44 @@ public class CinematicParry : MonoBehaviour
     {
         if (_inCinematic) return;
         _timer = 0; 
+
+        SpawnParryVFX();
+        PlayParrySFX(); 
+        
         StartCoroutine(ExecuteSequence(enemyAnimator));
+    }
+
+    private void SpawnParryVFX()
+    {
+        if (parryVFXPrefab != null)
+        {
+            Vector3 spawnPos = transform.position + (transform.forward * vfxSpawnDistance) + (Vector3.up * vfxSpawnHeight);
+            GameObject vfx = Instantiate(parryVFXPrefab, spawnPos, Quaternion.identity);
+            
+            var ps = vfx.GetComponent<ParticleSystem>();
+            if (ps != null) 
+            { 
+                var main = ps.main; 
+                main.useUnscaledTime = true; 
+            }
+            
+            Destroy(vfx, vfxDestroyDelay);
+        }
+    }
+
+    private void PlayParrySFX()
+    {
+        if (audioSource != null && parrySuccessSound != null)
+        {
+            audioSource.PlayOneShot(parrySuccessSound, sfxVolume);
+        }
     }
 
     IEnumerator ExecuteSequence(Animator enemyAnimator) 
     {
         _inCinematic = true;
 
+        // Safety check for health script
         PlayerHealth health = GetComponent<PlayerHealth>();
         if (health) health.IsInvulnerable = true;
 
