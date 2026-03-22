@@ -10,24 +10,22 @@ public class Enemy : MonoBehaviour
     private float hitWindowTimer;
 
     [Header("UI References")]
-    [SerializeField] private Image healthBarFill; // Drag your 'Fill' image here
+    [SerializeField] private Image healthBarFill; 
     [SerializeField] private bool hideUIOnDeath = true;
 
     private BossAnimationHandler _animHandler;
     private BossAI _brain;
 
-    void Awake()
+    void Awake() 
     {
         _animHandler = GetComponent<BossAnimationHandler>();
         _brain = GetComponent<BossAI>();
         
-        // Initialize UI
         UpdateHealthUI();
     }
 
     void Update()
     {
-        // Reset combo counter if player stops attacking for 2 seconds
         if (hitWindowTimer > 0)
         {
             hitWindowTimer -= Time.deltaTime;
@@ -41,21 +39,19 @@ public class Enemy : MonoBehaviour
         consecutiveHits++;
         hitWindowTimer = 2.0f;
 
-        // Update the UI image fill
         UpdateHealthUI();
 
-        // Logic for 3 different Got Hits
-        if (consecutiveHits >= 6) // Heavy Stagger
+        if (consecutiveHits >= 6) 
         {
             _animHandler.TriggerHit(2);
             if (_brain) _brain.EnterStagger(3.0f);
             consecutiveHits = 0;
         }
-        else if (consecutiveHits >= 3) // Normal Hit
+        else if (consecutiveHits >= 3) 
         {
             _animHandler.TriggerHit(1);
         }
-        else // Subtle Flinch
+        else 
         {
             _animHandler.TriggerHit(0);
         }
@@ -67,7 +63,6 @@ public class Enemy : MonoBehaviour
     {
         if (healthBarFill != null)
         {
-            // Health % = (MaxHits - CurrentHits) / MaxHits
             float healthPercent = (float)(maxHits - currentHits) / maxHits;
             healthBarFill.fillAmount = Mathf.Clamp01(healthPercent);
         }
@@ -79,7 +74,6 @@ public class Enemy : MonoBehaviour
         
         if (hideUIOnDeath && healthBarFill != null)
         {
-            // Hide the parent canvas or the bar itself
             healthBarFill.transform.parent.gameObject.SetActive(false);
         }
 

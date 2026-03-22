@@ -4763,7 +4763,7 @@ ParticleSystem:
     vectorLabel1_3: W
 --- !u!199 &3121591484653063242
 ParticleSystemRenderer:
-  serializedVersion: 6
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4809,6 +4809,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -4840,7 +4841,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
-  m_MaskInteraction: 0
 --- !u!1 &1776137149924135598
 GameObject:
   m_ObjectHideFlags: 0
@@ -4867,13 +4867,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1776137149924135598}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.00000023841852, z: 0.7021855, w: 0.7119941}
-  m_LocalPosition: {x: 0, y: 0, z: -0.13}
+  m_LocalRotation: {x: 0.00000019371505, y: 0.00000035762778, z: 0.94876534, w: 0.31598136}
+  m_LocalPosition: {x: -0.58490014, y: 0.9290906, z: -0.13001138}
   m_LocalScale: {x: 2.5698733, y: 2.5698733, z: 2.5698733}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1087217292023623501}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 89.205}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 143.16}
 --- !u!198 &6518055014361787970
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4889,7 +4889,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -9657,7 +9657,7 @@ ParticleSystem:
     vectorLabel1_3: W
 --- !u!199 &4619802412256275679
 ParticleSystemRenderer:
-  serializedVersion: 6
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -9703,6 +9703,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -9734,7 +9735,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
-  m_MaskInteraction: 0
 --- !u!1 &1862926447456566811
 GameObject:
   m_ObjectHideFlags: 0
@@ -9761,13 +9761,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1862926447456566811}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.44, y: 0, z: 0}
+  m_LocalRotation: {x: 0.00000074505795, y: 0.0000002533197, z: 0.45363998, w: 0.89118505}
+  m_LocalPosition: {x: -0.32599306, y: 1.2848581, z: 0.0000015497208}
   m_LocalScale: {x: 1.718412, y: 1.718412, z: 1.718412}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1087217292023623501}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 53.955}
 --- !u!198 &6236779750457550351
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -9783,7 +9783,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -14578,7 +14578,7 @@ ParticleSystem:
     vectorLabel1_3: W
 --- !u!199 &4675436436390404766
 ParticleSystemRenderer:
-  serializedVersion: 6
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -14624,6 +14624,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_RenderMode: 4
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -14655,7 +14656,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
-  m_MaskInteraction: 0
 --- !u!1 &3243711886151875881
 GameObject:
   m_ObjectHideFlags: 0
@@ -14682,13 +14682,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3243711886151875881}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.00000008940697, z: 0.67580795, w: 0.7370778}
-  m_LocalPosition: {x: -2.85, y: -0.22, z: -0.02}
+  m_LocalRotation: {x: 0.0000011473893, y: -0.0000008344649, z: 0.93663746, w: 0.35030034}
+  m_LocalPosition: {x: -2.0840008, y: -1.5048728, z: -0.020003557}
   m_LocalScale: {x: 3.5518584, y: 3.5518584, z: 3.5518584}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1087217292023623501}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 85.034}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 138.989}
 --- !u!198 &2923163590174129090
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -14704,7 +14704,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -19499,7 +19499,7 @@ ParticleSystem:
     vectorLabel1_3: W
 --- !u!199 &1344614155219929837
 ParticleSystemRenderer:
-  serializedVersion: 6
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -19545,6 +19545,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -19576,7 +19577,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
-  m_MaskInteraction: 0
 --- !u!1 &4791816002968740521
 GameObject:
   m_ObjectHideFlags: 0
@@ -19603,13 +19603,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4791816002968740521}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 0.13}
+  m_LocalRotation: {x: 0.00000074505795, y: 0.0000002533197, z: 0.45363998, w: 0.89118505}
+  m_LocalPosition: {x: -0.5848923, y: 0.92907655, z: 0.13000727}
   m_LocalScale: {x: 1.8016437, y: 1.8016437, z: 1.8016437}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1087217292023623501}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 53.955}
 --- !u!198 &3021059076493714439
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -19625,7 +19625,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -24420,7 +24420,7 @@ ParticleSystem:
     vectorLabel1_3: W
 --- !u!199 &7340343300694541141
 ParticleSystemRenderer:
-  serializedVersion: 6
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -24466,6 +24466,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_RenderMode: 4
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -24497,7 +24498,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
-  m_MaskInteraction: 0
 --- !u!1 &6142968250897386531
 GameObject:
   m_ObjectHideFlags: 0
@@ -24542,7 +24542,7 @@ ParticleSystem:
   serializedVersion: 8
   lengthInSec: 1
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 2
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -29257,7 +29257,7 @@ ParticleSystem:
     vectorLabel1_3: W
 --- !u!199 &4002824571875844953
 ParticleSystemRenderer:
-  serializedVersion: 6
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -29303,6 +29303,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -29334,7 +29335,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
-  m_MaskInteraction: 0
 --- !u!1 &7293267082827849266
 GameObject:
   m_ObjectHideFlags: 0
@@ -29361,13 +29361,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7293267082827849266}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.00000074505795, y: 0.0000002533197, z: 0.45363998, w: 0.89118505}
+  m_LocalPosition: {x: -0.58489895, y: 0.92908514, z: -0.0000038146973}
   m_LocalScale: {x: 1.6557162, y: 1.6557162, z: 1.6557162}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1087217292023623501}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 53.955}
 --- !u!198 &6533293996463183983
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -29383,7 +29383,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -34169,7 +34169,7 @@ ParticleSystem:
     vectorLabel1_3: W
 --- !u!199 &2912776748305672772
 ParticleSystemRenderer:
-  serializedVersion: 6
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -34215,6 +34215,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_RenderMode: 4
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -34246,4 +34247,3 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
-  m_MaskInteraction: 0

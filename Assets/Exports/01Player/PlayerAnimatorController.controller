@@ -377,9 +377,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.5
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: 0.75
+  m_ExitTime: 0.75000006
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -573,7 +573,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Got Hit 1
+  m_Name: GotHit
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -587,7 +587,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 1827226128182048838, guid: 296b81465941f974492f794bab1a3733, type: 3}
+  m_Motion: {fileID: 1827226128182048838, guid: 91de9af9cc08a0f47a43f728bc52ea45, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -738,10 +738,10 @@ AnimatorStateMachine:
     m_Position: {x: 670, y: 0, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7939659681356350496}
-    m_Position: {x: -30, y: 100, z: 0}
+    m_Position: {x: -70, y: 20, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6431855501093890110}
-    m_Position: {x: 5, y: 165, z: 0}
+    m_Position: {x: -30, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5044251039970166928}
     m_Position: {x: 240, y: 160, z: 0}

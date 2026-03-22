@@ -10,72 +10,70 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private Image healthFillImage;
     [SerializeField] private CanvasGroup damageOverlay;
 
+    public float recoveryTime = 0.6f; 
     private bool _isInvulnerable = false;
     public bool IsInvulnerable { get => _isInvulnerable; set => _isInvulnerable = value; }
-    private CinematicParry _parryScript;
+    
+    private PlayerAnimationHandler _animHandler;
+    private PlayerController _playerController;
     private bool _isDead = false;
 
     void Start()
     {
         _currentHealth = maxHealth;
-        _parryScript = GetComponent<CinematicParry>();
+        _animHandler = GetComponent<PlayerAnimationHandler>();
+        _playerController = GetComponent<PlayerController>();
         UpdateUI();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (_isInvulnerable || _isDead) return;
         if (!other.CompareTag("EnemyAttack")) return;
-
-        float distance = Vector3.Distance(transform.position, other.transform.position);
-
-        if (distance > 5f)
-        {
-            return;
-        }
 
         TakeDamage(15f);
     }
 
     public void TakeDamage(float amount)
     {
-        if (_isDead) return;
-
-        if (_isInvulnerable || (_parryScript != null && _parryScript.IsParrying))
-        {
-            return;
-        }
+        if (_isInvulnerable || _isDead) return;
 
         _currentHealth -= amount;
         _currentHealth = Mathf.Max(_currentHealth, 0);
         UpdateUI();
 
+        // 1. Force Reset Combat & TimeScale
+        if (_playerController != null) _playerController.ForceCancelAttack();
+
+        // 2. Play Hit Animation
+        if (_animHandler != null) _animHandler.PlayGotHit();
+
+        // 3. I-Frames
+        StartCoroutine(RecoveryRoutine());
+
         if (UIShake.Instance != null) UIShake.Instance.Shake(0.2f, 15f);
         StartCoroutine(FlashOverlay());
 
-        if (_currentHealth <= 0)
-        {
-            Die();
-        }
+        if (_currentHealth <= 0) Die();
+    }
+
+    private IEnumerator RecoveryRoutine()
+    {
+        _isInvulnerable = true;
+        yield return new WaitForSeconds(recoveryTime);
+        _isInvulnerable = false;
+    }
+
+    private void UpdateUI()
+    {
+        if (healthFillImage) healthFillImage.fillAmount = _currentHealth / maxHealth;
     }
 
     private void Die()
     {
         if (_isDead) return;
         _isDead = true;
-        
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.RestartLevel();
-        }
-        else
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-    }
-
-    private void UpdateUI()
-    {
-        if (healthFillImage) healthFillImage.fillAmount = _currentHealth / maxHealth;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private IEnumerator FlashOverlay()

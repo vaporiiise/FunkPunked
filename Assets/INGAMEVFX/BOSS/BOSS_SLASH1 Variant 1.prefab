@@ -38,7 +38,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6142968250897386531, guid: af6925e7709307345b148b05587c16a0, type: 3}
       propertyPath: m_Name
-      value: BOSS_SLASH1 Variant
+      value: BOSS_SLASH1 Variant 1
       objectReference: {fileID: 0}
     - target: {fileID: 6518055014361787970, guid: af6925e7709307345b148b05587c16a0, type: 3}
       propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[0].time
@@ -71,6 +71,10 @@ PrefabInstance:
     - target: {fileID: 6518055014361787970, guid: af6925e7709307345b148b05587c16a0, type: 3}
       propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[0].outWeight
       value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7782961949454751973, guid: af6925e7709307345b148b05587c16a0, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7782961949454751973, guid: af6925e7709307345b148b05587c16a0, type: 3}
       propertyPath: m_LocalPosition.x

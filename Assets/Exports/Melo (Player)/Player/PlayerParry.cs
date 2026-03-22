@@ -28,6 +28,7 @@ public class CinematicParry : MonoBehaviour
 
     private Animator animator;
     private PlayerController playerController;
+    private PlayerAnimationHandler animationHandler;
     private AudioSource audioSource;
     private float _timer = 0f;
     private bool _inCinematic = false;
@@ -38,6 +39,7 @@ public class CinematicParry : MonoBehaviour
     {
         animator = GetComponentInChildren<Animator>();
         playerController = GetComponent<PlayerController>();
+        animationHandler = GetComponent<PlayerAnimationHandler>();
         audioSource = GetComponent<AudioSource>();
         
         if (audioSource != null)
@@ -48,7 +50,6 @@ public class CinematicParry : MonoBehaviour
 
     void OnEnable() 
     { 
-        // CRITICAL: Check if action is assigned to avoid NullReference
         if (parryAction.action != null)
         {
             parryAction.action.Enable(); 
@@ -68,12 +69,14 @@ public class CinematicParry : MonoBehaviour
 
     private void OnParryPressed(InputAction.CallbackContext context)
     {
+        // Don't allow parry if currently flinching
+        if (animationHandler != null && animationHandler.IsFlinching()) return;
         AttemptParry();
     }
 
     public void AttemptParry() 
     {
-        // Don't parry if already doing it, or in slow-mo hitstop
+        // Don't parry if already doing it, in a cinematic, or game is paused/hitstopped
         if (_timer > 0 || _inCinematic || Time.timeScale < 0.2f) return;
         
         _timer = parryWindow;
@@ -84,20 +87,50 @@ public class CinematicParry : MonoBehaviour
 
     void Update() 
     {
+        // EMERGENCY: If we get hit during parry, abort everything immediately
+        if (animationHandler != null && animationHandler.IsFlinching())
+        {
+            AbortParry();
+            return;
+        }
+
         if (_timer > 0) 
         {
             _timer -= Time.deltaTime;
-            // If the window expires without a hit, unlock the player
+
+            // If the window expires without a hit
             if (_timer <= 0 && !_inCinematic) 
             {
-                if (playerController) playerController.EndParryLock();
+                // Only unlock if we aren't flinching (safety check)
+                if (playerController != null && !animationHandler.IsFlinching()) 
+                {
+                    playerController.EndParryLock();
+                }
             }
         }
     }
 
+    /// <summary>
+    /// Resets the parry state immediately. Called by the update loop if the player takes damage.
+    /// </summary>
+    public void AbortParry()
+    {
+        _timer = 0;
+        if (_inCinematic)
+        {
+            StopAllCoroutines();
+            ResetTimeScale();
+            if (parryCamera) parryCamera.gameObject.SetActive(false);
+            if (animator) animator.updateMode = AnimatorUpdateMode.Normal;
+            _inCinematic = false;
+        }
+        // Ensure player is unlocked from parry stance so GotHit animation takes priority
+        if (playerController) playerController.EndParryLock();
+    }
+
     public void TriggerSuccessfulParry(Animator enemyAnimator) 
     {
-        if (_inCinematic) return;
+        if (_inCinematic || (animationHandler != null && animationHandler.IsFlinching())) return;
         _timer = 0; 
 
         SpawnParryVFX();
@@ -136,12 +169,10 @@ public class CinematicParry : MonoBehaviour
     {
         _inCinematic = true;
 
-        // Safety check for health script
         PlayerHealth health = GetComponent<PlayerHealth>();
         if (health) health.IsInvulnerable = true;
 
         if (parryCamera) parryCamera.gameObject.SetActive(true);
-        
         if (animator) animator.updateMode = AnimatorUpdateMode.UnscaledTime;
         
         if (enemyAnimator) 
@@ -162,10 +193,10 @@ public class CinematicParry : MonoBehaviour
         }
 
         if (parryCamera) parryCamera.gameObject.SetActive(false);
-        
         if (animator) animator.updateMode = AnimatorUpdateMode.Normal;
         if (enemyAnimator) enemyAnimator.updateMode = AnimatorUpdateMode.Normal;
         
+        // Final unlock
         if (playerController) playerController.EndParryLock();
         if (health) health.IsInvulnerable = false;
         _inCinematic = false;
