@@ -7,27 +7,25 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Hit
-  m_Shader: {fileID: -6465566751694194690, guid: 32a4a62f333515c4ebb502a656373f53, type: 3}
+  m_Name: explotion01_green
+  m_Shader: {fileID: -6465566751694194690, guid: 1f19b1c0aa0794649831453f5913960b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ALPHATEST_ON
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2450
+  stringTagMap:
+    RenderType: TransparentCutout
   disabledShaderPasses:
   - MOTIONVECTORS
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _Texture2D:
-        m_Texture: {fileID: 2800000, guid: c6559b052c904794da3333e868657db5, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -42,19 +40,36 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Boolean: 0
-    - _Dissolve_Noise: 50
-    - _Offset_speed: 1
-    - _Offset_speed_X: 0
-    - _Offset_speed_Y: 0
+    - _AlphaClip: 1
+    - _AlphaToMask: 1
+    - _Blend: 0
+    - _BlendModePreserveSpecular: 1
+    - _CastShadows: 1
+    - _Cull: 2
+    - _DstBlend: 0
+    - _DstBlendAlpha: 0
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _ReceiveShadows: 1
+    - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
+    - _Surface: 0
+    - _VertexScale: 15
+    - _WorkflowMode: 1
+    - _ZTest: 4
+    - _ZWrite: 1
+    - _ZWriteControl: 0
+    - _smoothness: 0
+    - _vertexAmount: 0.1
+    - _voronoiSpeed: 5
+    - _voronoi_scale: 7
     m_Colors:
-    - _Color: {r: 16, g: 16, b: 16, a: 0}
-    - _Tiling_offset: {r: 1, g: 1, b: 0, a: 0}
+    - _Color: {r: 0.9381032, g: 3.2111173, b: 0.47073966, a: 0.3921569}
+    - _emmision: {r: 0.015686275, g: 0.015686275, b: 0.019607844, a: 1}
+    - _vertexSpeed: {r: 0.3, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &4508308072401068763
+--- !u!114 &1266512005145492269
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65,5 +80,5 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
   version: 10
