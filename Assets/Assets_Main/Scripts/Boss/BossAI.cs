@@ -17,7 +17,8 @@ public class BossAI : MonoBehaviour
     public float attackRange = 2.5f;
     public float attackCooldown = 1.5f;
     private float _nextAttackTime;
-    private bool _isActionLocked = false;
+    
+    private bool _isActionLocked = false; 
     private bool _isTracking = false;
 
     private BossAnimationHandler _animHandler;
@@ -31,31 +32,43 @@ public class BossAI : MonoBehaviour
 
     void Update() {
         if (player == null || _currentState == BossState.Staggered) return;
+        
         if (_isTracking) LookAtPlayer(20f);
+        
         if (_isActionLocked) return;
 
         float dist = Vector3.Distance(transform.position, player.position);
+        
         if (dist <= attackRange && Time.time >= _nextAttackTime) {
             StartAttack();
         } else {
+            _currentState = BossState.Chasing;
             ApplyMovement((player.position - transform.position).normalized, walkSpeed);
         }
     }
 
     private void StartAttack() {
-        _isActionLocked = true;
-        _isTracking = true;
+        _currentState = BossState.Attacking;
+        
         int attackIndex = Random.Range(0, 3);
         if (_animHandler) _animHandler.TriggerSpecificAttack(attackIndex);
+        
         _nextAttackTime = Time.time + attackCooldown;
+        _isTracking = true; 
     }
 
     public void EnterStagger(float duration) {
-        _isActionLocked = true;
-        _isTracking = false;
-        _currentState = BossState.Staggered;
         StopAllCoroutines();
+        CancelInvoke(nameof(ReturnRB));
+
+        _currentState = BossState.Staggered;
+        _isTracking = false;
+
+        EnemyAttack attackScript = GetComponentInChildren<EnemyAttack>();
+        if (attackScript != null) attackScript.ForceResetAttack();
+
         ReturnRB();
+        
         if (_animHandler) {
             _animHandler.ResetMovement();
             _animHandler.TriggerHit(1);
@@ -65,21 +78,41 @@ public class BossAI : MonoBehaviour
 
     private IEnumerator StaggerTimer(float d) {
         yield return new WaitForSeconds(d);
-        _isActionLocked = false;
-        _currentState = BossState.Idle;
+        if (_currentState == BossState.Staggered) ForceFullReset();
         if (_animHandler) _animHandler.EndStagger();
     }
 
+
+    public void SetActionLock(bool locked) {
+        _isActionLocked = locked;
+    }
+
+    public void ForceFullReset() {
+        _isActionLocked = false;
+        _isTracking = false;
+        if (_currentState != BossState.Staggered) _currentState = BossState.Idle;
+        
+        EnemyAttack attackScript = GetComponentInChildren<EnemyAttack>();
+        if (attackScript != null) attackScript.ForceResetAttack();
+    }
+
+
     private void ApplyMovement(Vector3 dir, float speed) {
         transform.position += dir * speed * Time.deltaTime;
-        if (dir != Vector3.zero) transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), rotationSpeed * Time.deltaTime);
-        if (_animHandler) _animHandler.UpdateMovement(transform.InverseTransformDirection(dir), speed > walkSpeed, _currentState);
+        if (dir != Vector3.zero) {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), rotationSpeed * Time.deltaTime);
+        }
+        if (_animHandler) {
+            _animHandler.UpdateMovement(transform.InverseTransformDirection(dir), speed > walkSpeed, _currentState);
+        }
     }
 
     private void LookAtPlayer(float speed) {
         Vector3 dir = (player.position - transform.position).normalized;
         dir.y = 0;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), speed * Time.deltaTime);
+        if (dir != Vector3.zero) {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), speed * Time.deltaTime);
+        }
     }
 
     public void AddForceForward() => rbForce(transform.forward * 100f);
@@ -100,6 +133,10 @@ public class BossAI : MonoBehaviour
         _rb.isKinematic = true; 
     }
 
+
     public void AE_StopTracking() => _isTracking = false;
-    public void OnAnimationActionComplete() { _isActionLocked = false; _isTracking = false; }
+
+    public void OnAnimationActionComplete() { 
+        ForceFullReset();
+    }
 }

@@ -4,15 +4,17 @@ public class EnemyAttack : MonoBehaviour
 {
     [Header("Detection")]
     public LayerMask playerLayer;
-    public GameObject attackHitbox;
+    public GameObject attackHitbox; // Assign your separate Box Collider object here
 
     [Header("Parry Reaction")]
-    public float knockbackForce = 10f;
+    public float knockbackForce = 15f;
     public ParticleSystem bodyParticle; 
 
     [Header("Debug Settings")]
     public bool showParryWindowDebug = true;
     public Renderer bossRenderer; 
+
+    [HideInInspector] public bool isAttacking = false; 
 
     private bool _isParryable = false;
     private bool _hasDealtDamageThisSwing = false;
@@ -24,6 +26,7 @@ public class EnemyAttack : MonoBehaviour
         _animator = GetComponentInParent<Animator>();
         _rb = GetComponentInParent<Rigidbody>();
         
+        // Ensure the separate hitbox starts OFF
         if (attackHitbox) attackHitbox.SetActive(false);
         if (bossRenderer) _originalColor = bossRenderer.material.color;
     }
@@ -35,34 +38,38 @@ public class EnemyAttack : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (_hasDealtDamageThisSwing) return;
+        // FAIL-SAFE: If the script says we aren't attacking, ignore the trigger
+        // This is crucial for separate GameObjects!
+        if (!isAttacking || _hasDealtDamageThisSwing) return;
 
         if (((1 << other.gameObject.layer) & playerLayer) != 0) {
             CinematicParry playerParry = other.GetComponentInParent<CinematicParry>();
-
-            if (playerParry != null) {
-                if (playerParry.IsParrying && _isParryable) {
-                    Debug.Log("<color=cyan>[SYSTEM] Parry Success Detected!</color>");
-                    _hasDealtDamageThisSwing = true;
-                    playerParry.TriggerSuccessfulParry(_animator);
-                    return; 
-                }
-                else if (playerParry.IsParrying && !_isParryable) {
-                    Debug.Log("<color=orange>[SYSTEM] Player parried, but Boss was NOT in AE_StartAttack window yet!</color>");
-                }
-            }
-
             PlayerHealth health = other.GetComponentInParent<PlayerHealth>();
+
+            // If player is parrying, ignore the hit
+            if (playerParry != null && playerParry.IsParrying) return;
+
             if (health != null && !health.IsInvulnerable) {
                 _hasDealtDamageThisSwing = true;
                 health.TakeDamage(10f);
-                Debug.Log("<color=red>[BOSS] Hit Player!</color>");
+                _isParryable = false; 
             }
         }
     }
 
+    public void ForceResetAttack() {
+        isAttacking = false; 
+        _isParryable = false;
+        _hasDealtDamageThisSwing = false;
+        
+        if (attackHitbox) attackHitbox.SetActive(false);
+        if (bossRenderer) bossRenderer.material.color = _originalColor;
+        
+        if (_rb != null && !_rb.isKinematic) _rb.linearVelocity = Vector3.zero;
+    }
+
     public void OnGetParried() {
-        AE_EndAttack(); 
+        ForceResetAttack(); 
 
         if (_animator) {
             _animator.Play("GotHit", 0, 0f); 
@@ -70,29 +77,27 @@ public class EnemyAttack : MonoBehaviour
         }
 
         if (_rb != null) {
-            Vector3 pushDirection = -transform.forward;
+            _rb.isKinematic = false;
             _rb.linearVelocity = Vector3.zero; 
+            Vector3 pushDirection = -transform.forward;
             _rb.AddForce(pushDirection * knockbackForce, ForceMode.Impulse);
+            Invoke(nameof(ReturnRBInternal), 0.4f);
         }
     }
 
+    private void ReturnRBInternal() {
+        if (_rb) { _rb.linearVelocity = Vector3.zero; _rb.isKinematic = true; }
+    }
 
+    // --- ANIMATION EVENTS ---
     public void AE_StartAttack() { 
+        isAttacking = true; 
         _isParryable = true; 
         _hasDealtDamageThisSwing = false; 
         if (attackHitbox) attackHitbox.SetActive(true); 
-        Debug.Log("<color=yellow>[EVENT] Boss is now PARRYABLE</color>");
     }
 
-    public void AE_EndAttack() { 
-        _isParryable = false; 
-        if (attackHitbox) attackHitbox.SetActive(false); 
-        Debug.Log("<color=white>[EVENT] Boss is NO LONGER parryable</color>");
-    }
+    public void AE_EndAttack() => ForceResetAttack();
 
-    public void AE_PlayParticleOnBody() {
-        if (bodyParticle != null) {
-            bodyParticle.Play();
-        }
-    }
+    public void AE_PlayParticleOnBody() { if (bodyParticle != null) bodyParticle.Play(); }
 }

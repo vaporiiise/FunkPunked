@@ -15,6 +15,11 @@ public class PlayerController : MonoBehaviour
     private Vector3 verticalVelocity; 
     private Vector3 impact; 
 
+    [Header("Soft-Lock Settings")]
+    public float lockOnRange = 10f;
+    public LayerMask enemyLayer;
+    public float rotationSmoothing = 15f;
+
     [Header("Dash Settings")]
     public float dashSpeed = 20f;
     public float dashDuration = 0.2f;
@@ -75,21 +80,74 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void AddForceForward() => impact += transform.forward * 15f;
-    public void AddForceBackwards() => impact += -transform.forward * 10f;
-    
-    public void EnableHitbox() 
-    { 
-        if(attackHitbox) attackHitbox.SetActive(true); 
-        if(attackTrail) attackTrail.emitting = true; 
+    // --- SOFT-LOCK LOGIC ---
+    private void FaceTarget()
+    {
+        // Find all enemies in range
+        Collider[] enemies = Physics.OverlapSphere(transform.position, lockOnRange, enemyLayer);
+        Transform closestEnemy = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (Collider enemy in enemies)
+        {
+            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestEnemy = enemy.transform;
+            }
+        }
+
+        // If an enemy is found, rotate to face them
+        if (closestEnemy != null)
+        {
+            Vector3 direction = (closestEnemy.position - transform.position).normalized;
+            direction.y = 0; // Keep the player upright
+            if (direction != Vector3.zero)
+            {
+                transform.rotation = Quaternion.LookRotation(direction);
+            }
+        }
     }
 
-    public void DisableHitbox() 
-    { 
-        if(attackHitbox) attackHitbox.SetActive(false); 
-        if(attackTrail) attackTrail.emitting = false; 
+    private void OnAttackInput()
+    {
+        if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
+        
+        // SOFT-LOCK ACTIVATION: Snap to boss before playing animation
+        FaceTarget();
+
+        isAttacking = true;
+        canMoveCancel = false; 
+        comboStep = (comboStep >= maxComboStep) ? 1 : comboStep + 1;
+        
+        DisableHitbox();
+        animationHandler.PlayAttack(comboStep);
     }
 
+    // --- MOVEMENT ---
+    private void HandleMovement() {
+        if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
+
+        if (canMoveCancel && moveInput.sqrMagnitude > 0.1f) {
+            ResetToLocomotion();
+        }
+
+        if (isAttacking && !canMoveCancel) {
+            // Optional: Still allow slight rotation tracking during attack follow-through
+            animationHandler.UpdateMovement(0f);
+            return;
+        }
+
+        Vector3 move = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * new Vector3(moveInput.x, 0, moveInput.y);
+        if (move.sqrMagnitude > 0.01f) {
+            controller.Move(move.normalized * moveSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(move.normalized), 12f * Time.deltaTime);
+        }
+        animationHandler.UpdateMovement(moveInput.magnitude);
+    }
+
+    // --- ANIMATION EVENT RECEIVERS ---
     public void OnAttackFinished() 
     {
         DisableHitbox();
@@ -101,6 +159,14 @@ public class PlayerController : MonoBehaviour
     public void OnAnimationReset() => ResetToLocomotion();
     public void OpenComboWindow() => animationHandler.SetComboWindow(true);
     public void CloseComboWindow() => animationHandler.SetComboWindow(false);
+
+    public void EnableHitbox() { if(attackHitbox) attackHitbox.SetActive(true); if(attackTrail) attackTrail.emitting = true; }
+    public void DisableHitbox() { if(attackHitbox) attackHitbox.SetActive(false); if(attackTrail) attackTrail.emitting = false; }
+
+    // --- PARRY & COMBO ---
+    public void StartParryLock() { _isParryLocked = true; isAttacking = false; impact = Vector3.zero; }
+    public void EndParryLock() => _isParryLocked = false;
+    public void SetDamageMultiplier(float m) => currentDamageMultiplier = m;
 
     public void ForceCancelAttack()
     {
@@ -116,18 +182,6 @@ public class PlayerController : MonoBehaviour
         if (parryScript != null) parryScript.AbortParry();
     }
 
-    private void OnAttackInput()
-    {
-        if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
-        
-        isAttacking = true;
-        canMoveCancel = false; 
-        comboStep = (comboStep >= maxComboStep) ? 1 : comboStep + 1;
-        
-        DisableHitbox();
-        animationHandler.PlayAttack(comboStep);
-    }
-
     public void ResetToLocomotion() { 
         isAttacking = false; 
         _isParryLocked = false; 
@@ -137,29 +191,9 @@ public class PlayerController : MonoBehaviour
         animationHandler.PlayMove(); 
     }
 
-    private void HandleMovement() {
-        if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
-
-        if (canMoveCancel && moveInput.sqrMagnitude > 0.1f) {
-            ResetToLocomotion();
-        }
-
-        if (isAttacking && !canMoveCancel) {
-            animationHandler.UpdateMovement(0f);
-            return;
-        }
-
-        Vector3 move = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * new Vector3(moveInput.x, 0, moveInput.y);
-        if (move.sqrMagnitude > 0.01f) {
-            controller.Move(move.normalized * moveSpeed * Time.deltaTime);
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(move.normalized), 12f * Time.deltaTime);
-        }
-        animationHandler.UpdateMovement(moveInput.magnitude);
-    }
-
-    public void SetDamageMultiplier(float m) => currentDamageMultiplier = m;
-    public void StartParryLock() { _isParryLocked = true; impact = Vector3.zero; }
-    public void EndParryLock() => _isParryLocked = false;
+    // --- PHYSICS ---
+    public void AddForceForward() => impact += transform.forward * 15f;
+    public void AddForceBackwards() => impact += -transform.forward * 10f;
     public void TriggerHitStop(float d, float s) { if (hitStopCoroutine != null) StopCoroutine(hitStopCoroutine); hitStopCoroutine = StartCoroutine(DoHitStop(d, s)); }
     private IEnumerator DoHitStop(float d, float s) { Time.timeScale = s; yield return new WaitForSecondsRealtime(d); ResetTimeScale(); }
     private void ResetTimeScale() { Time.timeScale = 1f; Time.fixedDeltaTime = 0.02f; }

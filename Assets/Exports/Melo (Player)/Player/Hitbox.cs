@@ -5,6 +5,7 @@ public class Hitbox : MonoBehaviour
 {
     private PlayerController _playerController;
     private PlayerAnimationHandler _animHandler;
+    private AnimationAudioManager _audioManager; // Reference to your sound script
 
     [Header("Hit Stop Settings")]
     public float duration = 0.07f;
@@ -16,6 +17,8 @@ public class Hitbox : MonoBehaviour
     {
         _playerController = GetComponentInParent<PlayerController>();
         _animHandler = GetComponentInParent<PlayerAnimationHandler>();
+        // Grab the AudioManager from the root player object
+        _audioManager = GetComponentInParent<AnimationAudioManager>();
     }
 
     private void OnEnable()
@@ -25,7 +28,6 @@ public class Hitbox : MonoBehaviour
 
     private void Update()
     {
-        // Safety: If the player gets hit, immediately disable the hitbox GameObject
         if (_animHandler != null && _animHandler.IsFlinching())
         {
             gameObject.SetActive(false);
@@ -34,7 +36,6 @@ public class Hitbox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Don't process hits if the player is flinching
         if (_animHandler != null && _animHandler.IsFlinching()) return;
 
         if (other.CompareTag("Enemy"))
@@ -43,7 +44,16 @@ public class Hitbox : MonoBehaviour
             _hitEnemies.Add(other);
             
             Enemy enemy = other.GetComponent<Enemy>();
-            if (enemy != null) enemy.TakeHit(transform.root);
+            if (enemy != null) 
+            {
+                enemy.TakeHit(transform.root);
+                
+                // PLAY HIT SOUND HERE
+                if (_audioManager != null)
+                {
+                    _audioManager.PlaySound("hit"); 
+                }
+            }
 
             if (_playerController != null)
                 _playerController.TriggerHitStop(duration, scale);
