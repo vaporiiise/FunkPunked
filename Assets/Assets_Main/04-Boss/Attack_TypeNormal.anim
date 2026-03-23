@@ -197092,6 +197092,13 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.43333334
+    functionName: AE_StartAttack
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.43333334
     functionName: AE_PlayParticleOnBody
     data: 
     objectReferenceParameter: {fileID: 0}
@@ -197100,13 +197107,6 @@ AnimationClip:
     messageOptions: 0
   - time: 0.53333336
     functionName: AddForceForward
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.53333336
-    functionName: AE_StartAttack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -197134,6 +197134,13 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 1.1333333
+    functionName: AddForceForward
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.1333333
     functionName: AE_PlayParticleOnBody
     data: 
     objectReferenceParameter: {fileID: 0}
@@ -197142,13 +197149,6 @@ AnimationClip:
     messageOptions: 0
   - time: 1.1833333
     functionName: AE_StartAttack
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 1.1833333
-    functionName: AddForceForward
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -197182,15 +197182,15 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.7833333
-    functionName: AddForceForward
+  - time: 1.6833333
+    functionName: AE_StartAttack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.8166667
-    functionName: AE_StartAttack
+  - time: 1.7833333
+    functionName: AddForceForward
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

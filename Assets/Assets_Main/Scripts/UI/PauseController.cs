@@ -3,7 +3,7 @@ using UnityEngine;
 public class PauseController : MonoBehaviour
 {
     [Header("Pause Menu")]
-    public GameObject pauseMenuCanvas;  // Assign your pause menu UI here
+    public GameObject pauseMenuCanvas;  
 
     private bool isPaused = false;
 
@@ -22,13 +22,13 @@ public class PauseController : MonoBehaviour
     {
         isPaused = true;
         if (pauseMenuCanvas) pauseMenuCanvas.SetActive(true);
-        Time.timeScale = 0f; // Freeze game
+        Time.timeScale = 0f; 
     }
 
     private void ResumeGame()
     {
         isPaused = false;
         if (pauseMenuCanvas) pauseMenuCanvas.SetActive(false);
-        Time.timeScale = 1f; // Resume game
+        Time.timeScale = 1f; 
     }
 }

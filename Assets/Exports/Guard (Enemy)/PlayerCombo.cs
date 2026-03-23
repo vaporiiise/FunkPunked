@@ -9,13 +9,29 @@ public class PlayerCombo : MonoBehaviour
     public CinemachineCamera faceCamera;
     public TextMeshProUGUI comboText;
     public int feverTriggerCount = 15;
+    
     private int currentCombo = 0;
     private bool isFeverActive = false;
+    private Coroutine feverCoroutine;
 
     public void AddComboHit() {
         currentCombo++;
         UpdateUI();
-        if (currentCombo >= feverTriggerCount && !isFeverActive) StartCoroutine(ActivateFeverMode());
+        if (currentCombo >= feverTriggerCount && !isFeverActive) {
+            if (feverCoroutine != null) StopCoroutine(feverCoroutine);
+            feverCoroutine = StartCoroutine(ActivateFeverMode());
+        }
+    }
+
+    public void ResetFeverOnHit() {
+        if (isFeverActive) {
+            if (feverCoroutine != null) StopCoroutine(feverCoroutine);
+            isFeverActive = false;
+            if (faceCamera) faceCamera.gameObject.SetActive(false);
+            if (playerController) playerController.SetDamageMultiplier(1f);
+            currentCombo = 0;
+            UpdateUI();
+        }
     }
 
     private IEnumerator ActivateFeverMode() {

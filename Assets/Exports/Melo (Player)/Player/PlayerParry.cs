@@ -3,214 +3,125 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using Unity.Cinemachine;
 
-[RequireComponent(typeof(AudioSource))]
 public class CinematicParry : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private InputActionProperty parryAction;
-    [SerializeField] private float parryWindow = 0.35f; 
-    [SerializeField] private CinemachineCamera parryCamera;
+    public float parryWindow = 0.35f; 
+    public CinemachineCamera parryCamera;
 
-    [Header("Slow Motion Control")]
-    public bool useSlowMoOnSuccess = true;
-    [Range(0.01f, 1f)] public float slowMoTimeScale = 0.05f;
-    public float slowMoDuration = 1.5f;
+    [Header("Slow-Mo Settings")]
+    public float slowMoTimeScale = 0.05f;
+    public float slowMoDuration = 1.0f; 
 
-    [Header("VFX Calibration")]
-    [SerializeField] private GameObject parryVFXPrefab; 
-    [SerializeField] private float vfxSpawnDistance = 0.5f; 
-    [SerializeField] private float vfxSpawnHeight = 1.1f;   
-    [SerializeField] private float vfxDestroyDelay = 2f;
-
-    [Header("SFX Settings")]
-    [SerializeField] private AudioClip parrySuccessSound;
-    [Range(0f, 1f)] [SerializeField] private float sfxVolume = 1f;
+    [Header("Debug")]
+    public bool showDebug = true;
+    public Renderer debugRenderer; 
+    private Color originalColor;
 
     private Animator animator;
     private PlayerController playerController;
     private PlayerAnimationHandler animationHandler;
-    private AudioSource audioSource;
-    private float _timer = 0f;
+    private PlayerHealth playerHealth;
+    
+    private float _parryTimer = 0f;
     private bool _inCinematic = false;
 
-    public bool IsParrying => _timer > 0 && !_inCinematic;
+    public bool IsParrying => _parryTimer > 0 && !_inCinematic;
 
-    void Awake() 
-    {
+    void Awake() {
         animator = GetComponentInChildren<Animator>();
         playerController = GetComponent<PlayerController>();
         animationHandler = GetComponent<PlayerAnimationHandler>();
-        audioSource = GetComponent<AudioSource>();
-        
-        if (audioSource != null)
-            audioSource.velocityUpdateMode = AudioVelocityUpdateMode.Fixed;
-        
-        ResetTimeScale();
+        playerHealth = GetComponent<PlayerHealth>();
+        if (debugRenderer) originalColor = debugRenderer.material.color;
     }
 
-    void OnEnable() 
-    { 
-        if (parryAction.action != null)
-        {
-            parryAction.action.Enable(); 
-            parryAction.action.performed += OnParryPressed; 
+    void OnEnable() {
+        if (parryAction.action != null) {
+            parryAction.action.Enable();
+            parryAction.action.performed += OnParryPressed;
         }
     }
 
-    void OnDisable() 
-    {
-        ResetTimeScale();
-        if (parryAction.action != null)
-        {
-            parryAction.action.performed -= OnParryPressed;
-            parryAction.action.Disable();
-        }
+    void OnDisable() {
+        if (parryAction.action != null) parryAction.action.performed -= OnParryPressed;
     }
 
-    private void OnParryPressed(InputAction.CallbackContext context)
-    {
-        // Don't allow parry if currently flinching
-        if (animationHandler != null && animationHandler.IsFlinching()) return;
-        AttemptParry();
+    private void OnParryPressed(InputAction.CallbackContext ctx) {
+        if (_parryTimer > 0 || _inCinematic || (animationHandler != null && animationHandler.IsFlinching())) return;
+        StartCoroutine(ParryWindowRoutine());
     }
 
-    public void AttemptParry() 
-    {
-        // Don't parry if already doing it, in a cinematic, or game is paused/hitstopped
-        if (_timer > 0 || _inCinematic || Time.timeScale < 0.2f) return;
-        
-        _timer = parryWindow;
-
+    private IEnumerator ParryWindowRoutine() {
+        _parryTimer = parryWindow;
+        if (showDebug) Debug.Log("<color=green>[PARRY] Window OPEN</color>");
         if (playerController) playerController.StartParryLock();
         if (animator) animator.SetTrigger("Parry");
-    }
 
-    void Update() 
-    {
-        // EMERGENCY: If we get hit during parry, abort everything immediately
-        if (animationHandler != null && animationHandler.IsFlinching())
-        {
-            AbortParry();
-            return;
+        while (_parryTimer > 0) {
+            _parryTimer -= Time.deltaTime;
+            if (showDebug && debugRenderer) debugRenderer.material.color = Color.green;
+            yield return null;
         }
 
-        if (_timer > 0) 
-        {
-            _timer -= Time.deltaTime;
-
-            // If the window expires without a hit
-            if (_timer <= 0 && !_inCinematic) 
-            {
-                // Only unlock if we aren't flinching (safety check)
-                if (playerController != null && !animationHandler.IsFlinching()) 
-                {
-                    playerController.EndParryLock();
-                }
+        if (!_inCinematic) {
+            if (showDebug) {
+                Debug.Log("<color=red>[PARRY] Window CLOSED (Missed)</color>");
+                if (debugRenderer) debugRenderer.material.color = originalColor;
             }
+            if (playerController) playerController.EndParryLock();
         }
     }
 
-    /// <summary>
-    /// Resets the parry state immediately. Called by the update loop if the player takes damage.
-    /// </summary>
-    public void AbortParry()
-    {
-        _timer = 0;
-        if (_inCinematic)
-        {
-            StopAllCoroutines();
-            ResetTimeScale();
-            if (parryCamera) parryCamera.gameObject.SetActive(false);
-            if (animator) animator.updateMode = AnimatorUpdateMode.Normal;
-            _inCinematic = false;
-        }
-        // Ensure player is unlocked from parry stance so GotHit animation takes priority
-        if (playerController) playerController.EndParryLock();
-    }
-
-    public void TriggerSuccessfulParry(Animator enemyAnimator) 
-    {
-        if (_inCinematic || (animationHandler != null && animationHandler.IsFlinching())) return;
-        _timer = 0; 
-
-        SpawnParryVFX();
-        PlayParrySFX(); 
-        
+    public void TriggerSuccessfulParry(Animator enemyAnimator) {
+        StopAllCoroutines(); 
+        _parryTimer = 0;
+        if (showDebug) Debug.Log("<color=cyan>[PARRY] SUCCESS!</color>");
         StartCoroutine(ExecuteSequence(enemyAnimator));
     }
 
-    private void SpawnParryVFX()
-    {
-        if (parryVFXPrefab != null)
-        {
-            Vector3 spawnPos = transform.position + (transform.forward * vfxSpawnDistance) + (Vector3.up * vfxSpawnHeight);
-            GameObject vfx = Instantiate(parryVFXPrefab, spawnPos, Quaternion.identity);
-            
-            var ps = vfx.GetComponent<ParticleSystem>();
-            if (ps != null) 
-            { 
-                var main = ps.main; 
-                main.useUnscaledTime = true; 
-            }
-            
-            Destroy(vfx, vfxDestroyDelay);
-        }
-    }
-
-    private void PlayParrySFX()
-    {
-        if (audioSource != null && parrySuccessSound != null)
-        {
-            audioSource.PlayOneShot(parrySuccessSound, sfxVolume);
-        }
-    }
-
-    IEnumerator ExecuteSequence(Animator enemyAnimator) 
-    {
+    IEnumerator ExecuteSequence(Animator enemyAnimator) {
         _inCinematic = true;
-
-        PlayerHealth health = GetComponent<PlayerHealth>();
-        if (health) health.IsInvulnerable = true;
-
-        if (parryCamera) parryCamera.gameObject.SetActive(true);
-        if (animator) animator.updateMode = AnimatorUpdateMode.UnscaledTime;
         
-        if (enemyAnimator) 
-        {
-            enemyAnimator.SetTrigger("GotParried");
-            enemyAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+        EnemyAttack enemyScript = enemyAnimator.GetComponentInChildren<EnemyAttack>();
+        if (enemyScript != null) {
+            enemyScript.OnGetParried(); 
         }
 
-        if (useSlowMoOnSuccess) 
-        {
-            ApplySlowMo(slowMoTimeScale);
-            yield return new WaitForSecondsRealtime(slowMoDuration);
-            ResetTimeScale();
+        if (playerHealth) playerHealth.IsInvulnerable = true;
+        if (parryCamera) {
+            parryCamera.gameObject.SetActive(true);
+            parryCamera.LookAt = enemyAnimator.transform; 
         }
-        else 
-        {
-            yield return new WaitForSeconds(0.5f);
-        }
+        
+        if (animator) animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+        if (enemyAnimator) enemyAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+        
+        Time.timeScale = slowMoTimeScale;
+        yield return new WaitForSecondsRealtime(slowMoDuration);
 
+        Time.timeScale = 1f;
         if (parryCamera) parryCamera.gameObject.SetActive(false);
         if (animator) animator.updateMode = AnimatorUpdateMode.Normal;
         if (enemyAnimator) enemyAnimator.updateMode = AnimatorUpdateMode.Normal;
-        
-        // Final unlock
         if (playerController) playerController.EndParryLock();
-        if (health) health.IsInvulnerable = false;
+        if (playerHealth) playerHealth.IsInvulnerable = false;
+        if (debugRenderer) debugRenderer.material.color = originalColor;
+        
         _inCinematic = false;
     }
 
-    private void ApplySlowMo(float scale)
-    {
-        Time.timeScale = scale;
-        Time.fixedDeltaTime = 0.02f * Time.timeScale;
-    }
-
-    private void ResetTimeScale()
-    {
-        Time.timeScale = 1f;
-        Time.fixedDeltaTime = 0.02f;
+    public void AbortParry() {
+        _parryTimer = 0;
+        if (_inCinematic) {
+            StopAllCoroutines();
+            Time.timeScale = 1f;
+            if (parryCamera) parryCamera.gameObject.SetActive(false);
+            if (animator) animator.updateMode = AnimatorUpdateMode.Normal;
+            if (playerHealth) playerHealth.IsInvulnerable = false;
+            _inCinematic = false;
+        }
+        if (playerController) playerController.EndParryLock();
     }
 }
