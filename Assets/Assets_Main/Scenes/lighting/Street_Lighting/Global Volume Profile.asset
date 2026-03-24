@@ -61,10 +61,10 @@ MonoBehaviour:
   active: 1
   lift:
     m_OverrideState: 1
-    m_Value: {x: 0.47545308, y: 0.5757303, z: 1, w: 0}
+    m_Value: {x: 0.8102772, y: 0.8806678, z: 1, w: 0}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.6746243, z: 0.3601278, w: 0}
+    m_Value: {x: 1, y: 0.74407524, z: 0.48990095, w: 0}
   gain:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 1, w: 0}
@@ -88,25 +88,25 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 2
   acesPreset:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 3
   hueShiftAmount:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   detectPaperWhite:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   paperWhite:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 300
   detectBrightnessLimits:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   minNits:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.005
   maxNits:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1000
 --- !u!114 &6792198512291333040
 MonoBehaviour:
@@ -123,10 +123,10 @@ MonoBehaviour:
   active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {x: 0.6631763, y: 0.74555486, z: 1, w: 0}
+    m_Value: {x: 0.85148954, y: 0.8836146, z: 1, w: 0}
   midtones:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.7549812, z: 0.6493686, w: 0}
+    m_Value: {x: 0.9792963, y: 0.98744214, z: 1, w: 0}
   highlights:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 1, w: 0}
@@ -160,13 +160,13 @@ MonoBehaviour:
     m_Value: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 0.5
+    m_Value: 7.5
   intensity:
     m_OverrideState: 1
-    m_Value: 0.75
+    m_Value: 7.29
   scatter:
     m_OverrideState: 1
-    m_Value: 0.7
+    m_Value: 0.8
   clamp:
     m_OverrideState: 1
     m_Value: 65472
