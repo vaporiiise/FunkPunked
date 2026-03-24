@@ -58,11 +58,16 @@ public class EnemyAttack : MonoBehaviour
         isAttacking = false; 
         _isParryable = false;
         _hasDealtDamageThisSwing = false;
-        
+    
         if (attackHitbox) attackHitbox.SetActive(false);
         if (bossRenderer) bossRenderer.material.color = _originalColor;
-        
-        if (_rb != null && !_rb.isKinematic) _rb.linearVelocity = Vector3.zero;
+    
+        if (_rb != null) {
+            // ONLY set velocity if we are NOT kinematic
+            if (!_rb.isKinematic) {
+                _rb.linearVelocity = Vector3.zero;
+            }
+        }
     }
 
     public void OnGetParried() {
@@ -83,10 +88,12 @@ public class EnemyAttack : MonoBehaviour
     }
 
     private void ReturnRBInternal() {
-        if (_rb) { _rb.linearVelocity = Vector3.zero; _rb.isKinematic = true; }
+        if (_rb == null) return;
+        
+    
+        _rb.isKinematic = true; 
     }
 
-    // --- ANIMATION EVENTS ---
     public void AE_StartAttack() { 
         isAttacking = true; 
         _isParryable = true; 

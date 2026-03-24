@@ -122,6 +122,7 @@ public class BossAI : MonoBehaviour
 
     private void rbForce(Vector3 force) {
         if (!_rb) return;
+        
         _rb.isKinematic = false;
         _rb.AddForce(force, ForceMode.Impulse);
         Invoke(nameof(ReturnRB), 0.4f);
@@ -129,7 +130,6 @@ public class BossAI : MonoBehaviour
 
     public void ReturnRB() { 
         if (!_rb) return;
-        _rb.linearVelocity = Vector3.zero;
         _rb.isKinematic = true; 
     }
 
