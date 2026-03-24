@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; // Required for Image component
+using UnityEngine.UI; 
 
 public class Enemy : MonoBehaviour
 {
@@ -41,13 +41,13 @@ public class Enemy : MonoBehaviour
 
         UpdateHealthUI();
 
-        if (consecutiveHits >= 6) 
+        if (consecutiveHits >= 20) 
         {
             _animHandler.TriggerHit(2);
-            if (_brain) _brain.EnterStagger(3.0f);
+            if (_brain) _brain.EnterStagger(6.0f);
             consecutiveHits = 0;
         }
-        else if (consecutiveHits >= 3) 
+        else if (consecutiveHits >= 5) 
         {
             _animHandler.TriggerHit(1);
         }

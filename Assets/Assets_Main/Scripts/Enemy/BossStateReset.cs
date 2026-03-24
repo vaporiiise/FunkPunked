@@ -17,7 +17,6 @@ public class BossStateReset : StateMachineBehaviour
         BossAI boss = animator.GetComponentInParent<BossAI>();
         if (boss != null)
         {
-            // Unlock everything and shut down hitboxes
             boss.ForceFullReset();
             Debug.Log($"<color=green>[ANIMATOR]</color> Unlocked AI via State Exit.");
         }

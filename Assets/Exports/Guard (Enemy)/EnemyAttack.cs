@@ -4,7 +4,7 @@ public class EnemyAttack : MonoBehaviour
 {
     [Header("Detection")]
     public LayerMask playerLayer;
-    public GameObject attackHitbox; // Assign your separate Box Collider object here
+    public GameObject attackHitbox;
 
     [Header("Parry Reaction")]
     public float knockbackForce = 15f;
@@ -26,7 +26,6 @@ public class EnemyAttack : MonoBehaviour
         _animator = GetComponentInParent<Animator>();
         _rb = GetComponentInParent<Rigidbody>();
         
-        // Ensure the separate hitbox starts OFF
         if (attackHitbox) attackHitbox.SetActive(false);
         if (bossRenderer) _originalColor = bossRenderer.material.color;
     }
@@ -38,15 +37,13 @@ public class EnemyAttack : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        // FAIL-SAFE: If the script says we aren't attacking, ignore the trigger
-        // This is crucial for separate GameObjects!
+ 
         if (!isAttacking || _hasDealtDamageThisSwing) return;
 
         if (((1 << other.gameObject.layer) & playerLayer) != 0) {
             CinematicParry playerParry = other.GetComponentInParent<CinematicParry>();
             PlayerHealth health = other.GetComponentInParent<PlayerHealth>();
 
-            // If player is parrying, ignore the hit
             if (playerParry != null && playerParry.IsParrying) return;
 
             if (health != null && !health.IsInvulnerable) {
