@@ -15,7 +15,6 @@ public class BossAnimationHandler : MonoBehaviour
     {
         if (_animator == null) return;
 
-        // If Staggered, force movement animations to stop so the Stagger clip plays clearly
         if (state == BossAI.BossState.Staggered)
         {
             _animator.SetFloat("VelocityX", 0, 0.1f, Time.deltaTime);
@@ -23,7 +22,6 @@ public class BossAnimationHandler : MonoBehaviour
             return;
         }
 
-        // Binary Clamping for the 1.0/-1.0 feel
         float targetX = (Mathf.Abs(localDir.x) > 0.01f) ? Mathf.Sign(localDir.x) : 0;
         float targetZ = (Mathf.Abs(localDir.z) > 0.01f) ? Mathf.Sign(localDir.z) : 0;
 
@@ -44,7 +42,7 @@ public class BossAnimationHandler : MonoBehaviour
         if (_animator == null) return;
         _animator.SetInteger("HitIntensity", intensity);
         _animator.SetTrigger("GetHit");
-        if (intensity == 2) _animator.SetBool("IsStaggered", true);
+        if (intensity == 2) _animator.SetTrigger("Stagger");
     }
 
     public void EndStagger() 
@@ -59,7 +57,6 @@ public class BossAnimationHandler : MonoBehaviour
         _animator.SetFloat("VelocityZ", 0);
     }
 
-    // Must be called by the Animation Event at the end of Attack/Recovery clips
     public void AE_OnActionFinished()
     {
         if (_bossAI != null) _bossAI.OnAnimationActionComplete();
