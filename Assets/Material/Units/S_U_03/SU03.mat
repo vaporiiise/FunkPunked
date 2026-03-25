@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7912218058412122624
+--- !u!114 &-8468624568876863668
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -38,7 +38,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseColour_Opacity:
-        m_Texture: {fileID: 2800000, guid: 3b3c15826694a954a9e7baab89b8abf6, type: 3}
+        m_Texture: {fileID: 2800000, guid: a93e1c64a7b7b46408a03b32375134e9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -66,7 +66,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Emmissive:
-        m_Texture: {fileID: 2800000, guid: 69d73a6bb680301438c8b7d5d1f32792, type: 3}
+        m_Texture: {fileID: 2800000, guid: 81dd6ee147b677945bdfafc78b71e7a6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -78,11 +78,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Metallic_Rough_AO:
-        m_Texture: {fileID: 2800000, guid: a1defcf35afa9344cbeaea3463a59566, type: 3}
+        m_Texture: {fileID: 2800000, guid: e89f81fbce620574bae7dafea1f7f0e0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal:
-        m_Texture: {fileID: 2800000, guid: 3e7e9e846c7145b42b4284767254ba69, type: 3}
+        m_Texture: {fileID: 2800000, guid: 45316525ca31d1a409b109941b46534f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -148,6 +148,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
