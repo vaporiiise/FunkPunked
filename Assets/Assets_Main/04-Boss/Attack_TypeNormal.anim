@@ -197133,6 +197133,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 0.8333333
+    functionName: AE_OnActionFinished
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 1.1333333
     functionName: AddForceForward
     data: 
@@ -197175,6 +197182,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 1.5
+    functionName: AE_OnActionFinished
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 1.6833333
     functionName: AE_PlayParticleOnBody
     data: 
@@ -197212,6 +197226,13 @@ AnimationClip:
     messageOptions: 0
   - time: 2.35
     functionName: OnAnimationActionComplete
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 2.35
+    functionName: AE_OnActionFinished
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

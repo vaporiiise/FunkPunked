@@ -208,7 +208,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1652680690524828396}
-  - component: {fileID: 7223503198039488403}
   - component: {fileID: 7173525874071786249}
   - component: {fileID: 1977962151169075402}
   - component: {fileID: 5747341568515779934}
@@ -250,103 +249,6 @@ Transform:
   - {fileID: 7033677798929380950}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!82 &7223503198039488403
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7412328237676368525}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &7173525874071786249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -359,6 +261,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79a734695f7d274439076a6fe65a523f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerParry
+  detectionPoint: {fileID: 0}
+  boxSize: {x: 2, y: 2, z: 3}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
   parryAction:
     m_UseReference: 0
     m_Action:
@@ -381,15 +288,10 @@ MonoBehaviour:
     m_Reference: {fileID: 0}
   parryWindow: 1
   parryCamera: {fileID: 294482442391244660}
-  useSlowMoOnSuccess: 1
   slowMoTimeScale: 0.05
   slowMoDuration: 1
-  parryVFXPrefab: {fileID: 4049564423136217360, guid: d054c6d8dc56501459f1c5640753d34c, type: 3}
-  vfxSpawnDistance: 0.5
-  vfxSpawnHeight: 1.1
-  vfxDestroyDelay: 2
-  parrySuccessSound: {fileID: 0}
-  sfxVolume: 1
+  showDebug: 1
+  debugRenderer: {fileID: 0}
 --- !u!114 &1977962151169075402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -406,22 +308,18 @@ MonoBehaviour:
   gravity: -9.81
   drag: 5
   cameraTransform: {fileID: 0}
+  lockOnRange: 10
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  rotationSmoothing: 15
   dashSpeed: 20
   dashDuration: 0.15
   dashCooldown: 0.1
-  dashEnemyDetectionRange: 5
   maxComboStep: 6
-  comboWindowOpenDelay: 0.15
-  comboWindowDuration: 0.8
   comboResetTime: 1
-  baseDamage: 10
   attackHitbox: {fileID: 8045566314012364318}
   attackTrail: {fileID: 0}
-  audioSource: {fileID: 7223503198039488403}
-  attackSFX: {fileID: 8300000, guid: ca5df0a168f9e934f91194ab0a742b8f, type: 3}
-  targetRange: 6
-  targetRotationSpeed: 8
-  enemyTag: Enemy
 --- !u!114 &5747341568515779934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -691,7 +589,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1d7647f5b91ff94e883890748bdb9cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationHandler
-  speedDamp: 0.1
 --- !u!136 &6137945574567673860
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -729,7 +626,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 600
   healthFillImage: {fileID: 0}
-  damageOverlay: {fileID: 0}
+  enemyAttackTag: EnemyAttack
 --- !u!114 &952561246518255151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -745,6 +642,9 @@ MonoBehaviour:
   basicVFX_1: {fileID: 8589838664419574275, guid: a212754258a987c48acfaa0598112df8, type: 3}
   basicVFX_2: {fileID: 6387174318228791145, guid: 709d30c35e813ec41b1d1a0ccefb3ba8, type: 3}
   handTransform: {fileID: 7033677798929380950}
+  basicVFX_1I: {fileID: 0}
+  basicVFX_2I: {fileID: 0}
+  handTransformI: {fileID: 0}
   specialVFX: {fileID: 8835647262288544851, guid: fc720dbd72e531f4db6405c68a608034, type: 3}
   specialSpawnPoint: {fileID: 7033677798929380950}
   verticalVFX: {fileID: 7601763885901041604, guid: 02db5107885c4f44c81e1918c04deca0, type: 3}

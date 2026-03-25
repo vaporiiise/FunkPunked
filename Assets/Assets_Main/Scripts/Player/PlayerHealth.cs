@@ -15,30 +15,50 @@ public class PlayerHealth : MonoBehaviour
     private bool _isFlinching = false;
     private PlayerAnimationHandler _animHandler;
     private PlayerController _playerController;
+    private CinematicParry _parryScript;
+
+    // --- NEW: BUFFER SETTINGS ---
+    private Coroutine _pendingDamageCoroutine;
+    [SerializeField] private float parryLeewayWindow = 0.15f; // How long to wait to see if player parries
 
     void Start() {
         _currentHealth = maxHealth;
         _animHandler = GetComponent<PlayerAnimationHandler>();
         _playerController = GetComponent<PlayerController>();
+        _parryScript = GetComponent<CinematicParry>();
         UpdateUI();
     }
 
     private void OnTriggerEnter(Collider other) {
-        // 1. Safety Locks
         if (IsInvulnerable || _isFlinching) return;
-
-        // 2. SELF-HIT PROTECT: Ignore collisions with objects attached to the player
         if (other.transform.IsChildOf(transform)) return;
 
-        // 3. TAG CHECK: Only trigger damage if the object has the 'EnemyAttack' tag
         if (other.CompareTag(enemyAttackTag)) {
-            
-            // DEBUG: Check your console! It will tell you exactly which object hit you.
-            // If it says "Boss_Capsule", that object shouldn't have the tag!
-            Debug.Log("<color=red>[HEALTH] Hit by object named: </color>" + other.gameObject.name);
-            
-            TakeDamage(15f);
+            // Instead of taking damage now, we wait to see if the player parries "last second"
+            if (_pendingDamageCoroutine != null) StopCoroutine(_pendingDamageCoroutine);
+            _pendingDamageCoroutine = StartCoroutine(WaitAndCheckForParry(15f, other.gameObject.name));
         }
+    }
+
+    private IEnumerator WaitAndCheckForParry(float damageAmount, string attackerName) {
+        float timer = 0;
+        
+        while (timer < parryLeewayWindow) {
+            // If the player starts parrying during this tiny window, ABORT DAMAGE
+            if (_parryScript != null && _parryScript.IsParrying) {
+                Debug.Log("<color=cyan>[HEALTH] Damage Cancelled! Successful Parry detected during buffer.</color>");
+                _pendingDamageCoroutine = null;
+                yield break; // Exit the coroutine, taking 0 damage
+            }
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        // If we reach here, the player failed to parry in time
+        Debug.Log("<color=red>[HEALTH] Buffer Expired. Taking damage from: </color>" + attackerName);
+        TakeDamage(damageAmount);
+        _pendingDamageCoroutine = null;
     }
 
     public void TakeDamage(float amount) {
@@ -48,13 +68,11 @@ public class PlayerHealth : MonoBehaviour
         _currentHealth = Mathf.Max(_currentHealth, 0);
         UpdateUI();
 
-        // Cancel player's attack and push them back
         if (_playerController != null) {
             _playerController.ForceCancelAttack();
             _playerController.AddForceBackwards(); 
         }
 
-        // Trigger the visual flinch
         if (_animHandler != null) _animHandler.PlayGotHit();
 
         StartCoroutine(RecoveryRoutine());
@@ -63,10 +81,7 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator RecoveryRoutine() {
         _isFlinching = true;
         IsInvulnerable = true;
-
-        // Duration of stun/invincibility
         yield return new WaitForSeconds(0.6f); 
-        
         IsInvulnerable = false;
         _isFlinching = false;
     }

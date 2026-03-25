@@ -5,60 +5,48 @@ public class BossAnimationHandler : MonoBehaviour
     private Animator _animator;
     private BossAI _bossAI;
 
-    void Awake()
-    {
+    void Awake() {
         _animator = GetComponentInChildren<Animator>();
         _bossAI = GetComponent<BossAI>();
     }
 
-    public void UpdateMovement(Vector3 localDir, bool isRunning, BossAI.BossState state)
-    {
+    public void UpdateMovement(Vector3 localDir, bool isRunning, BossAI.BossState state) {
         if (_animator == null) return;
-
-        if (state == BossAI.BossState.Staggered)
-        {
-            _animator.SetFloat("VelocityX", 0, 0.1f, Time.deltaTime);
-            _animator.SetFloat("VelocityZ", 0, 0.1f, Time.deltaTime);
-            return;
-        }
-
-        float targetX = (Mathf.Abs(localDir.x) > 0.01f) ? Mathf.Sign(localDir.x) : 0;
-        float targetZ = (Mathf.Abs(localDir.z) > 0.01f) ? Mathf.Sign(localDir.z) : 0;
-
-        _animator.SetBool("IsRunning", isRunning);
-        _animator.SetFloat("VelocityX", targetX, 0.05f, Time.deltaTime);
-        _animator.SetFloat("VelocityZ", targetZ, 0.05f, Time.deltaTime);
+        float x = (Mathf.Abs(localDir.x) > 0.1f) ? Mathf.Sign(localDir.x) : 0f;
+        float z = (Mathf.Abs(localDir.z) > 0.1f) ? Mathf.Sign(localDir.z) : 0f;
+        _animator.SetFloat("VelocityX", x);
+        _animator.SetFloat("VelocityZ", z);
     }
 
-    public void TriggerSpecificAttack(int index)
-    {
+    public void TriggerSpecificAttack(int index) {
         if (_animator == null) return;
         _animator.SetInteger("AttackIndex", index);
         _animator.SetTrigger("Attack");
     }
 
-    public void TriggerHit(int intensity)
-    {
+    public void TriggerHit() {
         if (_animator == null) return;
-        _animator.SetInteger("HitIntensity", intensity);
-        _animator.SetTrigger("GetHit");
-        if (intensity == 2) _animator.SetTrigger("Stagger");
+        _animator.SetTrigger("GotHit");
     }
 
-    public void EndStagger() 
-    {
-        if (_animator != null) _animator.SetBool("IsStaggered", false);
+    public void TriggerStaggerOnly() {
+        if (_animator == null) return;
+        _animator.SetTrigger("Stagger"); 
+        _animator.SetBool("IsStaggered", true); 
     }
 
-    public void ResetMovement()
-    {
+    public void EndStagger() {
+        if (_animator == null) return;
+        _animator.SetBool("IsStaggered", false);
+    }
+
+    public void ResetMovement() {
         if (_animator == null) return;
         _animator.SetFloat("VelocityX", 0);
         _animator.SetFloat("VelocityZ", 0);
     }
 
-    public void AE_OnActionFinished()
-    {
-        if (_bossAI != null) _bossAI.OnAnimationActionComplete();
+    public void AE_OnActionFinished() {
+        if (_bossAI) _bossAI.OnAnimationActionComplete();
     }
 }
