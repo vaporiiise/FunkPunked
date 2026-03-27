@@ -46,7 +46,8 @@ public class PlayerController : MonoBehaviour
     private PlayerCombo comboScript;
     private Coroutine hitStopCoroutine;
     private PlayerControls controls;
-
+    private bool isAnimationPlaying;
+    private bool isMovementLocked;
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -80,10 +81,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // --- SOFT-LOCK LOGIC ---
     private void FaceTarget()
     {
-        // Find all enemies in range
         Collider[] enemies = Physics.OverlapSphere(transform.position, lockOnRange, enemyLayer);
         Transform closestEnemy = null;
         float closestDistance = Mathf.Infinity;
@@ -98,11 +97,10 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // If an enemy is found, rotate to face them
         if (closestEnemy != null)
         {
             Vector3 direction = (closestEnemy.position - transform.position).normalized;
-            direction.y = 0; // Keep the player upright
+            direction.y = 0; 
             if (direction != Vector3.zero)
             {
                 transform.rotation = Quaternion.LookRotation(direction);
@@ -112,29 +110,33 @@ public class PlayerController : MonoBehaviour
 
     private void OnAttackInput()
     {
-        if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
-        
-        // SOFT-LOCK ACTIVATION: Snap to boss before playing animation
+        if (animationHandler.IsFlinching() || _isParryLocked || isDashing || isAnimationPlaying) return;
+    
+        isMovementLocked = true; 
+        isAttacking = true;
+        canMoveCancel = false; 
+
+        comboStep = (comboStep >= maxComboStep) ? 1 : comboStep + 1;
+        DisableHitbox();
+        animationHandler.PlayAttack(comboStep);
         FaceTarget();
 
         isAttacking = true;
+        isAnimationPlaying = true; 
         canMoveCancel = false; 
         comboStep = (comboStep >= maxComboStep) ? 1 : comboStep + 1;
-        
+    
         DisableHitbox();
         animationHandler.PlayAttack(comboStep);
     }
 
-    // --- MOVEMENT ---
     private void HandleMovement() {
-        if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
-
+        if (animationHandler.IsFlinching() || _isParryLocked || isDashing || isAnimationPlaying) return;
         if (canMoveCancel && moveInput.sqrMagnitude > 0.1f) {
             ResetToLocomotion();
         }
 
         if (isAttacking && !canMoveCancel) {
-            // Optional: Still allow slight rotation tracking during attack follow-through
             animationHandler.UpdateMovement(0f);
             return;
         }
@@ -147,7 +149,6 @@ public class PlayerController : MonoBehaviour
         animationHandler.UpdateMovement(moveInput.magnitude);
     }
 
-    // --- ANIMATION EVENT RECEIVERS ---
     public void OnAttackFinished() 
     {
         DisableHitbox();
@@ -155,7 +156,14 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
         lastAttackEndTime = Time.time;
     }
-
+    
+    public void OnAnimationFullyComplete()
+    {
+        isAnimationPlaying = false;
+        isAttacking = false;
+        canMoveCancel = false;
+    }
+    
     public void OnAnimationReset() => ResetToLocomotion();
     public void OpenComboWindow() => animationHandler.SetComboWindow(true);
     public void CloseComboWindow() => animationHandler.SetComboWindow(false);
@@ -163,7 +171,6 @@ public class PlayerController : MonoBehaviour
     public void EnableHitbox() { if(attackHitbox) attackHitbox.SetActive(true); if(attackTrail) attackTrail.emitting = true; }
     public void DisableHitbox() { if(attackHitbox) attackHitbox.SetActive(false); if(attackTrail) attackTrail.emitting = false; }
 
-    // --- PARRY & COMBO ---
     public void StartParryLock() { _isParryLocked = true; isAttacking = false; impact = Vector3.zero; }
     public void EndParryLock() => _isParryLocked = false;
     public void SetDamageMultiplier(float m) => currentDamageMultiplier = m;
@@ -193,6 +200,10 @@ public class PlayerController : MonoBehaviour
 
     // --- PHYSICS ---
     public void AddForceForward() => impact += transform.forward * 15f;
+    public void AddForceForwardHard() => impact += transform.forward * 20f;
+
+    public void AddForceForwardBounce() => impact += (transform.forward * 10f) + (transform.up * 10f);
+    public void AddForceBackwardsLight() => impact += transform.forward * -10f;
     public void AddForceBackwards() => impact += -transform.forward * 10f;
     public void TriggerHitStop(float d, float s) { if (hitStopCoroutine != null) StopCoroutine(hitStopCoroutine); hitStopCoroutine = StartCoroutine(DoHitStop(d, s)); }
     private IEnumerator DoHitStop(float d, float s) { Time.timeScale = s; yield return new WaitForSecondsRealtime(d); ResetTimeScale(); }
