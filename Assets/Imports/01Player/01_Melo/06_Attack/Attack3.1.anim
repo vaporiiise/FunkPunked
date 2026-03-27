@@ -393228,8 +393228,15 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 0.9166667
+    functionName: DisablePlayerEnemyCollision
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 0.93333334
-    functionName: AddForceForward
+    functionName: AddForceForwardHard
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -393256,7 +393263,21 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.7333333
+  - time: 1.2666667
+    functionName: EnablePlayerEnemyCollision
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.45
+    functionName: QuickTurn180
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.4666667
     functionName: OnAttackFinished
     data: 
     objectReferenceParameter: {fileID: 0}

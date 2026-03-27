@@ -13,6 +13,12 @@ public class BossAI : MonoBehaviour
     public float walkSpeed = 5.0f; 
     public float rotationSpeed = 25f; 
     public float strafeSpeed = 4.0f;
+    
+    [Header("Jump Reset Settings")]
+    public int hitsToTriggerReset = 6;
+    private int _currentHitCount = 0;
+    private int _targetHitCount;
+    private bool _isJumping = false;
 
     [Header("Arena Boundary")]
     public Transform arenaCenter;
@@ -41,24 +47,42 @@ public class BossAI : MonoBehaviour
 
     private BossAnimationHandler _animHandler;
     private Rigidbody _rb;
+    private EnemyAttack _enemyAttack;
+    private float _attackSafetyTimer = 0f; 
 
     public bool IsStaggered => _currentState == BossState.Staggered;
 
     void Awake() {
         _rb = GetComponent<Rigidbody>();
         _animHandler = GetComponent<BossAnimationHandler>();
+        _enemyAttack = GetComponentInChildren<EnemyAttack>(); 
+    
+        if (_animHandler == null) _animHandler = GetComponentInChildren<BossAnimationHandler>();
+
         if (_rb) _rb.isKinematic = true;
+    
+        _targetHitCount = Random.Range(6, 9); 
         _requiredNormalsBeforeDash = Random.Range(3, 7);
     }
 
     void Update() {
         if (player == null || _currentState == BossState.Staggered) return;
 
+        if (_isActionLocked && _currentState == BossState.Attacking) {
+            _attackSafetyTimer += Time.deltaTime;
+            if (_attackSafetyTimer > 5.0f) { 
+                Debug.LogWarning("Boss stuck! Forcing Reset.");
+                OnAnimationActionComplete(); 
+                _attackSafetyTimer = 0;
+            }
+        } else {
+            _attackSafetyTimer = 0;
+        }
+
         if (_isTracking) LookAtPlayer(rotationSpeed);
-        
+    
         if (_isActionLocked) {
             if (_animHandler) _animHandler.ResetMovement();
-            // We still constrain even if locked (in case knockback pushes him)
             ConstrainToArena();
             return;
         }
@@ -72,37 +96,31 @@ public class BossAI : MonoBehaviour
             return;
         }
 
-        if (dist <= closeAttackRange) {
-            _normalAttackCount++;
-            ExecuteAttack(2);
-            ConstrainToArena();
-            return;
-        } 
-
         if (_normalAttackCount >= _requiredNormalsBeforeDash && dist >= 8.0f && dist <= dashAttackRange) {
             _normalAttackCount = 0;
             _requiredNormalsBeforeDash = Random.Range(3, 7);
-            ExecuteAttack(1);
-            ConstrainToArena();
+            ExecuteAttack(1); 
             return;
         }
 
+        if (dist <= closeAttackRange) {
+            _normalAttackCount++;
+            ExecuteAttack(2); 
+            return;
+        } 
+
         ExecuteChase();
-        
-        // Final check every frame to keep him inside
         ConstrainToArena();
     }
 
     private void ConstrainToArena() {
         if (arenaCenter == null) return;
 
-        // Calculate 2D distance (X and Z)
         Vector3 offset = transform.position - arenaCenter.position;
         float yPos = transform.position.y;
         offset.y = 0;
 
         if (offset.magnitude > arenaRadius) {
-            // Keep the boss at the edge of the radius
             Vector3 clampedPos = arenaCenter.position + (offset.normalized * arenaRadius);
             clampedPos.y = yPos;
             transform.position = clampedPos;
@@ -154,23 +172,37 @@ public class BossAI : MonoBehaviour
         StopAllCoroutines();
         CancelInvoke(nameof(ReturnRB));
         ReturnRB();
-        _currentState = BossState.Staggered;
-        _isActionLocked = true;
+
+        if (_enemyAttack != null) {
+            _enemyAttack.ForceResetAttack(); 
+        }
+
+        _isActionLocked = true; 
         _isTracking = false;
+        _normalAttackCount = 0; 
+
+        _currentState = BossState.Staggered;
+    
+        if (_animHandler) _animHandler.ResetMovement(); 
+    
         StartCoroutine(StaggerTimer(duration));
     }
 
     private IEnumerator StaggerTimer(float d) {
         yield return new WaitForSeconds(d);
+    
         _nextAvailableStaggerTime = Time.time + staggerGlobalCooldown;
+    
         _isActionLocked = false;
         _isTracking = true;
         _currentState = BossState.Idle;
-        _cooldownTimer = 0;
+        _cooldownTimer = 0.5f; 
+    
         if (_animHandler) _animHandler.EndStagger();
     }
 
     public void OnAnimationActionComplete() {
+        _isJumping = false;
         _isActionLocked = false;
         _currentState = BossState.Idle;
         _cooldownTimer = postAttackRest; 
@@ -220,4 +252,42 @@ public class BossAI : MonoBehaviour
             lastPoint = nextPoint;
         }
     }
+    
+    public void OnBossTookHit() {
+        if (_currentState == BossState.Staggered || _isActionLocked || _isJumping) return;
+
+        _currentHitCount++;
+
+        if (_currentHitCount >= _targetHitCount) {
+            StartJumpReset();
+        }
+    }
+    
+    private void StartJumpReset() {
+        if (_animHandler == null || _animHandler._animator == null) {
+            Debug.LogError("Animator missing on Boss!");
+            return;
+        }
+
+        _currentHitCount = 0;
+        _targetHitCount = Random.Range(6, 9); 
+        _isJumping = true;
+        _isActionLocked = true;
+        _currentState = BossState.Attacking;
+
+        Vector3 offset = transform.position - arenaCenter.position;
+        bool shouldJumpLeft = Vector3.Dot(transform.right, offset) > 0;
+
+        if (shouldJumpLeft) {
+            _animHandler._animator.CrossFadeInFixedTime("JumpLeft", 0.1f);
+        } else {
+            _animHandler._animator.CrossFadeInFixedTime("JumpRight", 0.1f);
+        }
+    }
+    
+    public void AE_ApplyJumpForce(float sidePower) {
+        Vector3 force = (transform.right * sidePower) + (transform.up * 8f);
+        rbForce(force);
+    }
+    
 }

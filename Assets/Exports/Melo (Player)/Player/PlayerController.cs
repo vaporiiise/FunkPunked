@@ -109,35 +109,40 @@ public class PlayerController : MonoBehaviour
 
     private void OnAttackInput()
     {
-        if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
-        
+        if (animationHandler.IsFlinching() || _isParryLocked || isDashing || (isAttacking && !canMoveCancel)) return;
+    
         FaceTarget();
 
         isAttacking = true;
         canMoveCancel = false; 
         comboStep = (comboStep >= maxComboStep) ? 1 : comboStep + 1;
-        
-        DisableHitbox();
+    
+        DisableHitbox(); 
         animationHandler.PlayAttack(comboStep);
     }
 
-    private void HandleMovement() {
+    private void HandleMovement() 
+    {
         if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
 
-        if (canMoveCancel && moveInput.sqrMagnitude > 0.1f) {
-            ResetToLocomotion();
-        }
-
-        if (isAttacking && !canMoveCancel) {
+        if (isAttacking && !canMoveCancel) 
+        {
             animationHandler.UpdateMovement(0f);
             return;
         }
 
+        if (canMoveCancel && moveInput.sqrMagnitude > 0.1f) 
+        {
+            ResetToLocomotion();
+        }
+
         Vector3 move = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * new Vector3(moveInput.x, 0, moveInput.y);
-        if (move.sqrMagnitude > 0.01f) {
+        if (move.sqrMagnitude > 0.01f) 
+        {
             controller.Move(move.normalized * moveSpeed * Time.deltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(move.normalized), 12f * Time.deltaTime);
         }
+    
         animationHandler.UpdateMovement(moveInput.magnitude);
     }
 
@@ -182,10 +187,39 @@ public class PlayerController : MonoBehaviour
         DisableHitbox(); 
         animationHandler.PlayMove(); 
     }
+    
+    private bool _isQuickTurning = false;
+
+    public void QuickTurn180()
+    {
+        if (!_isQuickTurning) 
+        {
+            StartCoroutine(DampedRotationRoutine(0.15f)); 
+        }
+    }
+
+    private IEnumerator DampedRotationRoutine(float duration)
+    {
+        _isQuickTurning = true;
+    
+        Quaternion startRot = transform.rotation;
+        Quaternion targetRot = transform.rotation * Quaternion.Euler(0, 180, 0);
+    
+        float elapsed = 0;
+        while (elapsed < duration)
+        {
+            transform.rotation = Quaternion.Slerp(startRot, targetRot, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.rotation = targetRot; 
+        _isQuickTurning = false;
+    }
 
     // --- PHYSICS ---
     public void AddForceForward() => impact += transform.forward * 15f;
-    public void AddForceForwardHard() => impact += transform.forward * 35f;
+    public void AddForceForwardHard() => impact += transform.forward * 20f;
 
     public void AddForceForwardBounce() => impact += (transform.forward * 10f) + (transform.up * 10f);
     public void AddForceBackwardsLight() => impact += transform.forward * -10f;
