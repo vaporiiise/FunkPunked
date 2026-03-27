@@ -5,8 +5,7 @@ public class Hitbox : MonoBehaviour
 {
     private PlayerController _playerController;
     private PlayerAnimationHandler _animHandler;
-    private AnimationAudioManager _audioManager; // Reference to your sound script
-
+    private AnimationAudioManager _audioManager; 
     [Header("Hit Stop Settings")]
     public float duration = 0.07f;
     [Range(0f, 1f)] public float scale = 0.01f;
@@ -48,7 +47,6 @@ public class Hitbox : MonoBehaviour
             {
                 enemy.TakeHit(transform.root);
                 
-                // PLAY HIT SOUND HERE
                 if (_audioManager != null)
                 {
                     _audioManager.PlaySound("hit"); 

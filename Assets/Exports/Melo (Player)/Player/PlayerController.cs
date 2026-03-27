@@ -80,10 +80,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // --- SOFT-LOCK LOGIC ---
     private void FaceTarget()
     {
-        // Find all enemies in range
         Collider[] enemies = Physics.OverlapSphere(transform.position, lockOnRange, enemyLayer);
         Transform closestEnemy = null;
         float closestDistance = Mathf.Infinity;
@@ -98,11 +96,10 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // If an enemy is found, rotate to face them
         if (closestEnemy != null)
         {
             Vector3 direction = (closestEnemy.position - transform.position).normalized;
-            direction.y = 0; // Keep the player upright
+            direction.y = 0; 
             if (direction != Vector3.zero)
             {
                 transform.rotation = Quaternion.LookRotation(direction);
@@ -114,7 +111,6 @@ public class PlayerController : MonoBehaviour
     {
         if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
         
-        // SOFT-LOCK ACTIVATION: Snap to boss before playing animation
         FaceTarget();
 
         isAttacking = true;
@@ -125,7 +121,6 @@ public class PlayerController : MonoBehaviour
         animationHandler.PlayAttack(comboStep);
     }
 
-    // --- MOVEMENT ---
     private void HandleMovement() {
         if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
 
@@ -134,7 +129,6 @@ public class PlayerController : MonoBehaviour
         }
 
         if (isAttacking && !canMoveCancel) {
-            // Optional: Still allow slight rotation tracking during attack follow-through
             animationHandler.UpdateMovement(0f);
             return;
         }
@@ -147,7 +141,6 @@ public class PlayerController : MonoBehaviour
         animationHandler.UpdateMovement(moveInput.magnitude);
     }
 
-    // --- ANIMATION EVENT RECEIVERS ---
     public void OnAttackFinished() 
     {
         DisableHitbox();
@@ -163,7 +156,6 @@ public class PlayerController : MonoBehaviour
     public void EnableHitbox() { if(attackHitbox) attackHitbox.SetActive(true); if(attackTrail) attackTrail.emitting = true; }
     public void DisableHitbox() { if(attackHitbox) attackHitbox.SetActive(false); if(attackTrail) attackTrail.emitting = false; }
 
-    // --- PARRY & COMBO ---
     public void StartParryLock() { _isParryLocked = true; isAttacking = false; impact = Vector3.zero; }
     public void EndParryLock() => _isParryLocked = false;
     public void SetDamageMultiplier(float m) => currentDamageMultiplier = m;
@@ -193,6 +185,10 @@ public class PlayerController : MonoBehaviour
 
     // --- PHYSICS ---
     public void AddForceForward() => impact += transform.forward * 15f;
+    public void AddForceForwardHard() => impact += transform.forward * 35f;
+
+    public void AddForceForwardBounce() => impact += (transform.forward * 10f) + (transform.up * 10f);
+    public void AddForceBackwardsLight() => impact += transform.forward * -10f;
     public void AddForceBackwards() => impact += -transform.forward * 10f;
     public void TriggerHitStop(float d, float s) { if (hitStopCoroutine != null) StopCoroutine(hitStopCoroutine); hitStopCoroutine = StartCoroutine(DoHitStop(d, s)); }
     private IEnumerator DoHitStop(float d, float s) { Time.timeScale = s; yield return new WaitForSecondsRealtime(d); ResetTimeScale(); }

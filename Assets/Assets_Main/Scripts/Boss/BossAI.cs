@@ -14,6 +14,11 @@ public class BossAI : MonoBehaviour
     public float rotationSpeed = 25f; 
     public float strafeSpeed = 4.0f;
 
+    [Header("Arena Boundary")]
+    public Transform arenaCenter;
+    public float arenaRadius = 15f;
+    public Color gizmoColor = Color.red;
+
     [Header("Combat Ranges")]
     public Transform player;
     public float closeAttackRange = 4.5f; 
@@ -53,6 +58,8 @@ public class BossAI : MonoBehaviour
         
         if (_isActionLocked) {
             if (_animHandler) _animHandler.ResetMovement();
+            // We still constrain even if locked (in case knockback pushes him)
+            ConstrainToArena();
             return;
         }
 
@@ -61,12 +68,14 @@ public class BossAI : MonoBehaviour
         if (_cooldownTimer > 0) {
             _cooldownTimer -= Time.deltaTime;
             ExecuteStrafeBehavior(dist);
+            ConstrainToArena();
             return;
         }
 
         if (dist <= closeAttackRange) {
             _normalAttackCount++;
             ExecuteAttack(2);
+            ConstrainToArena();
             return;
         } 
 
@@ -74,10 +83,30 @@ public class BossAI : MonoBehaviour
             _normalAttackCount = 0;
             _requiredNormalsBeforeDash = Random.Range(3, 7);
             ExecuteAttack(1);
+            ConstrainToArena();
             return;
         }
 
         ExecuteChase();
+        
+        // Final check every frame to keep him inside
+        ConstrainToArena();
+    }
+
+    private void ConstrainToArena() {
+        if (arenaCenter == null) return;
+
+        // Calculate 2D distance (X and Z)
+        Vector3 offset = transform.position - arenaCenter.position;
+        float yPos = transform.position.y;
+        offset.y = 0;
+
+        if (offset.magnitude > arenaRadius) {
+            // Keep the boss at the edge of the radius
+            Vector3 clampedPos = arenaCenter.position + (offset.normalized * arenaRadius);
+            clampedPos.y = yPos;
+            transform.position = clampedPos;
+        }
     }
 
     private void ExecuteAttack(int index) {
@@ -163,11 +192,32 @@ public class BossAI : MonoBehaviour
     public void AddForceForward() => rbForce(transform.forward * 150f);
     public void AddForceForwardATK1() => rbForce(transform.forward * 800f); 
     public void AddForceBackwards() => rbForce(-transform.forward * 100f);
+    
     private void rbForce(Vector3 force) {
         if (!_rb) return;
         _rb.isKinematic = false;
         _rb.AddForce(force, ForceMode.Impulse);
         Invoke(nameof(ReturnRB), 0.4f);
     }
-    public void ReturnRB() { if (_rb) _rb.isKinematic = true; }
+
+    public void ReturnRB() { 
+        if (_rb) _rb.isKinematic = true; 
+        ConstrainToArena(); 
+    }
+
+    private void OnDrawGizmosSelected() {
+        if (arenaCenter == null) return;
+        Gizmos.color = gizmoColor;
+        
+        float segments = 32;
+        float angle = 0f;
+        Vector3 lastPoint = arenaCenter.position + new Vector3(arenaRadius, 0, 0);
+
+        for (int i = 0; i <= segments; i++) {
+            angle += (2f * Mathf.PI) / segments;
+            Vector3 nextPoint = arenaCenter.position + new Vector3(Mathf.Cos(angle) * arenaRadius, 0, Mathf.Sin(angle) * arenaRadius);
+            Gizmos.DrawLine(lastPoint, nextPoint);
+            lastPoint = nextPoint;
+        }
+    }
 }
