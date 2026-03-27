@@ -46,8 +46,7 @@ public class PlayerController : MonoBehaviour
     private PlayerCombo comboScript;
     private Coroutine hitStopCoroutine;
     private PlayerControls controls;
-    private bool isAnimationPlaying;
-    private bool isMovementLocked;
+
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -110,28 +109,21 @@ public class PlayerController : MonoBehaviour
 
     private void OnAttackInput()
     {
-        if (animationHandler.IsFlinching() || _isParryLocked || isDashing || isAnimationPlaying) return;
-    
-        isMovementLocked = true; 
-        isAttacking = true;
-        canMoveCancel = false; 
-
-        comboStep = (comboStep >= maxComboStep) ? 1 : comboStep + 1;
-        DisableHitbox();
-        animationHandler.PlayAttack(comboStep);
+        if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
+        
         FaceTarget();
 
         isAttacking = true;
-        isAnimationPlaying = true; 
         canMoveCancel = false; 
         comboStep = (comboStep >= maxComboStep) ? 1 : comboStep + 1;
-    
+        
         DisableHitbox();
         animationHandler.PlayAttack(comboStep);
     }
 
     private void HandleMovement() {
-        if (animationHandler.IsFlinching() || _isParryLocked || isDashing || isAnimationPlaying) return;
+        if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
+
         if (canMoveCancel && moveInput.sqrMagnitude > 0.1f) {
             ResetToLocomotion();
         }
@@ -156,14 +148,7 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
         lastAttackEndTime = Time.time;
     }
-    
-    public void OnAnimationFullyComplete()
-    {
-        isAnimationPlaying = false;
-        isAttacking = false;
-        canMoveCancel = false;
-    }
-    
+
     public void OnAnimationReset() => ResetToLocomotion();
     public void OpenComboWindow() => animationHandler.SetComboWindow(true);
     public void CloseComboWindow() => animationHandler.SetComboWindow(false);
@@ -200,7 +185,7 @@ public class PlayerController : MonoBehaviour
 
     // --- PHYSICS ---
     public void AddForceForward() => impact += transform.forward * 15f;
-    public void AddForceForwardHard() => impact += transform.forward * 20f;
+    public void AddForceForwardHard() => impact += transform.forward * 35f;
 
     public void AddForceForwardBounce() => impact += (transform.forward * 10f) + (transform.up * 10f);
     public void AddForceBackwardsLight() => impact += transform.forward * -10f;
