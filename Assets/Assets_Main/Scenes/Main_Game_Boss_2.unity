@@ -850,37 +850,6 @@ PrefabInstance:
       addedObject: {fileID: 41295433}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b2682871409be14da80e7399831a427, type: 3}
---- !u!1 &253290231
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 253290232}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &253290232
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 253290231}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.4852, y: 0.84663, z: 15.39923}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &337901050
 GameObject:
   m_ObjectHideFlags: 0
@@ -10206,6 +10175,7 @@ GameObject:
   - component: {fileID: 1067777175}
   - component: {fileID: 1067777174}
   - component: {fileID: 1067777173}
+  - component: {fileID: 1067777176}
   - component: {fileID: 1067777172}
   - component: {fileID: 1067777171}
   m_Layer: 0
@@ -10439,6 +10409,23 @@ MonoBehaviour:
       BarrelClipping: 0.25
       Anamorphism: 0
   BlendHint: 0
+--- !u!114 &1067777176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067777169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449ef5ebbe24720439ec31d15f7b6f3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineVolumeSettings
+  Weight: 1
+  FocusTracking: 0
+  FocusTarget: {fileID: 0}
+  FocusOffset: 0
+  Profile: {fileID: 11400000, guid: acc4a17a2a3694d42a5038dc30e4bfc6, type: 2}
 --- !u!224 &1099750680 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8861945554101790301, guid: 3b2682871409be14da80e7399831a427, type: 3}
@@ -10763,6 +10750,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1289024811 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7815471522081175750, guid: b04bfc175231dae4eab8ee9c0b5846a6, type: 3}
+  m_PrefabInstance: {fileID: 7464810784818525705}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1289024821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289024811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57b19710df8dcfe458f146fc5864b3aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlobalCollisionHandler
+  playerLayerName: Enemy
+  enemyLayerName: Player
 --- !u!4 &1359324066 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7033677798929380950, guid: ffba221cf297918429eec5bbc90a59a8, type: 3}
@@ -15828,7 +15834,7 @@ Transform:
   m_GameObject: {fileID: 1708481330}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.53216, y: 0, z: 6.66042}
+  m_LocalPosition: {x: -4.53216, y: -0.76, z: -1.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16491,23 +16497,25 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7815471522081175750, guid: b04bfc175231dae4eab8ee9c0b5846a6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1289024821}
   m_SourcePrefab: {fileID: 100100000, guid: b04bfc175231dae4eab8ee9c0b5846a6, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 2059996979}
+  - {fileID: 758263618}
+  - {fileID: 1067777170}
+  - {fileID: 523244412}
+  - {fileID: 666793228}
+  - {fileID: 741451258}
   - {fileID: 1002082721}
   - {fileID: 48840945}
   - {fileID: 7464810784818525705}
-  - {fileID: 1067777170}
   - {fileID: 222763004}
   - {fileID: 1147810846}
   - {fileID: 1708481332}
-  - {fileID: 758263618}
-  - {fileID: 523244412}
-  - {fileID: 741451258}
-  - {fileID: 253290232}
-  - {fileID: 2059996979}
-  - {fileID: 666793228}
   - {fileID: 443967571}

@@ -68,19 +68,10 @@ public class BossAI : MonoBehaviour
     void Update() {
         if (player == null || _currentState == BossState.Staggered) return;
 
-        if (_isActionLocked && _currentState == BossState.Attacking) {
-            _attackSafetyTimer += Time.deltaTime;
-            if (_attackSafetyTimer > 5.0f) { 
-                Debug.LogWarning("Boss stuck! Forcing Reset.");
-                OnAnimationActionComplete(); 
-                _attackSafetyTimer = 0;
-            }
-        } else {
-            _attackSafetyTimer = 0;
-        }
+        HandleSafetyTimer();
 
         if (_isTracking) LookAtPlayer(rotationSpeed);
-    
+
         if (_isActionLocked) {
             if (_animHandler) _animHandler.ResetMovement();
             ConstrainToArena();
@@ -96,21 +87,38 @@ public class BossAI : MonoBehaviour
             return;
         }
 
-        if (_normalAttackCount >= _requiredNormalsBeforeDash && dist >= 8.0f && dist <= dashAttackRange) {
-            _normalAttackCount = 0;
-            _requiredNormalsBeforeDash = Random.Range(3, 7);
-            ExecuteAttack(1); 
-            return;
-        }
-
         if (dist <= closeAttackRange) {
             _normalAttackCount++;
             ExecuteAttack(2); 
             return;
-        } 
+        }
+
+        if (dist >= 8.0f && dist <= dashAttackRange) {
+            bool readyToDash = _normalAttackCount >= _requiredNormalsBeforeDash;
+            bool randomChance = Random.value > 0.7f; 
+
+            if (readyToDash || randomChance) {
+                _normalAttackCount = 0;
+                _requiredNormalsBeforeDash = Random.Range(3, 7);
+                ExecuteAttack(1); 
+                return;
+            }
+        }
 
         ExecuteChase();
         ConstrainToArena();
+    }
+
+    private void HandleSafetyTimer() {
+        if (_isActionLocked && _currentState == BossState.Attacking) {
+            _attackSafetyTimer += Time.deltaTime;
+            if (_attackSafetyTimer > 5.0f) {
+                OnAnimationActionComplete();
+                _attackSafetyTimer = 0;
+            }
+        } else {
+            _attackSafetyTimer = 0;
+        }
     }
 
     private void ConstrainToArena() {
@@ -288,6 +296,39 @@ public class BossAI : MonoBehaviour
     public void AE_ApplyJumpForce(float sidePower) {
         Vector3 force = (transform.right * sidePower) + (transform.up * 8f);
         rbForce(force);
+    }
+    
+    [Header("Advanced Dash")]
+    public float dashDistance = 20f; 
+    public float dashTime = 0.4f;     
+
+    public void AE_LongDash() 
+    {
+        StartCoroutine(LongDashRoutine());
+    }
+
+    private IEnumerator LongDashRoutine() 
+    {
+        if (!_rb) yield break;
+
+        _rb.isKinematic = false;
+        float elapsed = 0f;
+    
+        Vector3 dashDir = (player.position - transform.position).normalized;
+        dashDir.y = 0;
+
+        transform.rotation = Quaternion.LookRotation(dashDir);
+
+        while (elapsed < dashTime) 
+        {
+            _rb.linearVelocity = dashDir * (dashDistance / dashTime);
+        
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        _rb.linearVelocity = Vector3.zero;
+        ReturnRB(); 
     }
     
 }
