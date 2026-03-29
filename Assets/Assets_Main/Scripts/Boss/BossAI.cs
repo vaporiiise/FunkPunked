@@ -41,6 +41,10 @@ public class BossAI : MonoBehaviour
     [Header("Attack Logic")]
     private int _normalAttackCount = 0;
     private int _requiredNormalsBeforeDash;
+    
+    [Header("VFX Settings")]
+    public ParticleSystem bodyVFX; 
+    public Transform handTransform;
 
     private bool _isActionLocked = false; 
     private bool _isTracking = true;
@@ -329,6 +333,22 @@ public class BossAI : MonoBehaviour
 
         _rb.linearVelocity = Vector3.zero;
         ReturnRB(); 
+    }
+    
+    public void AE_PlayParticleOnBody()
+    {
+        if (bodyVFX != null && handTransform != null)
+        {
+            ParticleSystem vfx = Instantiate(bodyVFX, handTransform.position, handTransform.rotation);
+        
+            vfx.transform.parent = handTransform; 
+        
+            Destroy(vfx.gameObject, 2.0f);
+        }
+        else
+        {
+            Debug.LogWarning("VFX or Hand Transform missing on BossAI!");
+        }
     }
     
 }
