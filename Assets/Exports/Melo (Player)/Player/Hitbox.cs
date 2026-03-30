@@ -16,7 +16,6 @@ public class Hitbox : MonoBehaviour
     {
         _playerController = GetComponentInParent<PlayerController>();
         _animHandler = GetComponentInParent<PlayerAnimationHandler>();
-        // Grab the AudioManager from the root player object
         _audioManager = GetComponentInParent<AnimationAudioManager>();
     }
 
@@ -46,7 +45,12 @@ public class Hitbox : MonoBehaviour
             if (enemy != null) 
             {
                 enemy.TakeHit(transform.root);
-                
+                PlayerCombo comboScript = GetComponentInParent<PlayerCombo>();
+                if (comboScript != null)
+                {
+                    comboScript.AddComboHit();
+                }
+
                 if (_audioManager != null)
                 {
                     _audioManager.PlaySound("hit"); 

@@ -31,14 +31,15 @@ public class CinematicParry : MonoBehaviour
     private PlayerHealth playerHealth;
     
     private float _parryTimer = 0f;
-    private bool _inCinematic = false;
+    public bool _inCinematic = false;
+    private ParryResourceManager _resource;
 
-    public bool IsParrying => _parryTimer > 0.01f && !_inCinematic;
-
+    public bool IsParrying => (_parryTimer > 0f || _inCinematic);
     void Awake() {
         animator = GetComponentInChildren<Animator>();
         playerController = GetComponent<PlayerController>();
         playerHealth = GetComponent<PlayerHealth>();
+        _resource = GetComponent<ParryResourceManager>();
         
         _audioManager = GetComponent<AnimationAudioManager>();
         
@@ -64,7 +65,12 @@ public class CinematicParry : MonoBehaviour
 
     private void OnParryPressed(InputAction.CallbackContext ctx) {
         if (_inCinematic || _parryTimer > 0) return;
-        
+
+        if (_resource != null) {
+            if (!_resource.CanParry()) return; 
+            _resource.ConsumeBar();
+        }
+    
         StopAllCoroutines(); 
         StartCoroutine(ParryWindowRoutine());
     }

@@ -93,7 +93,10 @@ public class BossAI : MonoBehaviour
 
         if (dist <= closeAttackRange) {
             _normalAttackCount++;
-            ExecuteAttack(2); 
+            int attackIndex = (Random.value > 0.5f) ? 2 : 3; 
+    
+            ExecuteAttack(attackIndex); 
+            
             return;
         }
 
@@ -181,22 +184,22 @@ public class BossAI : MonoBehaviour
     public bool CanBeStaggered() => Time.time >= _nextAvailableStaggerTime;
 
     public void EnterStagger(float duration) {
-        StopAllCoroutines();
-        CancelInvoke(nameof(ReturnRB));
-        ReturnRB();
+        _currentState = BossState.Staggered;
+        _isActionLocked = true; 
 
         if (_enemyAttack != null) {
             _enemyAttack.ForceResetAttack(); 
         }
 
-        _isActionLocked = true; 
+        StopAllCoroutines();
+        CancelInvoke(nameof(ReturnRB));
+        ReturnRB();
+
         _isTracking = false;
         _normalAttackCount = 0; 
 
-        _currentState = BossState.Staggered;
-    
         if (_animHandler) _animHandler.ResetMovement(); 
-    
+
         StartCoroutine(StaggerTimer(duration));
     }
 
@@ -348,6 +351,20 @@ public class BossAI : MonoBehaviour
         else
         {
             Debug.LogWarning("VFX or Hand Transform missing on BossAI!");
+        }
+    }
+
+    public void ResumeAI()
+    {
+        _isActionLocked = false;
+        _isTracking = true;
+        _currentState = BossState.Idle;
+        _cooldownTimer = 0.2f;
+        _currentHitCount = 0;
+
+        if (_animHandler != null)
+        {
+            _animHandler.ResetMovement();
         }
     }
     

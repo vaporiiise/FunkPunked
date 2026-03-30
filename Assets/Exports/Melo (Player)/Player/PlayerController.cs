@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
     private PlayerCombo comboScript;
     private Coroutine hitStopCoroutine;
     private PlayerControls controls;
+    private bool _isActionLocked;
 
     private void Awake()
     {
@@ -109,12 +110,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnAttackInput()
     {
-        if (animationHandler.IsFlinching() || _isParryLocked || isDashing || (isAttacking && !canMoveCancel)) return;
+        if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
     
+        if (isAttacking && !canMoveCancel) return;
+
         FaceTarget();
 
         isAttacking = true;
         canMoveCancel = false; 
+    
         comboStep = (comboStep >= maxComboStep) ? 1 : comboStep + 1;
     
         DisableHitbox(); 
@@ -131,7 +135,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (canMoveCancel && moveInput.sqrMagnitude > 0.1f) 
+        if (canMoveCancel && moveInput.sqrMagnitude > 0.1f && !isAttacking && comboStep == 0) 
         {
             ResetToLocomotion();
         }
@@ -195,6 +199,14 @@ public class PlayerController : MonoBehaviour
         if (!_isQuickTurning) 
         {
             StartCoroutine(DampedRotationRoutine(0.15f)); 
+        }
+    }
+    
+    public void SetActionLock(bool locked) {
+        _isActionLocked = locked;
+        if (locked) {
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb) rb.linearVelocity = Vector3.zero; 
         }
     }
 

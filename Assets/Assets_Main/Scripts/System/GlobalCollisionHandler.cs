@@ -11,7 +11,6 @@ public class GlobalCollisionHandler : MonoBehaviour
         int enemyLayer = LayerMask.NameToLayer(enemyLayerName);
 
         Physics.IgnoreLayerCollision(playerLayer, enemyLayer, true);
-        Debug.Log("Global: Player and Enemy will now pass through each other.");
     }
 
     public void EnablePlayerEnemyCollision()
@@ -20,6 +19,5 @@ public class GlobalCollisionHandler : MonoBehaviour
         int enemyLayer = LayerMask.NameToLayer(enemyLayerName);
 
         Physics.IgnoreLayerCollision(playerLayer, enemyLayer, false);
-        Debug.Log("Global: Player and Enemy will now collide again.");
     }
 }
