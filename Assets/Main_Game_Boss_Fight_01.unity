@@ -970,7 +970,7 @@ SpriteRenderer:
   m_Size: {x: 26.06, y: 24.62}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!1 &222235332
 GameObject:
@@ -3221,7 +3221,7 @@ SpriteRenderer:
   m_Size: {x: 44.9, y: 25.13}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!1 &641441710
 GameObject:
@@ -6015,9 +6015,6 @@ PrefabInstance:
       addedObject: {fileID: 740772283}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7412328237676368525, guid: ffba221cf297918429eec5bbc90a59a8, type: 3}
-      insertIndex: 2
-      addedObject: {fileID: 722501484}
-    - targetCorrespondingSourceObject: {fileID: 7412328237676368525, guid: ffba221cf297918429eec5bbc90a59a8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 722501443}
     - targetCorrespondingSourceObject: {fileID: 7412328237676368525, guid: ffba221cf297918429eec5bbc90a59a8, type: 3}
@@ -6242,6 +6239,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3c2c7444217cf5b4ea5e4f5eb2d53ad6, type: 3}
   parrySounds:
   - {fileID: 8300000, guid: a0d7e5ede21085b449296f9ce04870c4, type: 3}
+  quips: []
+  attackGrunts: []
+  gotHit: []
 --- !u!114 &722501447 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4293488745321545905, guid: ffba221cf297918429eec5bbc90a59a8, type: 3}
@@ -6277,42 +6277,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GlobalCollisionHandler
   playerLayerName: Player
   enemyLayerName: Enemy
---- !u!114 &722501484
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 722501442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79a734695f7d274439076a6fe65a523f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ParryResourceManager
-  detectionPoint: {fileID: 1359324066}
-  boxSize: {x: 2, y: 2, z: 3}
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  parryAction:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Parry
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: a13e9dbf-4da3-493c-a98e-735e43c25f81
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 0}
-  parryWindow: 0.35
-  parryCamera: {fileID: 0}
-  slowMoTimeScale: 0.05
-  slowMoDuration: 1
-  showDebug: 1
-  debugRenderer: {fileID: 0}
-  _inCinematic: 0
 --- !u!1 &738637223
 GameObject:
   m_ObjectHideFlags: 0
@@ -14228,7 +14192,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.34
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -19518,7 +19482,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.52
+  m_Intensity: 0.34
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -19686,7 +19650,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.58
+  m_Intensity: 0.34
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
