@@ -527,6 +527,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: a8d9231f5fb7c7545b99475b4fecdb7a, type: 2}
     - target: {fileID: 7654638489329669232, guid: ba29135ef53b40a4fb3984c5bbffcf37, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.0749
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654638489329669232, guid: ba29135ef53b40a4fb3984c5bbffcf37, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.576
       objectReference: {fileID: 0}
@@ -679,7 +683,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializedBakingSet: {fileID: 0}
-  sceneGUID: b93b7ee70ba50ad4bb28d58f80532375
+  sceneGUID: e83735817a3282948a56b5ac28a50da8
   obsoleteAsset: {fileID: 0}
   obsoleteCellSharedDataAsset: {fileID: 0}
   obsoleteCellSupportDataAsset: {fileID: 0}
@@ -786,6 +790,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -485378142120866619, guid: e62cd936cd44b9744a6f70eb8f11ab96, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 035dbd3a5741f6648854674991d19757, type: 2}
     - target: {fileID: 679267285568870776, guid: e62cd936cd44b9744a6f70eb8f11ab96, type: 3}
       propertyPath: m_IsActive
       value: 1
