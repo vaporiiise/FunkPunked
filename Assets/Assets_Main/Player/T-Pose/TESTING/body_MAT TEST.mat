@@ -110,7 +110,7 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
-    - _Brightness: 1
+    - _Brightness: 1.12
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
@@ -129,7 +129,7 @@ Material:
     - _IndirectDiffuse: 0.5
     - _IndirectSpecular: 0.85
     - _IndirectSpecularSmoothness: 1
-    - _LightWrapping: 0
+    - _LightWrapping: 0.543
     - _METALNESS: 1
     - _MainMaskType: 0
     - _Metallic: 0
@@ -148,9 +148,9 @@ Material:
     - _ShadowColorEnable: 0
     - _ShadowFalloff: 1
     - _ShadowOffset: -0.05
-    - _ShadowStrength: 0.1
+    - _ShadowStrength: 0.4
     - _Smoothness: 0
-    - _SmoothnessStrength: 0.55
+    - _SmoothnessStrength: 0.51
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -164,7 +164,7 @@ Material:
     - _TranslucencyScattering: 1
     - _TranslucencyStrength: 0.5
     - _TransmissionFeather: 0.5
-    - _TransmissionMapEnable: 0
+    - _TransmissionMapEnable: 1
     - _TransmissionStrength: 0.15
     - _UVSec: 0
     - _UseShadowThreshold: 0
@@ -179,10 +179,10 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _IndirectSpecColor: {r: 0.4745098, g: 0.4745098, b: 0.4745098, a: 1}
     - _SPECULAR_COLOR: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
-    - _ShadowColor: {r: 0.05882353, g: 0.05882353, b: 0.05882353, a: 0.4901961}
+    - _ShadowColor: {r: 0, g: 0.64049315, b: 0.9764706, a: 0.4901961}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _SpecularColor: {r: 0.4745098, g: 0.4745098, b: 0.4745098, a: 1}
     - _TranslucencyColor: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-    - _TransmissionColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _TransmissionColor: {r: 1, g: 0.3254902, b: 0.3254902, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
