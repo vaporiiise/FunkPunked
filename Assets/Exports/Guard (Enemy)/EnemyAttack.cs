@@ -53,15 +53,47 @@ public class EnemyAttack : MonoBehaviour
 
     public void OnGetParried() {
         ForceResetAttack(); 
-        if (_animator) _animator.SetTrigger("GotHit"); 
+
+        GlobalCollisionHandler collisionHandler = Object.FindFirstObjectByType<GlobalCollisionHandler>();
+        if (collisionHandler != null) {
+            collisionHandler.EnablePlayerEnemyCollision();
+        }
+
+        if (_animator) {
+
+            _animator.ResetTrigger("Attack"); 
+            _animator.SetTrigger("GotHit"); 
+        }
+
         if (_rb != null) {
             _rb.isKinematic = false;
             _rb.AddForce(-transform.forward * knockbackForce, ForceMode.Impulse);
-            Invoke(nameof(ReturnRBInternal), 0.4f);
+        
+            Invoke(nameof(ReturnFromParryStun), 0.5f);
         }
     }
 
-    private void ReturnRBInternal() { if (_rb) _rb.isKinematic = true; }
+    private void ReturnFromParryStun() {
+        if (_rb) _rb.isKinematic = true;
+
+        BossAI boss = GetComponentInParent<BossAI>();
+        if (boss != null) {
+            boss.ResumeAI();
+        }
+    }
+
+    private void ReturnToNormalState() {
+        if (_rb) _rb.isKinematic = true;
+
+        if (_animator) {
+            _animator.Play("Base Layer.Locomotion", 0, 0.25f); 
+        }
+
+        BossAI enemyManager = GetComponentInParent<BossAI>();
+        if (enemyManager != null) {
+            enemyManager.ResumeAI(); 
+        }
+    }
     
     public void AE_StartAttack() { 
         isAttacking = true; 

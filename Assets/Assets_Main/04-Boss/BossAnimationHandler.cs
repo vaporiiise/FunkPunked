@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BossAnimationHandler : MonoBehaviour
 {
-    private Animator _animator;
+    public Animator _animator;
     private BossAI _bossAI;
 
     void Awake() {

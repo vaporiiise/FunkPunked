@@ -197091,15 +197091,15 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.43333334
-    functionName: AE_StartAttack
+  - time: 0.3
+    functionName: AE_PlayParticleOnBody
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.43333334
-    functionName: AE_PlayParticleOnBody
+  - time: 0.46666667
+    functionName: AE_StartAttack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -197140,15 +197140,15 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.1333333
-    functionName: AddForceForward
+  - time: 1.0166667
+    functionName: AE_PlayParticleOnBody
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 1.1333333
-    functionName: AE_PlayParticleOnBody
+    functionName: AddForceForward
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -197189,7 +197189,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.6833333
+  - time: 1.6166667
     functionName: AE_PlayParticleOnBody
     data: 
     objectReferenceParameter: {fileID: 0}
