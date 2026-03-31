@@ -10,6 +10,9 @@ public class AnimationAudioManager : MonoBehaviour
     public AudioClip[] swingSounds;
     public AudioClip[] hitSounds;
     public AudioClip[] parrySounds;
+    public AudioClip[] quips;
+    public AudioClip[] attackGrunts;
+    public AudioClip[] gotHit;
 
     /// <summary>
     /// This is called by Animation Events (Walk/Swing) 
@@ -32,6 +35,15 @@ public class AnimationAudioManager : MonoBehaviour
                 break;
             case "parry":
                 PlayRandomFromList(parrySounds);
+                break;
+            case "quip":
+                PlayRandomFromList(quips);
+                break;
+            case "attackgrunt":
+                PlayRandomFromList(attackGrunts);
+                break;
+            case "gothit":
+                PlayRandomFromList(gotHit);
                 break;
             default:
                 Debug.LogWarning($"Sound name '{soundName}' not recognized!");
