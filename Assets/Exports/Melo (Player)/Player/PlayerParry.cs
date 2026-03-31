@@ -24,6 +24,7 @@ public class CinematicParry : MonoBehaviour
     public Renderer debugRenderer; 
     private Color originalColor;
 
+    // --- NEW: AUDIO REFERENCE ---
     private AnimationAudioManager _audioManager;
 
     private Animator animator;
@@ -31,16 +32,16 @@ public class CinematicParry : MonoBehaviour
     private PlayerHealth playerHealth;
     
     private float _parryTimer = 0f;
-    public bool _inCinematic = false;
-    private ParryResourceManager _resource;
+    private bool _inCinematic = false;
 
-    public bool IsParrying => (_parryTimer > 0f || _inCinematic);
+    public bool IsParrying => _parryTimer > 0.01f && !_inCinematic;
+
     void Awake() {
         animator = GetComponentInChildren<Animator>();
         playerController = GetComponent<PlayerController>();
         playerHealth = GetComponent<PlayerHealth>();
-        _resource = GetComponent<ParryResourceManager>();
         
+        // Grab the Audio Manager from the root
         _audioManager = GetComponent<AnimationAudioManager>();
         
         if (debugRenderer) originalColor = debugRenderer.material.color;
@@ -65,12 +66,7 @@ public class CinematicParry : MonoBehaviour
 
     private void OnParryPressed(InputAction.CallbackContext ctx) {
         if (_inCinematic || _parryTimer > 0) return;
-
-        if (_resource != null) {
-            if (!_resource.CanParry()) return; 
-            _resource.ConsumeBar();
-        }
-    
+        
         StopAllCoroutines(); 
         StartCoroutine(ParryWindowRoutine());
     }
@@ -107,6 +103,7 @@ public class CinematicParry : MonoBehaviour
             EnemyAttack enemyScript = col.GetComponentInParent<EnemyAttack>();
             Animator enemyAnim = col.GetComponentInParent<Animator>();
 
+            // If we detect an enemy in their attack state...
             if (enemyScript != null && enemyScript.isAttacking) {
                 TriggerSuccessfulParry(enemyAnim);
                 break; 
@@ -116,14 +113,10 @@ public class CinematicParry : MonoBehaviour
 
     public void TriggerSuccessfulParry(Animator enemyAnimator) {
         _parryTimer = 0;
-    
+        
+        // PLAY PARRY SOUND IMMEDIATELY
         if (_audioManager != null) {
             _audioManager.PlaySound("parry");
-        }
-
-        var impulse = GetComponent<CinemachineImpulseSource>();
-        if (impulse) {
-            impulse.GenerateImpulse(Vector3.one * 0.3f); 
         }
 
         StopAllCoroutines(); 
@@ -146,26 +139,24 @@ public class CinematicParry : MonoBehaviour
 
     IEnumerator ExecuteSequence(Animator enemyAnimator) {
         _inCinematic = true;
-    
+        
         EnemyAttack enemyScript = enemyAnimator.GetComponentInChildren<EnemyAttack>();
         if (enemyScript != null) {
             enemyScript.OnGetParried(); 
         }
 
         if (playerHealth) playerHealth.IsInvulnerable = true;
-
-
-        float originalTimeScale = 1f;
-        Time.timeScale = 0f; 
-    
-        yield return new WaitForSecondsRealtime(0.15f); 
-
-
+        
+        if (parryCamera) {
+            parryCamera.LookAt = enemyAnimator.transform; 
+            parryCamera.Priority = 100; 
+        }
+        
+        // Use UnscaledTime so the animator ignores the slow-mo timeScale
         if (animator) animator.updateMode = AnimatorUpdateMode.UnscaledTime;
         if (enemyAnimator) enemyAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
-    
+        
         Time.timeScale = slowMoTimeScale;
-    
         yield return new WaitForSecondsRealtime(slowMoDuration);
 
         AbortParry(); 

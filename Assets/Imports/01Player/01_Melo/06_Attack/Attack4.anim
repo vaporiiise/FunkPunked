@@ -161465,22 +161465,22 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.2
+  - time: 1.5333333
     functionName: PlaySound
     data: swing
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.2333333
-    functionName: PlayVerticalAttack
+  - time: 1.5666667
+    functionName: EnableHitbox
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.2333333
-    functionName: EnableHitbox
+  - time: 1.5666667
+    functionName: PlayVerticalAttack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -161500,7 +161500,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 4.366667
+  - time: 2.2333333
     functionName: OnAnimationReset
     data: 
     objectReferenceParameter: {fileID: 0}

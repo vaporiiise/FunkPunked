@@ -52,12 +52,6 @@ public class Enemy : MonoBehaviour
         }
         
         if (_currentHealth >= maxHealth) Die();
-        
-        BossAI ai = GetComponent<BossAI>();
-        if (ai != null) 
-        {
-            ai.OnBossTookHit(); 
-        }
     }
     
     public void ResetStabilityOnPlayerHit() {

@@ -155553,15 +155553,15 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.75
-    functionName: OnAttackFinished
+  - time: 0.9
+    functionName: DisableHitbox
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.9
-    functionName: DisableHitbox
+  - time: 0.95
+    functionName: OnAttackFinished
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -155574,7 +155574,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 4.4666667
+  - time: 4.15
     functionName: OnAnimationReset
     data: 
     objectReferenceParameter: {fileID: 0}

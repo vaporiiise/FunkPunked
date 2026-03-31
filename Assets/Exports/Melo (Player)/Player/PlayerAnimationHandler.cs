@@ -19,6 +19,4 @@ public class PlayerAnimationHandler : MonoBehaviour
     public void PlayAttack(int step) => animator.CrossFadeInFixedTime("Attack" + step, 0.05f);
 
     public void PlayDashForward() => animator.CrossFadeInFixedTime("DashForward", 0.05f);
-    
-    public void PlayDeath() => animator.CrossFadeInFixedTime("Death", 0.05f);
 }
