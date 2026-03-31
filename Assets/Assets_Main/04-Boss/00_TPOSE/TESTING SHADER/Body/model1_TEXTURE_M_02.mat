@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-832687829536005908
+--- !u!114 &-4769519442322268026
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: face_MAT
+  m_Name: model1_TEXTURE_M_02
   m_Shader: {fileID: 4800000, guid: 01a87d0abf29aa940afc16001ca0c356, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -37,31 +37,31 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BASE_COLOR_MAP:
-        m_Texture: {fileID: 2800000, guid: bb270166fec82a24fbde619b2246efcb, type: 3}
+        m_Texture: {fileID: 2800000, guid: d3dec6da8e52f9c4fb9691843c62dc66, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: db2821f8958fcc2418b2ff9509d429e0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EMISSION_COLOR_MAP:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 34f29bca5f546a946b5b518b70881a13, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _METALNESS_MAP:
-        m_Texture: {fileID: 2800000, guid: 45652d52b75a3cc408dce8a915fa5996, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0385da75eca60b648b01257bea52edfe, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainMaskMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: f7833acc06f3fd04d96011a95588abda, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: af36767a876a8ee4c921f9698cbc9d86, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NORMAL_MAP:
-        m_Texture: {fileID: 2800000, guid: 85e054d6e245cc84ab3fd779181c7a05, type: 3}
+        m_Texture: {fileID: 2800000, guid: 605c3998ed72d8b4bbc0c8d571e15cfb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SPECULAR_COLOR_MAP:
@@ -110,7 +110,7 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
-    - _Brightness: 1
+    - _Brightness: 1.259
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
@@ -129,7 +129,7 @@ Material:
     - _IndirectDiffuse: 0.5
     - _IndirectSpecular: 0.85
     - _IndirectSpecularSmoothness: 1
-    - _LightWrapping: 0
+    - _LightWrapping: 0.35
     - _METALNESS: 1
     - _MainMaskType: 0
     - _Metallic: 0
@@ -147,10 +147,10 @@ Material:
     - _Saturation: 0
     - _ShadowColorEnable: 0
     - _ShadowFalloff: 1
-    - _ShadowOffset: -0.05
-    - _ShadowStrength: 0.1
+    - _ShadowOffset: -0.056
+    - _ShadowStrength: 0.65
     - _Smoothness: 0
-    - _SmoothnessStrength: 0.55
+    - _SmoothnessStrength: 0.6
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -165,7 +165,7 @@ Material:
     - _TranslucencyStrength: 0.5
     - _TransmissionFeather: 0.5
     - _TransmissionMapEnable: 0
-    - _TransmissionStrength: 0.15
+    - _TransmissionStrength: 0.35
     - _UVSec: 0
     - _UseShadowThreshold: 0
     - _WorkflowMode: 1
@@ -175,14 +175,14 @@ Material:
     - _BASE_COLOR: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EMISSION_COLOR: {r: 0, g: 0, b: 0, a: 0}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EMISSION_COLOR: {r: 0.14685315, g: 0.14685315, b: 0.14685315, a: 0.14685315}
+    - _EmissionColor: {r: 0.14685315, g: 0.14685315, b: 0.14685315, a: 0.14685315}
     - _IndirectSpecColor: {r: 0.4745098, g: 0.4745098, b: 0.4745098, a: 1}
     - _SPECULAR_COLOR: {r: 1, g: 1, b: 1, a: 1}
-    - _ShadowColor: {r: 0.05882353, g: 0.05882353, b: 0.05882353, a: 0.4901961}
-    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _ShadowColor: {r: 0, g: 1, b: 0.8499384, a: 0.4901961}
+    - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     - _SpecularColor: {r: 0.4745098, g: 0.4745098, b: 0.4745098, a: 1}
     - _TranslucencyColor: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-    - _TransmissionColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _TransmissionColor: {r: 1, g: 0.31760997, b: 0.31760997, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
