@@ -627,6 +627,7 @@ MonoBehaviour:
   maxHealth: 600
   healthFillImage: {fileID: 0}
   enemyAttackTag: EnemyAttack
+  parryLeewayWindow: 0.15
 --- !u!114 &952561246518255151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -728,11 +729,11 @@ PrefabInstance:
     - target: {fileID: -8887764137715893268, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 3fd3e35b0d13ebc43ace9f8dca8ad2d8, type: 2}
+      objectReference: {fileID: 2100000, guid: 4f30a4ec2c8b23f4193e6c17997ddda3, type: 2}
     - target: {fileID: -8887764137715893268, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
-      objectReference: {fileID: 2100000, guid: 43dea8d9b49a4aa4fa8b70128710e8f2, type: 2}
+      objectReference: {fileID: 2100000, guid: 87f2a6f1f9d7aba408ce601ababeebdb, type: 2}
     - target: {fileID: -8679921383154817045, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -773,10 +774,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -2356279759205326726, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 4e4cbeda1fe3a414398dfeaa4cca4705, type: 2}
     - target: {fileID: 919132149155446097, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
       propertyPath: m_Name
       value: Melo_TPOSE_FINAL
       objectReference: {fileID: 0}
+    - target: {fileID: 4946868097372163941, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d83c5aec34644e94e96feed7bb590fad, type: 2}
+    - target: {fileID: 5364131593895869149, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a8d9231f5fb7c7545b99475b4fecdb7a, type: 2}
     - target: {fileID: 5866666021909216657, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
       propertyPath: m_Enabled
       value: 0
