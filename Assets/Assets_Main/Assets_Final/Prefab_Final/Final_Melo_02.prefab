@@ -209,7 +209,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1652680690524828396}
   - component: {fileID: 7173525874071786249}
-  - component: {fileID: 4955316775070908351}
   - component: {fileID: 1977962151169075402}
   - component: {fileID: 5747341568515779934}
   - component: {fileID: 3484021273997904858}
@@ -293,22 +292,6 @@ MonoBehaviour:
   slowMoDuration: 1
   showDebug: 1
   debugRenderer: {fileID: 0}
-  _inCinematic: 0
---- !u!114 &4955316775070908351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7412328237676368525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5927aa1b5c56f249851282a71ace6f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ParryResourceManager
-  maxBars: 3
-  rechargeTimePerBar: 15
-  barFillImage: {fileID: 0}
 --- !u!114 &1977962151169075402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -370,10 +353,6 @@ MonoBehaviour:
   faceCamera: {fileID: 8723332049336056263}
   comboText: {fileID: 0}
   feverTriggerCount: 5000
-  feverUIWindow: {fileID: 0}
-  feverMask:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!143 &6976378425052270766
 CharacterController:
   m_ObjectHideFlags: 0
@@ -647,12 +626,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 600
   healthFillImage: {fileID: 0}
-  hurtOverlay: {fileID: 0}
-  overlayFlashSpeed: 5
   enemyAttackTag: EnemyAttack
-  deathCanvas: {fileID: 0}
-  deathFadeDelay: 2
-  fadeDuration: 1.5
+  parryLeewayWindow: 0.15
 --- !u!114 &952561246518255151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -671,7 +646,8 @@ MonoBehaviour:
   basicVFX_1I: {fileID: 0}
   basicVFX_2I: {fileID: 0}
   handTransformI: {fileID: 0}
-  feverVFXObject: {fileID: 0}
+  specialVFX: {fileID: 8835647262288544851, guid: fc720dbd72e531f4db6405c68a608034, type: 3}
+  specialSpawnPoint: {fileID: 7033677798929380950}
   verticalVFX: {fileID: 7601763885901041604, guid: 02db5107885c4f44c81e1918c04deca0, type: 3}
   verticalSpawnPoint: {fileID: 7033677798929380950}
 --- !u!1 &8045566314012364318
@@ -753,11 +729,11 @@ PrefabInstance:
     - target: {fileID: -8887764137715893268, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 3fd3e35b0d13ebc43ace9f8dca8ad2d8, type: 2}
+      objectReference: {fileID: 2100000, guid: 4f30a4ec2c8b23f4193e6c17997ddda3, type: 2}
     - target: {fileID: -8887764137715893268, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
-      objectReference: {fileID: 2100000, guid: 43dea8d9b49a4aa4fa8b70128710e8f2, type: 2}
+      objectReference: {fileID: 2100000, guid: 87f2a6f1f9d7aba408ce601ababeebdb, type: 2}
     - target: {fileID: -8679921383154817045, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -798,10 +774,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -2356279759205326726, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 4e4cbeda1fe3a414398dfeaa4cca4705, type: 2}
     - target: {fileID: 919132149155446097, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
       propertyPath: m_Name
       value: Melo_TPOSE_FINAL
       objectReference: {fileID: 0}
+    - target: {fileID: 4946868097372163941, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d83c5aec34644e94e96feed7bb590fad, type: 2}
+    - target: {fileID: 5364131593895869149, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a8d9231f5fb7c7545b99475b4fecdb7a, type: 2}
     - target: {fileID: 5866666021909216657, guid: e712b4ead389d3d4c8646655c0eb2927, type: 3}
       propertyPath: m_Enabled
       value: 0
