@@ -11,10 +11,10 @@ public class PlayerCombo : MonoBehaviour
     public int feverTriggerCount = 15;
 
     [Header("UI Settings")]
-    public GameObject feverUIWindow; // Assign the GameObject that holds your background/foreground images
+    public GameObject feverUIWindow; 
     
     private int currentCombo = 0;
-    private bool isFeverActive = false;
+    public static bool isFeverActive = false;
     private Coroutine feverCoroutine;
     
     [Header("Rendering Settings")]
@@ -30,7 +30,7 @@ public class PlayerCombo : MonoBehaviour
     }
 
     public void AddComboHit() {
-        if (isFeverActive) return; // Prevent adding combo while fever intro is playing
+        if (isFeverActive) return; 
 
         currentCombo++;
         UpdateUI();
@@ -45,7 +45,6 @@ public class PlayerCombo : MonoBehaviour
             if (feverCoroutine != null) StopCoroutine(feverCoroutine);
             isFeverActive = false;
             
-            // Immediate Cleanup
             if (faceCamera) faceCamera.gameObject.SetActive(false);
             if (feverUIWindow) feverUIWindow.SetActive(false);
             if (playerController) {
@@ -61,12 +60,10 @@ public class PlayerCombo : MonoBehaviour
     private IEnumerator ActivateFeverMode() {
         isFeverActive = true;
 
-        // --- 1. LOCK ALL INPUTS & SHOW UI ---
         if (feverUIWindow) feverUIWindow.SetActive(true);
         
         if (playerController) {
-            // CRITICAL: Ensure your PlayerController's Update/FixedUpdate 
-            // returns early if ActionLock is true.
+
             playerController.SetActionLock(true); 
             playerController.SetDamageMultiplier(2f);
 
@@ -89,30 +86,26 @@ public class PlayerCombo : MonoBehaviour
 
         if (faceCamera) faceCamera.gameObject.SetActive(true);
     
-        // --- 2. THE INPUT LOCK DURATION ---
-        // During this 1.5s, ActionLock is TRUE, so no keys should work.
+
         yield return new WaitForSecondsRealtime(1.5f);
 
-        // --- 3. RELEASE INPUT LOCK BUT KEEP BUFF ---
         if (faceCamera) faceCamera.gameObject.SetActive(false);
-        if (feverUIWindow) feverUIWindow.SetActive(false); // Hide UI after intro if desired
+        if (feverUIWindow) feverUIWindow.SetActive(false); 
     
         if (_mainCam) {
             _mainCam.cullingMask = _originalMask; 
         }
 
         if (playerController) {
-            playerController.SetActionLock(false); // Player can move/attack again
+            playerController.SetActionLock(false); 
         }
     
         if (health) health.IsInvulnerable = false;
 
-        // 8.5 seconds of gameplay with the 2x damage buff
-        yield return new WaitForSecondsRealtime(8.5f);
+        yield return new WaitForSecondsRealtime(20f);
 
-        // --- 4. END FEVER ---
         isFeverActive = false;
-        if (playerController) playerController.SetDamageMultiplier(1f);
+        if (playerController) playerController.SetDamageMultiplier(2f);
         currentCombo = 0;
         UpdateUI();
     }

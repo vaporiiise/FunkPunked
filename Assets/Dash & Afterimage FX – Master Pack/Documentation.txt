@@ -1,0 +1,37 @@
+Online documentation: https://tvitchi-vfx.gitbook.io/stylized-dash-and-trail-fx
+Support Email: tvitchivfx@gmail.com
+Join me on Discord for support and more information – https://discord.gg/XD9gut7F8p
+
+
+
+Setup:
+
+1. Drag one of the AfterimageController scripts from the Scripts/ folder onto your character.
+2. Create a GameObject and attach one of the effects from the Scripts/Effects/ folder to it.
+3. Assign your GameObject in the AfterimageController component.
+4. Customize the material and effect settings as you like.
+
+VFX:
+1. Drag one of the AfterimageController scripts from the Scripts/ folder onto your character.
+2. Create a GameObject and attach the VFXEffect script from the Scripts/Effects/ folder to it.
+3. Add a VFX Graph to the GameObject (demo effects are in the Effects/Visual Effects/ folder).
+4. Create a Property Binder and assign your character to it.
+5. Assign the SkinnedMeshRenderer if required.
+6. Assign your GameObject in the AfterimageController component.
+7. You can use/copy demo materials and modify its properties to customize the look of them. 
+8. Do not hesitate to reach out to me via email with questions/feedback.
+
+Make sure you have Visual Effect Graph installed in your project
+
+
+In the demo scene, click Play, then hold R to trigger the effect. Use the up and down arrows
+to cycle through the available effects.
+
+
+
+You can use/copy demo materials and modify its properties to customize the look of them. 
+
+Do not hesitate to reach out to me via email with questions/feedback.
+
+Thanks!
+

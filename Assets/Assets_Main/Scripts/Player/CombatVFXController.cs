@@ -14,59 +14,63 @@ public class CombatVFXController : MonoBehaviour
     public Transform handTransformI;
     private bool _useFirstBasicI = true;
 
-    [Header("Special Attack")]
-    public GameObject specialVFX;
-    public Transform specialSpawnPoint;
+    [Header("Special Attack (Fever)")]
+    [Tooltip("Drag the VFX object ALREADY in your hierarchy/player here")]
+    public GameObject feverVFXObject; 
 
     [Header("Vertical Attack")]
     public GameObject verticalVFX;
     public Transform verticalSpawnPoint;
-    
+
+    void Start()
+    {
+        // Ensure it starts off
+        if (feverVFXObject != null)
+            feverVFXObject.SetActive(false);
+    }
+
+    void Update()
+    {
+        HandleFeverVFX();
+    }
+
+    private void HandleFeverVFX()
+    {
+        if (feverVFXObject == null) return;
+
+        // Sync the object's active state directly with the fever boolean
+        if (feverVFXObject.activeSelf != PlayerCombo.isFeverActive)
+        {
+            feverVFXObject.SetActive(PlayerCombo.isFeverActive);
+        }
+    }
+
     public void PlayBasicAttack()
     {
-        GameObject effectToSpawn = _useFirstBasic ? basicVFX_1 : basicVFX_2;
-        if (effectToSpawn != null)
-        {
-            Instantiate(effectToSpawn, handTransform.position, handTransform.rotation);
-        }
-        else 
-        {
-            Debug.LogError("The VFX prefab slot is EMPTY in the inspector!");
-        }
+        if (PlayerCombo.isFeverActive) return; 
 
+        SpawnVFX(_useFirstBasic ? basicVFX_1 : basicVFX_2, handTransform);
         _useFirstBasic = !_useFirstBasic;
     }
-    
+
     public void PlayBasicAttackInverse()
     {
-        GameObject effectToSpawn = _useFirstBasicI ? basicVFX_1I : basicVFX_2I;
-        
-        if (effectToSpawn != null)
-        {
-            Instantiate(effectToSpawn, handTransformI.position, handTransformI.rotation);
-        }
-        else 
-        {
-            Debug.LogError("The VFX prefab slot is EMPTY in the inspector!");
-        }
+        if (PlayerCombo.isFeverActive) return;
 
+        SpawnVFX(_useFirstBasicI ? basicVFX_1I : basicVFX_2I, handTransformI);
         _useFirstBasicI = !_useFirstBasicI;
     }
 
-
-    public void PlaySpecialAttack()
-    { 
-        if (specialVFX != null)
-        {
-            Instantiate(specialVFX, specialSpawnPoint.position, specialSpawnPoint.rotation);
-        }
-    }
-    
     public void PlayVerticalAttack()
     {
-        if (verticalVFX != null)
+        SpawnVFX(verticalVFX, verticalSpawnPoint);
+    }
+
+    private void SpawnVFX(GameObject prefab, Transform target)
+    {
+        if (prefab != null && target != null)
         {
-            Instantiate(verticalVFX, verticalSpawnPoint.position, verticalSpawnPoint.rotation);
+            Instantiate(prefab, target.position, target.rotation);
         }
     }
 }
