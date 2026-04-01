@@ -12,7 +12,11 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - TCP2_OUTLINE_CONST_SIZE
+  - TCP2_OUTLINE_TEXTURED_VERTEX
+  - TCP2_RAMP_CRISP
   - TCP2_REFLECTIONS_FRESNEL
+  - TCP2_RIM_LIGHTING
   - TCP2_RIM_LIGHTING_LIGHTMASK
   - TCP2_SHADOW_LIGHT_COLOR
   - TCP2_UV_NORMALS_FULL
@@ -148,13 +152,13 @@ Material:
     - _OcclusionChannel: 0
     - _OcclusionStrength: 1
     - _OutlineLightingType: 0
-    - _OutlineLightingTypeURP: 0
+    - _OutlineLightingTypeURP: 1
     - _OutlineMaxWidth: 1
     - _OutlineMinWidth: 1
-    - _OutlinePixelSizeType: 0
+    - _OutlinePixelSizeType: 1
     - _OutlineTextureLOD: 5
-    - _OutlineTextureType: 0
-    - _OutlineWidth: 1
+    - _OutlineTextureType: 1
+    - _OutlineWidth: 4.87
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -163,14 +167,14 @@ Material:
     - _RampOffset: 0
     - _RampScale: 1
     - _RampSmoothing: 0.1
-    - _RampThreshold: 0.75
-    - _RampType: 0
+    - _RampThreshold: 0.724
+    - _RampType: 1
     - _ReceiveShadows: 1
     - _ReceiveShadowsOff: 1
     - _ReflectionMapType: 0
     - _ReflectionSmoothness: 0.5
     - _RenderingMode: 0
-    - _RimMax: 1
+    - _RimMax: 0.76
     - _RimMin: 0.5
     - _SPECULAR_IOR: 1.5
     - _SPECULAR_ROUGHNESS: 1
@@ -198,7 +202,7 @@ Material:
     - _UseOcclusion: 0
     - _UseOutline: 1
     - _UseReflections: 0
-    - _UseRim: 0
+    - _UseRim: 1
     - _UseRimLightMask: 1
     - _UseShadowTexture: 0
     - _UseSpecular: 0
