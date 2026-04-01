@@ -31,7 +31,12 @@ public class PauseMenuManager : MonoBehaviour
     {
         isPaused = false;                             
         if (pauseMenuCanvas) pauseMenuCanvas.SetActive(false);  
-        Time.timeScale = 1f;                          
+        Time.timeScale = 1f;      
+        
+        if (HitstopManager.Instance != null)
+        {
+            HitstopManager.Instance.ClearHitstopOnResume();
+        }
     }
 
     public void Pause()

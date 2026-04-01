@@ -56,9 +56,7 @@ public class Hitbox : MonoBehaviour
                     _audioManager.PlaySound("hit"); 
                 }
             }
-
-            if (_playerController != null)
-                _playerController.TriggerHitStop(duration, scale);
+            
         }
     }
 }

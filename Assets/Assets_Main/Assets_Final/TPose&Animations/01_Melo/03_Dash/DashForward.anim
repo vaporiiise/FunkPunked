@@ -199829,8 +199829,15 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0
-    functionName: StartTrail
+  - time: 0.016666668
+    functionName: StartVFX
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.56666666
+    functionName: StopVFX
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -199843,8 +199850,8 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.9
-    functionName: StopTrail
+  - time: 0.9166667
+    functionName: OnAttackFinished
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

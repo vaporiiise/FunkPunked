@@ -87,7 +87,7 @@ public class PlayerCombo : MonoBehaviour
         if (faceCamera) faceCamera.gameObject.SetActive(true);
     
 
-        yield return new WaitForSecondsRealtime(1.5f);
+        yield return new WaitForSecondsRealtime(3f);
 
         if (faceCamera) faceCamera.gameObject.SetActive(false);
         if (feverUIWindow) feverUIWindow.SetActive(false); 

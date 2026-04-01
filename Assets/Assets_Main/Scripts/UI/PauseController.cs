@@ -5,30 +5,36 @@ public class PauseController : MonoBehaviour
     [Header("Pause Menu")]
     public GameObject pauseMenuCanvas;  
 
-    private bool isPaused = false;
+    // Static means any script can check "if (PauseController.IsPaused)"
+    public static bool IsPaused = false; 
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (!isPaused)
+            if (!IsPaused)
                 PauseGame();
             else
                 ResumeGame();
         }
     }
 
-    private void PauseGame()
+    public void PauseGame()
     {
-        isPaused = true;
+        IsPaused = true;
         if (pauseMenuCanvas) pauseMenuCanvas.SetActive(true);
+        
         Time.timeScale = 0f; 
+
+        // Makes the mouse visible so you can use the menu
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
-    private void ResumeGame()
+    public void ResumeGame()
     {
-        isPaused = false;
-        if (pauseMenuCanvas) pauseMenuCanvas.SetActive(false);
-        Time.timeScale = 1f; 
+        Time.timeScale = 1f;
+        PauseController.IsPaused = false; // Essential for the HitstopManager to work!
+        pauseMenuCanvas.SetActive(false);
     }
 }

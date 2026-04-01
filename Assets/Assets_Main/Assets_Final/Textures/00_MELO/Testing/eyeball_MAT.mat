@@ -156,9 +156,9 @@ Material:
     - _OutlineMaxWidth: 1
     - _OutlineMinWidth: 1
     - _OutlinePixelSizeType: 1
-    - _OutlineTextureLOD: 5
+    - _OutlineTextureLOD: 2
     - _OutlineTextureType: 1
-    - _OutlineWidth: 4.87
+    - _OutlineWidth: 5
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -167,15 +167,15 @@ Material:
     - _RampOffset: 0
     - _RampScale: 1
     - _RampSmoothing: 0.1
-    - _RampThreshold: 0.724
+    - _RampThreshold: 0.709
     - _RampType: 1
     - _ReceiveShadows: 1
     - _ReceiveShadowsOff: 1
     - _ReflectionMapType: 0
     - _ReflectionSmoothness: 0.5
     - _RenderingMode: 0
-    - _RimMax: 0.76
-    - _RimMin: 0.5
+    - _RimMax: 0.82
+    - _RimMin: 0.66
     - _SPECULAR_IOR: 1.5
     - _SPECULAR_ROUGHNESS: 1
     - _ShadowColorLightAtten: 1
@@ -208,7 +208,7 @@ Material:
     - _UseSpecular: 0
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
-    - _ZWrite: 0
+    - _ZWrite: 1
     m_Colors:
     - _BASE_COLOR: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}

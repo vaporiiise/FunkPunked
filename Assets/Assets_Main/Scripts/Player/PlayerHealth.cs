@@ -101,6 +101,11 @@ public class PlayerHealth : MonoBehaviour
 
         // Play visuals
         TriggerHurtEffects();
+        
+        if (HitstopManager.Instance != null)
+        {
+            HitstopManager.Instance.ExecuteHitstop(false);
+        }
 
         if (_currentHealth <= 0) 
         {
