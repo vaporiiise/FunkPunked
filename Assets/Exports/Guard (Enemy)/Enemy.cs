@@ -8,106 +8,122 @@ public class Enemy : MonoBehaviour
     private int _currentHealth = 0;
     [SerializeField] private Image healthBarFill;
 
-    [Header("Stability - Single Bar")]
+    [Header("Stability - Boss Only")]
     public float maxStability = 100f; 
     private float _currentStability = 0f;
     public float stabilityPerHit = 15f; 
-    [SerializeField] private Image stabilityBarFill; // Single bar reference
+    [SerializeField] private Image stabilityBarFill;
 
-    private BossAnimationHandler _animHandler;
-    private BossAI _brain;
+    private BossAI _bossBrain;
+    private EnemyAI _guardBrain; 
+    private Animator _animator;
+    private bool _isDead = false; 
 
     void Awake() 
     {
-        _animHandler = GetComponent<BossAnimationHandler>();
-        _brain = GetComponent<BossAI>();
+        _animator = GetComponent<Animator>();
+        _bossBrain = GetComponent<BossAI>();
+        _guardBrain = GetComponent<EnemyAI>();
         UpdateUI();
     }
 
     public void TakeHit(Transform attacker = null) 
     {
-        // 1. Basic Health Logic
-        if (_currentHealth >= maxHealth || _brain == null) return;
+        // Don't take hits if already dead
+        if (_isDead || _currentHealth >= maxHealth) return;
         
         _currentHealth++; 
         UpdateUI();
 
-        // 2. Hitstop Effect
         if (HitstopManager.Instance != null)
-        {
             HitstopManager.Instance.ExecuteHitstop(false);
-            Debug.Log("Hitstop running");
+
+        if (_bossBrain != null)
+        {
+            HandleBossStagger();
+        }
+        else if (_guardBrain != null)
+        {
+            HandleGuardHit();
         }
 
-        // 3. Stagger/Stability Logic
-        if (_brain.IsStaggered) return;
+        if (_currentHealth >= maxHealth) Die();
+    }
 
-        if (_brain.CanBeStaggered()) 
-        {
-            _currentStability += stabilityPerHit;
-        } 
-        else 
-        {
-            _currentStability = 0; 
-        }
+    private void HandleBossStagger()
+    {
+        if (_bossBrain.IsStaggered) return;
+
+        if (_bossBrain.CanBeStaggered()) _currentStability += stabilityPerHit;
+        else _currentStability = 0;
 
         if (_currentStability >= maxStability) 
         {
-            // Trigger Stagger
             _currentStability = 0; 
-            if (_animHandler) _animHandler.TriggerStaggerOnly(); 
-            _brain.EnterStagger(5.0f); 
+            _animator.SetTrigger("Stagger"); 
+            _bossBrain.EnterStagger(5.0f); 
         } 
         else 
         {
-            // Regular Hit Reaction
-            if (_animHandler) _animHandler.TriggerHit();
-            _brain.SetActionLock(true); 
-            CancelInvoke(nameof(RestoreSpeed)); 
-            Invoke(nameof(RestoreSpeed), 0.2f); 
+            _animator.SetTrigger("Hit");
+            _bossBrain.SetActionLock(true); 
+            CancelInvoke(nameof(RestoreBossSpeed)); 
+            Invoke(nameof(RestoreBossSpeed), 0.2f); 
         }
-        
         UpdateUI();
-
-        // 4. Death Check
-        if (_currentHealth >= maxHealth) Die();
-        
-        // 5. Notify AI
-        if (_brain != null) 
-        {
-            _brain.OnBossTookHit(); 
-        }
     }
-    
+
+    private void HandleGuardHit()
+    {
+        if (_animator) _animator.SetTrigger("GotHit");
+        if (_guardBrain) _guardBrain.AddForceForward(); 
+    }
+
+    private void RestoreBossSpeed() { if (_bossBrain) _bossBrain.SetActionLock(false); }
+
     public void ResetStabilityOnPlayerHit() 
     {
         _currentStability = 0f;
         UpdateUI();
     }
 
-    private void RestoreSpeed() 
-    { 
-        if (_brain && !_brain.IsStaggered) _brain.SetActionLock(false); 
-    }
-
     private void UpdateUI() 
     { 
-        // Update Health (Remaining health percentage)
-        if (healthBarFill) 
-        {
-            healthBarFill.fillAmount = (float)(maxHealth - _currentHealth) / maxHealth; 
-        }
-
-        // Update Stability (Standard 0 to 1 fill)
-        if (stabilityBarFill) 
-        {
-            stabilityBarFill.fillAmount = _currentStability / maxStability;
-        }
+        if (healthBarFill) healthBarFill.fillAmount = (float)(maxHealth - _currentHealth) / maxHealth; 
+        if (stabilityBarFill) stabilityBarFill.fillAmount = _currentStability / maxStability;
     }
 
     private void Die() 
     { 
-        if (_brain) _brain.enabled = false; 
-        gameObject.SetActive(false); 
+        if (_isDead) return;
+        _isDead = true;
+
+        if (_animator) 
+        {
+            // 1. Clear all other logic
+            _animator.ResetTrigger("Attack");
+            _animator.ResetTrigger("GotHit");
+
+            // 2. FORCE the "Die" state to play immediately (Bypasses all transitions)
+            // Ensure "Die" matches the name of the state in your Animator exactly
+            _animator.Play("Die", 0, 0f); 
+        }
+
+        // 3. Kill the Brain so it stops calling Attack()
+        if (_guardBrain) _guardBrain.enabled = false;
+
+        // 4. Freeze Physics
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.linearVelocity = Vector3.zero;
+        }
+
+        // 5. Turn off Collision
+        Collider col = GetComponent<Collider>();
+        if (col) col.enabled = false;
+
+        Destroy(gameObject, 3f); 
     }
 }

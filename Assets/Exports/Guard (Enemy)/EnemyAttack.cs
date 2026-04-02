@@ -5,7 +5,7 @@ public class EnemyAttack : MonoBehaviour
     public LayerMask playerLayer;
     public GameObject attackHitbox;
     public float knockbackForce = 15f;
-    public Renderer bossRenderer; 
+    public Renderer enemyRenderer; 
 
     [HideInInspector] public bool isAttacking = false; 
     private bool _isParryable = false;
@@ -18,11 +18,11 @@ public class EnemyAttack : MonoBehaviour
         _animator = GetComponentInParent<Animator>();
         _rb = GetComponentInParent<Rigidbody>();
         if (attackHitbox) attackHitbox.SetActive(false);
-        if (bossRenderer) _originalColor = bossRenderer.material.color;
+        if (enemyRenderer) _originalColor = enemyRenderer.material.color;
     }
 
     void Update() { 
-        if (bossRenderer) bossRenderer.material.color = _isParryable ? Color.yellow : _originalColor; 
+        if (enemyRenderer) enemyRenderer.material.color = _isParryable ? Color.yellow : _originalColor; 
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -30,11 +30,9 @@ public class EnemyAttack : MonoBehaviour
 
         if (((1 << other.gameObject.layer) & playerLayer) != 0) {
             PlayerHealth health = other.GetComponentInParent<PlayerHealth>();
-            
             Enemy enemyManager = GetComponentInParent<Enemy>();
-            if (enemyManager != null) {
-                enemyManager.ResetStabilityOnPlayerHit(); 
-            }
+            
+            if (enemyManager != null) enemyManager.ResetStabilityOnPlayerHit(); 
 
             if (health != null && !health.IsInvulnerable) {
                 _hasDealtDamageThisSwing = true;
@@ -43,58 +41,37 @@ public class EnemyAttack : MonoBehaviour
         }
     }
 
-    public void ForceResetAttack() {
-        isAttacking = false; 
-        _isParryable = false; 
-        _hasDealtDamageThisSwing = false;
-        if (attackHitbox) attackHitbox.SetActive(false);
-        if (bossRenderer) bossRenderer.material.color = _originalColor;
-    }
-
     public void OnGetParried() {
         ForceResetAttack(); 
 
-        GlobalCollisionHandler collisionHandler = Object.FindFirstObjectByType<GlobalCollisionHandler>();
-        if (collisionHandler != null) {
-            collisionHandler.EnablePlayerEnemyCollision();
-        }
-
         if (_animator) {
-
             _animator.ResetTrigger("Attack"); 
             _animator.SetTrigger("GotHit"); 
         }
 
         if (_rb != null) {
             _rb.isKinematic = false;
-            _rb.AddForce(-transform.forward * knockbackForce, ForceMode.Impulse);
-        
-            Invoke(nameof(ReturnFromParryStun), 0.5f);
+            // Guards fly back further than the Boss
+            float force = (GetComponentInParent<EnemyAI>() != null) ? 20f : knockbackForce;
+            _rb.AddForce(-transform.forward * force, ForceMode.Impulse);
         }
-    }
 
-    private void ReturnFromParryStun() {
-        if (_rb) _rb.isKinematic = true;
-
+        // Notify the relevant Brain
         BossAI boss = GetComponentInParent<BossAI>();
-        if (boss != null) {
-            boss.ResumeAI();
-        }
+        if (boss != null) boss.ResumeAI(); 
+
+        EnemyAI guard = GetComponentInParent<EnemyAI>();
+        if (guard != null) guard.AddForceForward(); 
     }
 
-    private void ReturnToNormalState() {
-        if (_rb) _rb.isKinematic = true;
-
-        if (_animator) {
-            _animator.Play("Base Layer.Locomotion", 0, 0.25f); 
-        }
-
-        BossAI enemyManager = GetComponentInParent<BossAI>();
-        if (enemyManager != null) {
-            enemyManager.ResumeAI(); 
-        }
+    public void ForceResetAttack() {
+        isAttacking = false; 
+        _isParryable = false; 
+        _hasDealtDamageThisSwing = false;
+        if (attackHitbox) attackHitbox.SetActive(false);
+        if (enemyRenderer) enemyRenderer.material.color = _originalColor;
     }
-    
+
     public void AE_StartAttack() { 
         isAttacking = true; 
         _isParryable = true; 

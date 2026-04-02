@@ -8,12 +8,10 @@ public class PlayerController : MonoBehaviour
     [Header("Movement & Physics")]
     public float moveSpeed = 6f;
     public float gravity = -20f; 
-    public float drag = 5f;      
     public Transform cameraTransform;
     private CharacterController controller;
     private Vector2 moveInput;
     private Vector3 verticalVelocity; 
-    private Vector3 impact; 
 
     [Header("Soft-Lock Settings")]
     public float lockOnRange = 10f;
@@ -35,7 +33,7 @@ public class PlayerController : MonoBehaviour
     private bool canMoveCancel; 
     private float lastAttackEndTime; 
     private bool _isParryLocked;
-    private float currentDamageMultiplier = 1f;
+    private float currentDamageMultiplier = 1f; // RESTORED
 
     [Header("Combat Assets")]
     public GameObject attackHitbox;
@@ -45,7 +43,7 @@ public class PlayerController : MonoBehaviour
     private CinematicParry parryScript;
     private PlayerCombo comboScript;
     private PlayerControls controls;
-    private bool _isActionLocked;
+    private bool _isActionLocked; // RESTORED
 
     private void Awake()
     {
@@ -66,8 +64,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        HandleGravity();
-        HandleImpactDecay(); 
+        ApplyGravity();
         HandleMovement();
         CheckComboExpiration();
     }
@@ -109,7 +106,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnAttackInput()
     {
-        if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
+        if (animationHandler.IsFlinching() || _isParryLocked || isDashing || _isActionLocked) return;
         if (isAttacking && !canMoveCancel) return;
 
         FaceTarget();
@@ -125,9 +122,8 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement() 
     {
-        if (animationHandler.IsFlinching() || _isParryLocked || isDashing) return;
+        if (animationHandler.IsFlinching() || _isParryLocked || isDashing || _isActionLocked) return;
 
-        // --- NEW LOGIC: Walk out of attack without killing combo ---
         if (canMoveCancel && moveInput.sqrMagnitude > 0.01f) 
         {
             CancelAnimationOnly(); 
@@ -162,16 +158,117 @@ public class PlayerController : MonoBehaviour
         lastAttackEndTime = Time.time;
     }
 
+    // --- NEW LUNGE PHYSICS ---
+    public void AddForceForward() => StartCoroutine(LungeRoutine(transform.forward, 15f, 0.12f));
+    public void AddForceForwardHard() => StartCoroutine(LungeRoutine(transform.forward, 22f, 0.15f));
+    public void AddForceForwardBounce() => StartCoroutine(LungeRoutine(transform.forward + (Vector3.up * 0.5f), 12f, 0.15f));
+    public void AddForceBackwardsLight() => StartCoroutine(LungeRoutine(-transform.forward, 8f, 0.1f));
+    public void AddForceBackwards() => StartCoroutine(LungeRoutine(-transform.forward, 12f, 0.12f));
+    
+
+    private IEnumerator LungeRoutine(Vector3 direction, float speed, float duration)
+    {
+        float elapsed = 0;
+        while (elapsed < duration)
+        {
+            controller.Move(direction.normalized * speed * Time.deltaTime);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    private void ApplyGravity() 
+    { 
+        if (controller.isGrounded && verticalVelocity.y < 0) verticalVelocity.y = -2f; 
+        verticalVelocity.y += gravity * Time.deltaTime; 
+        controller.Move(verticalVelocity * Time.deltaTime); 
+    }
+
+    private void StartDash() { if (isDashing || Time.time < lastDashTime + dashCooldown || _isParryLocked || animationHandler.IsFlinching() || _isActionLocked) return; StartCoroutine(DashRoutine()); }
+    private IEnumerator DashRoutine() 
+    { 
+        isDashing = true; 
+        lastDashTime = Time.time; 
+        Vector3 dDir = (moveInput.sqrMagnitude > 0.01f) ? (Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * new Vector3(moveInput.x, 0, moveInput.y)).normalized : transform.forward; 
+        animationHandler.PlayDashForward(); 
+        float t = 0; 
+        while (t < dashDuration) 
+        { 
+            controller.Move(dDir * dashSpeed * Time.deltaTime); 
+            t += Time.deltaTime; 
+            yield return null; 
+        } 
+        isDashing = false; 
+    }
+
+    // --- RESTORED METHODS FOR PLAYERCOMBO & OTHER SCRIPTS ---
+    public void SetDamageMultiplier(float m) => currentDamageMultiplier = m;
+
+    public void SetActionLock(bool locked) 
+    {
+        _isActionLocked = locked;
+        if (locked) {
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb) rb.linearVelocity = Vector3.zero; 
+        }
+    }
+
+    private bool _isQuickTurning = false;
+    public void QuickTurn180()
+    {
+        if (!_isQuickTurning) StartCoroutine(DampedRotationRoutine(0.15f)); 
+    }
+
+    private IEnumerator DampedRotationRoutine(float duration)
+    {
+        _isQuickTurning = true;
+        Quaternion startRot = transform.rotation;
+        Quaternion targetRot = transform.rotation * Quaternion.Euler(0, 180, 0);
+        float elapsed = 0;
+        while (elapsed < duration)
+        {
+            transform.rotation = Quaternion.Slerp(startRot, targetRot, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.rotation = targetRot; 
+        _isQuickTurning = false;
+    }
+
+    // --- UTILITY & ANIMATION HANDLERS ---
+    public void EnableHitbox() { if(attackHitbox) attackHitbox.SetActive(true); if(attackTrail) attackTrail.emitting = true; }
+    public void DisableHitbox() { if(attackHitbox) attackHitbox.SetActive(false); if(attackTrail) attackTrail.emitting = false; }
     public void OnAnimationReset() => ResetToLocomotion();
     public void OpenComboWindow() => animationHandler.SetComboWindow(true);
     public void CloseComboWindow() => animationHandler.SetComboWindow(false);
 
-    public void EnableHitbox() { if(attackHitbox) attackHitbox.SetActive(true); if(attackTrail) attackTrail.emitting = true; }
-    public void DisableHitbox() { if(attackHitbox) attackHitbox.SetActive(false); if(attackTrail) attackTrail.emitting = false; }
-
-    public void StartParryLock() { _isParryLocked = true; isAttacking = false; impact = Vector3.zero; }
+    public void StartParryLock() 
+    { 
+        _isParryLocked = true; 
+        isAttacking = false; 
+        StopAllCoroutines(); 
+        _isQuickTurning = false;
+    }
+    
     public void EndParryLock() => _isParryLocked = false;
-    public void SetDamageMultiplier(float m) => currentDamageMultiplier = m;
+
+    public void ResetToLocomotion() 
+    { 
+        isAttacking = false; 
+        _isParryLocked = false; 
+        canMoveCancel = false;
+        comboStep = 0;
+        DisableHitbox(); 
+        animationHandler.PlayMove(); 
+    }
+
+    public void CancelAnimationOnly()
+    {
+        isAttacking = false;
+        canMoveCancel = false;
+        DisableHitbox();
+        animationHandler.PlayMove(); 
+    }
 
     public void ForceCancelAttack()
     {
@@ -184,72 +281,4 @@ public class PlayerController : MonoBehaviour
         if (comboScript != null) comboScript.ResetFeverOnHit();
         if (parryScript != null) parryScript.AbortParry();
     }
-
-    public void ResetToLocomotion() { 
-        isAttacking = false; 
-        _isParryLocked = false; 
-        canMoveCancel = false;
-        comboStep = 0;
-        DisableHitbox(); 
-        animationHandler.PlayMove(); 
-    }
-    
-    private bool _isQuickTurning = false;
-
-    public void QuickTurn180()
-    {
-        if (!_isQuickTurning) 
-        {
-            StartCoroutine(DampedRotationRoutine(0.15f)); 
-        }
-    }
-    
-    public void SetActionLock(bool locked) {
-        _isActionLocked = locked;
-        if (locked) {
-            Rigidbody rb = GetComponent<Rigidbody>();
-            if (rb) rb.linearVelocity = Vector3.zero; 
-        }
-    }
-
-    private IEnumerator DampedRotationRoutine(float duration)
-    {
-        _isQuickTurning = true;
-        Quaternion startRot = transform.rotation;
-        Quaternion targetRot = transform.rotation * Quaternion.Euler(0, 180, 0);
-    
-        float elapsed = 0;
-        while (elapsed < duration)
-        {
-            transform.rotation = Quaternion.Slerp(startRot, targetRot, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.rotation = targetRot; 
-        _isQuickTurning = false;
-    }
-    
-    public void CancelAnimationOnly()
-    {
-        isAttacking = false;
-        canMoveCancel = false;
-        DisableHitbox();
-    
-        // Switch animator to walking, but DON'T touch comboStep or lastAttackEndTime
-        animationHandler.PlayMove(); 
-    }
-
-    // --- PHYSICS ---
-    public void AddForceForward() => impact += transform.forward * 15f;
-    public void AddForceForwardHard() => impact += transform.forward * 20f;
-    public void AddForceForwardBounce() => impact += (transform.forward * 10f) + (transform.up * 10f);
-    public void AddForceBackwardsLight() => impact += transform.forward * -10f;
-    public void AddForceBackwards() => impact += -transform.forward * 10f;
-
-    private void HandleGravity() { if (controller.isGrounded && verticalVelocity.y < 0) verticalVelocity.y = -2f; verticalVelocity.y += gravity * Time.deltaTime; controller.Move(verticalVelocity * Time.deltaTime); }
-    private void HandleImpactDecay() { if (impact.magnitude > 0.1f) controller.Move(impact * Time.deltaTime); impact = Vector3.Lerp(impact, Vector3.zero, drag * Time.deltaTime); }
-    
-    private void StartDash() { if (isDashing || Time.time < lastDashTime + dashCooldown || _isParryLocked || animationHandler.IsFlinching()) return; StartCoroutine(DashRoutine()); }
-    private IEnumerator DashRoutine() { isDashing = true; lastDashTime = Time.time; Vector3 dDir = (moveInput.sqrMagnitude > 0.01f) ? (Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * new Vector3(moveInput.x, 0, moveInput.y)).normalized : transform.forward; animationHandler.PlayDashForward(); float t = 0; while (t < dashDuration) { controller.Move(dDir * dashSpeed * Time.deltaTime); t += Time.deltaTime; yield return null; } isDashing = false; }
 }
