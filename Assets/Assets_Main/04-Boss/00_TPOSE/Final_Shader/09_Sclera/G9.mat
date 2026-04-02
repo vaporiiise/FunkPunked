@@ -26,8 +26,8 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ALPHAPREMULTIPLY_ON
+  - _METALLICSPECGLOSSMAP
   - _NORMALMAP
-  - _PARALLAXMAP
   - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -37,15 +37,19 @@ Material:
   stringTagMap:
     RenderType: Transparent
   disabledShaderPasses:
-  - MOTIONVECTORS
   - DepthOnly
   - SHADOWCASTER
+  - MOTIONVECTORS
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BaseColour_Opacity:
+        m_Texture: {fileID: 2800000, guid: f932fb0d82e9bd04d80d6644d18f9335, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: fe2b74a40b8451745bf4b53f78e2366a, type: 3}
+        m_Texture: {fileID: 2800000, guid: f932fb0d82e9bd04d80d6644d18f9335, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -76,15 +80,27 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Emmissive:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainMaskMap:
-        m_Texture: {fileID: 2800000, guid: 1003f0114184548468a0774e8ca2392f, type: 3}
+        m_Texture: {fileID: 2800000, guid: 12ccbe89d4bab0d41b1683d711cb315b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: fe2b74a40b8451745bf4b53f78e2366a, type: 3}
+        m_Texture: {fileID: 2800000, guid: f932fb0d82e9bd04d80d6644d18f9335, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
+        m_Texture: {fileID: 2800000, guid: 12ccbe89d4bab0d41b1683d711cb315b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Metallic_Rough_AO:
+        m_Texture: {fileID: 2800000, guid: 1003f0114184548468a0774e8ca2392f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -135,7 +151,8 @@ Material:
     - _BaseColorAffectClearCoat: 0.95
     - _Blend: 2
     - _BlendModePreserveSpecular: 1
-    - _Brightness: 1
+    - _BlendOp: 0
+    - _Brightness: 1.188
     - _BumpScale: 1
     - _ClearCoat: 0.25
     - _ClearCoatBias: 0.025
@@ -178,7 +195,8 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Saturation: 0
+    - _SampleGI: 0
+    - _Saturation: 0.166
     - _ShadowColorEnable: 1
     - _ShadowFalloff: 1
     - _ShadowOffset: -0.05
@@ -205,10 +223,11 @@ Material:
     - _XRMotionVectorsPass: 1
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0.54088044, g: 0.54088044, b: 0.54088044, a: 1}
+    - _BaseColor: {r: 0.52201253, g: 0.52201253, b: 0.52201253, a: 1}
     - _ClearCoatColor: {r: 0.4156863, g: 0.4156863, b: 0.4156863, a: 1}
-    - _Color: {r: 0.54088044, g: 0.54088044, b: 0.54088044, a: 1}
+    - _Color: {r: 0.52201253, g: 0.52201253, b: 0.52201253, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissiveColor: {r: 0.45911938, g: 0.45911938, b: 0.45911938, a: 1}
     - _IndirectSpecColor: {r: 0.4745098, g: 0.4745098, b: 0.4745098, a: 1}
     - _ShadowColor: {r: 0.16981131, g: 0.064613715, b: 0.064613715, a: 0.4901961}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
