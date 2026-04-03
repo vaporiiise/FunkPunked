@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
-using Unity.Cinemachine;
+using Unity.Cinemachine; 
 
 public class CinematicParry : MonoBehaviour
 {
@@ -13,7 +13,6 @@ public class CinematicParry : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private InputActionProperty parryAction;
     public float parryWindow = 0.35f; 
-    public CinemachineCamera parryCamera;
 
     [Header("Slow-Mo Settings")]
     public float slowMoTimeScale = 0.05f;
@@ -23,20 +22,21 @@ public class CinematicParry : MonoBehaviour
     [SerializeField] private GameObject parryVFXPrefab; 
     [SerializeField] private float vfxDestroyTime = 2.0f;
 
-    [Header("Debug")]
-    public bool showDebug = true;
-    public Renderer debugRenderer; 
-    private Color originalColor;
+    [Header("Camera Zoom Settings")]
+    public CinemachineCamera mainVcam; // Drag your main Vcam here
+    public float zoomAmount = 4f;      // Smaller number = closer zoom
+    private float _originalZoom;
 
     private AnimationAudioManager _audioManager;
     private Animator animator;
     private PlayerController playerController;
     private PlayerHealth playerHealth;
     private ParryResourceManager _resource;
+    private CinemachineImpulseSource _impulseSource; 
     
     private float _parryTimer = 0f;
     public bool _inCinematic = false;
-    private Animator _lastEnemyAnimator; // Track the enemy to reset them properly
+    private Animator _lastEnemyAnimator; 
 
     public bool IsParrying => (_parryTimer > 0f || _inCinematic);
 
@@ -46,13 +46,10 @@ public class CinematicParry : MonoBehaviour
         playerHealth = GetComponent<PlayerHealth>();
         _resource = GetComponent<ParryResourceManager>();
         _audioManager = GetComponent<AnimationAudioManager>();
+        _impulseSource = GetComponent<CinemachineImpulseSource>();
         
-        if (debugRenderer) originalColor = debugRenderer.material.color;
-
-        if (parryCamera) {
-            parryCamera.Priority = 0; 
-            parryCamera.gameObject.SetActive(true);
-        }
+        if (mainVcam) _originalZoom = mainVcam.Lens.OrthographicSize;
+        CinemachineImpulseManager.Instance.IgnoreTimeScale = true;
     }
 
     void OnEnable() {
@@ -84,13 +81,11 @@ public class CinematicParry : MonoBehaviour
         while (_parryTimer > 0) {
             CheckForParryCollision();
             _parryTimer -= Time.deltaTime;
-            if (showDebug && debugRenderer) debugRenderer.material.color = Color.green;
             yield return null;
         }
 
         _parryTimer = 0; 
         if (!_inCinematic) {
-            if (debugRenderer) debugRenderer.material.color = originalColor;
             if (playerController) playerController.EndParryLock();
         }
     }
@@ -114,37 +109,31 @@ public class CinematicParry : MonoBehaviour
     private void SpawnParryVFX(Vector3 position) {
         if (parryVFXPrefab == null) return;
         GameObject vfx = Instantiate(parryVFXPrefab, position, Quaternion.identity);
-        var ps = vfx.GetComponent<ParticleSystem>();
-        if (ps != null) {
-            var main = ps.main;
-            main.useUnscaledTime = true;
-        }
         Destroy(vfx, vfxDestroyTime);
     }
 
     public void TriggerSuccessfulParry(Animator enemyAnimator, Vector3 impactPoint) {
         _parryTimer = 0;
         if (_audioManager != null) _audioManager.PlaySound("parry");
-        
         if (playerHealth != null) playerHealth.RestoreHealth(20f);
 
-        var impulse = GetComponent<CinemachineImpulseSource>();
-        if (impulse) impulse.GenerateImpulseAt(impactPoint, Vector3.one * 0.3f); 
+        // --- THE SHAKE ---
+        if (_impulseSource != null) {
+            _impulseSource.GenerateImpulseAt(impactPoint, Vector3.one * 1.2f); // Beefed up shake
+        }
 
         StopAllCoroutines(); 
         StartCoroutine(ExecuteSequence(enemyAnimator));
     }
 
     public void AbortParry() {
-        StopAllCoroutines();
         _parryTimer = 0;
         _inCinematic = false;
-
         ResetTimeScaleSafely();
 
-        if (parryCamera) parryCamera.Priority = 0; 
-        
-        // CRITICAL FIX: Reset BOTH animators to Normal so they can be frozen by Hitstop
+        // --- RESET CAMERA ZOOM ---
+        if (mainVcam) mainVcam.Lens.OrthographicSize = _originalZoom;
+
         if (animator) animator.updateMode = AnimatorUpdateMode.Normal;
         if (_lastEnemyAnimator) {
             _lastEnemyAnimator.updateMode = AnimatorUpdateMode.Normal;
@@ -152,7 +141,6 @@ public class CinematicParry : MonoBehaviour
         }
 
         if (playerHealth) playerHealth.IsInvulnerable = false;
-        if (debugRenderer) debugRenderer.material.color = originalColor;
         if (playerController) playerController.EndParryLock();
     }
 
@@ -160,26 +148,23 @@ public class CinematicParry : MonoBehaviour
         _inCinematic = true;
         _lastEnemyAnimator = enemyAnimator; 
 
-        // --- THE BOSS JUSTICE FIX ---
+        // 1. Force Boss Stagger
         BossAI boss = enemyAnimator.GetComponentInParent<BossAI>();
-        if (boss != null) 
-        {
-            // Force him to flinch and stay idle for 2 seconds
-            boss.ForceParryStagger(2.0f); 
-        }
+        if (boss != null) boss.ForceParryStagger(2.0f);
 
-        // 1. Impact Freeze
+        // 2. CAMERA ZOOM-IN
+        if (mainVcam) mainVcam.Lens.OrthographicSize = zoomAmount;
+
+        // 3. Impact Freeze
         Time.timeScale = 0f; 
         yield return new WaitForSecondsRealtime(0.15f); 
 
-        // 2. Unlock Melo (Player Controller)
-        if (playerController) 
-        {
+        // 4. Early Unlock for Melo
+        if (playerController) {
             playerController.EndParryLock();
             playerController.SetActionLock(false);
         }
     
-        // Set Melo to Unscaled so she moves at 100% speed while world is slow
         if (animator) animator.updateMode = AnimatorUpdateMode.UnscaledTime;
     
         Time.timeScale = slowMoTimeScale; 
@@ -191,12 +176,5 @@ public class CinematicParry : MonoBehaviour
     private void ResetTimeScaleSafely() {
         if (HitstopManager.Instance != null && HitstopManager.Instance.IsProcessing) return;
         Time.timeScale = 1f;
-    }
-
-    private void OnDrawGizmos() {
-        if (detectionPoint == null) return;
-        Gizmos.color = _parryTimer > 0 ? Color.red : Color.yellow;
-        Gizmos.matrix = Matrix4x4.TRS(detectionPoint.position, detectionPoint.rotation, Vector3.one);
-        Gizmos.DrawWireCube(Vector3.zero, boxSize);
     }
 }

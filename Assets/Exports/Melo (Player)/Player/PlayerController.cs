@@ -67,6 +67,8 @@ public class PlayerController : MonoBehaviour
         ApplyGravity();
         HandleMovement();
         CheckComboExpiration();
+    
+        // (Soft-Lock block has been removed from here)
     }
 
     private void CheckComboExpiration()
@@ -122,6 +124,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement() 
     {
+        // If we are in SoftLock and moving, EndHurtLock() is called in Update
         if (animationHandler.IsFlinching() || _isParryLocked || isDashing || _isActionLocked) return;
 
         if (canMoveCancel && moveInput.sqrMagnitude > 0.01f) 
@@ -135,11 +138,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (canMoveCancel && moveInput.sqrMagnitude > 0.1f && !isAttacking && comboStep == 0) 
-        {
-            ResetToLocomotion();
-        }
-
         Vector3 move = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * new Vector3(moveInput.x, 0, moveInput.y);
         if (move.sqrMagnitude > 0.01f) 
         {
@@ -149,6 +147,8 @@ public class PlayerController : MonoBehaviour
     
         animationHandler.UpdateMovement(moveInput.magnitude);
     }
+    
+    
 
     public void OnAttackFinished() 
     {
@@ -244,12 +244,19 @@ public class PlayerController : MonoBehaviour
 
     public void StartParryLock() 
     { 
-        _isParryLocked = true; 
+        // Force reset attack variables so movement isn't blocked
         isAttacking = false; 
+        canMoveCancel = true; 
+        
+        _isParryLocked = true; 
         StopAllCoroutines(); 
         _isQuickTurning = false;
+        DisableHitbox();
     }
     
+    public bool _isSoftLock = false; 
+
+    public void EnableSoftLock() => _isSoftLock = true;
     public void EndParryLock() => _isParryLocked = false;
 
     public void ResetToLocomotion() 
@@ -280,5 +287,25 @@ public class PlayerController : MonoBehaviour
         DisableHitbox();
         if (comboScript != null) comboScript.ResetFeverOnHit();
         if (parryScript != null) parryScript.AbortParry();
+    }
+    
+    public void StartHurtLock() 
+    { 
+        _isActionLocked = true; 
+        _isSoftLock = false; 
+    }
+
+    public void EndHurtLock() 
+    { 
+        // Reset all combat and movement locks
+        _isActionLocked = false; 
+        isAttacking = false;   // Ensure "Zombie" attack is dead
+        canMoveCancel = false; // Reset the cancel flag
+    
+        // Force the animator to blend back to walking/idle
+        if (animationHandler != null) 
+        {
+            animationHandler.PlayMove(); 
+        }
     }
 }

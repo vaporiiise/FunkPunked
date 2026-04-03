@@ -175,9 +175,19 @@ public class PlayerHealth : MonoBehaviour
     {
         _isFlinching = true;
         IsInvulnerable = true;
-        yield return new WaitForSeconds(0.6f); 
-        IsInvulnerable = false;
+
+        // 1. HARD LOCK: The only time Melo is actually stuck
+        yield return new WaitForSeconds(0.15f); 
+
+        // 2. THE RESET: Force Melo back to her Locomotion state immediately
+        if (_playerController != null) 
+        {
+            _playerController.EndHurtLock(); 
+        }
+
+        // 3. CLEANUP
         _isFlinching = false;
+        IsInvulnerable = false;
     }
 
     private void UpdateUI() 
