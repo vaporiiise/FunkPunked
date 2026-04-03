@@ -158,22 +158,31 @@ public class CinematicParry : MonoBehaviour
 
     IEnumerator ExecuteSequence(Animator enemyAnimator) {
         _inCinematic = true;
-        _lastEnemyAnimator = enemyAnimator; // Store reference to reset later
+        _lastEnemyAnimator = enemyAnimator; 
 
-        EnemyAttack enemyScript = enemyAnimator.GetComponentInChildren<EnemyAttack>();
-        if (enemyScript != null) enemyScript.OnGetParried(); 
+        // --- THE BOSS JUSTICE FIX ---
+        BossAI boss = enemyAnimator.GetComponentInParent<BossAI>();
+        if (boss != null) 
+        {
+            // Force him to flinch and stay idle for 2 seconds
+            boss.ForceParryStagger(2.0f); 
+        }
 
-        if (playerHealth) playerHealth.IsInvulnerable = true;
-
-        // Start with a hard freeze
+        // 1. Impact Freeze
         Time.timeScale = 0f; 
         yield return new WaitForSecondsRealtime(0.15f); 
 
-        // Switch to Unscaled for the cinematic cinematic motion
-        if (animator) animator.updateMode = AnimatorUpdateMode.UnscaledTime;
-        if (enemyAnimator) enemyAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+        // 2. Unlock Melo (Player Controller)
+        if (playerController) 
+        {
+            playerController.EndParryLock();
+            playerController.SetActionLock(false);
+        }
     
-        Time.timeScale = slowMoTimeScale;
+        // Set Melo to Unscaled so she moves at 100% speed while world is slow
+        if (animator) animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+    
+        Time.timeScale = slowMoTimeScale; 
         yield return new WaitForSecondsRealtime(slowMoDuration);
 
         AbortParry(); 

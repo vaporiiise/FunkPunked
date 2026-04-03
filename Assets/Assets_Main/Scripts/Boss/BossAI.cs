@@ -271,6 +271,16 @@ public class BossAI : MonoBehaviour
     public void OnBossTookHit() {
         if (_currentState == BossState.Staggered || _isActionLocked || _isJumping) return;
 
+        // --- 1/3 CHANCE TO FLINCH & IDLE ---
+        // Random.Range(0, 3) returns 0, 1, or 2. 
+        if (Random.Range(0, 3) == 0) 
+        {
+            // Trigger the same 2-second lock as the parry
+            ForceParryStagger(2.0f); 
+            return; // Skip the rest so he doesn't jump away while idling
+        }
+
+        // --- NORMAL HIT LOGIC ---
         _currentHitCount++;
 
         if (_currentHitCount >= _targetHitCount) {
@@ -365,6 +375,46 @@ public class BossAI : MonoBehaviour
         if (_animHandler != null)
         {
             _animHandler.ResetMovement();
+        }
+    }
+    
+    public void ForceParryStagger(float duration)
+    {
+        // 1. Reset all combat flags
+        _isActionLocked = true;
+        _isTracking = false;
+        _currentState = BossState.Staggered;
+        _currentHitCount = 0; // Reset his jump-away counter
+
+        // 2. Kill current attacks/physics
+        if (_enemyAttack != null) _enemyAttack.ForceResetAttack();
+        StopAllCoroutines();
+        ReturnRB();
+
+        // 3. Force the Animation
+        if (_animHandler != null && _animHandler._animator != null)
+        {
+            // "GotHit" must match the trigger or state name in your Animator
+            _animHandler._animator.Play("GotHit", 0, 0f); 
+        }
+
+        // 4. Start the 2-second Idle timer
+        StartCoroutine(ParryIdleRoutine(duration));
+    }
+
+    private IEnumerator ParryIdleRoutine(float duration)
+    {
+        yield return new WaitForSecondsRealtime(duration);
+    
+        // Resume AI logic
+        _isActionLocked = false;
+        _isTracking = true;
+        _currentState = BossState.Idle;
+        _cooldownTimer = 0.5f;
+
+        if (_animHandler != null)
+        {
+            _animHandler.EndStagger(); // Returns him to Locomotion/Idle
         }
     }
     

@@ -65,6 +65,9 @@ public class Enemy : MonoBehaviour
         } 
         else 
         {
+            // --- TRIGGER THE RANDOM CHANCE LOGIC ---
+            _bossBrain.OnBossTookHit(); 
+        
             _animator.SetTrigger("Hit");
             _bossBrain.SetActionLock(true); 
             CancelInvoke(nameof(RestoreBossSpeed)); 
