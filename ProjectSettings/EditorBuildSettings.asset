@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
+    path: Assets/Assets_Main/Scenes/Main_Game_Boss_2.unity
+    guid: 08102476db013f943a41e62eae2cdaab
+  - enabled: 0
     path: Assets/Assets_Main/Scenes/Movement_Test.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 0
@@ -15,8 +18,8 @@ EditorBuildSettings:
     path: Assets/Assets_Main/Scenes/Model_Test_03.unity
     guid: fb7e22b5f53d2a242a9b678f4c0a092c
   - enabled: 0
-    path: Assets/Assets_Main/Scenes/UIUX/MainMenu.unity
-    guid: 3dba870ea69caf947bf219353c9863c4
+    path: Assets/Assets_Main/Scenes/Boss_Fight_Test_02.unity
+    guid: b2062e1ecbb28f84cb6ca509ea17cf25
   - enabled: 0
     path: Assets/Assets_Main/Scenes/CombatTest_V2.unity
     guid: 47061ed072b0e084d93548077aa98fa0
@@ -26,21 +29,30 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Assets_Main/Scenes/Swarm_FIght_01.unity
     guid: 8c6d5023bc36cff4d8f4bf90190a644a
-  - enabled: 0
+  - enabled: 1
+    path: Assets/Assets_Main/Scenes/UIUX/MainMenu.unity
+    guid: 3dba870ea69caf947bf219353c9863c4
+  - enabled: 1
+    path: Assets/Assets_Main/Assets_Final/Cutscene Scenes/Cutscene01.unity
+    guid: 6a0234f61df44ac46a754714671f1d4f
+  - enabled: 1
     path: Assets/Assets_Main/Scenes/Main_Game_Tutorial_0.unity
     guid: 36e3fb348efb320439a84a576f5f00a3
-  - enabled: 0
+  - enabled: 1
+    path: Assets/Assets_Main/Assets_Final/Cutscene Scenes/Cutscene02.unity
+    guid: 2d39c54d96aacb34a9b7f1f5fdcdcb06
+  - enabled: 1
     path: Assets/Assets_Main/Scenes/Main_Game_Street_1.unity
     guid: 63e2c7d50d235e14ea1e2974814748aa
-  - enabled: 0
-    path: Assets/Assets_Main/Scenes/Boss_Fight_Test_02.unity
-    guid: b2062e1ecbb28f84cb6ca509ea17cf25
-  - enabled: 0
-    path: Assets/Assets_Main/Scenes/Main_Game_Boss_2.unity
-    guid: 08102476db013f943a41e62eae2cdaab
+  - enabled: 1
+    path: Assets/Assets_Main/Assets_Final/Cutscene Scenes/Cutscene03.unity
+    guid: 51135e3ceb36c97438a8df506c118d43
   - enabled: 1
     path: Assets/Main_Game_Boss_02.unity
     guid: f8a6ab9f6271a7a44a043d644ba30c03
+  - enabled: 1
+    path: Assets/Assets_Main/Assets_Final/Cutscene Scenes/Cutscene04.unity
+    guid: 3c1e887c3ef547149892d3976f92d49a
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

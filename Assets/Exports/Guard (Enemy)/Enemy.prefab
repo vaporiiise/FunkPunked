@@ -224,6 +224,8 @@ MonoBehaviour:
   attackHitbox: {fileID: 8149071397914799150}
   knockbackForce: 15
   enemyRenderer: {fileID: 0}
+  hitVFXPrefab: {fileID: 0}
+  vfxDelay: 0.05
   isAttacking: 0
 --- !u!114 &2846099694252825722
 MonoBehaviour:
@@ -239,7 +241,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimationController
   flashEffect: {fileID: 0}
   attackHitbox: {fileID: 8149071397914799150}
-  deathVFX: {fileID: 0}
+  deathVFX: {fileID: 5234300454871195321, guid: 6f8783ce4d86e7046bc62dc10ffdbbf7, type: 3}
 --- !u!95 &2575449988463893246
 Animator:
   serializedVersion: 7
@@ -276,11 +278,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
   player: {fileID: 5345847297629511139, guid: 7f34af63cbc08f04794f716917b42b3e, type: 3}
   detectionRange: 6
-  attackRange: 2
+  attackRange: 1.5
   attackCooldown: 3
   runSpeed: 3.5
   rotationSpeed: 8
-  physicsUnlockDuration: 0.2
+  stopDistanceValue: 1
+  isLeader: 0
+  targetToFollow: {fileID: 0}
+  patrolWaypoints: []
+  followDistance: 2
+  speedParam: Speed
+  walkThreshold: 0.5
+  idleThreshold: 0
   attackHitbox: {fileID: 8149071397914799150}
 --- !u!82 &7609671253972383511
 AudioSource:

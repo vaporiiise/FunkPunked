@@ -473,6 +473,7 @@ GameObject:
   - component: {fileID: 425204211}
   - component: {fileID: 425204210}
   - component: {fileID: 425204209}
+  - component: {fileID: 425204212}
   m_Layer: 5
   m_Name: QUIT
   m_TagString: Untagged
@@ -544,8 +545,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1570458635}
-        m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
+      - m_Target: {fileID: 425204212}
+        m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
         m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
@@ -594,6 +595,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 425204207}
   m_CullTransparentMesh: 1
+--- !u!114 &425204212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 425204207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24c849d4398d41142bb36be66544035f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Buttons
 --- !u!1 &505740605
 GameObject:
   m_ObjectHideFlags: 0
@@ -747,7 +760,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &592007798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760,29 +773,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1d722cf946c3c84f97b10b8de223d7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PressAnyButton
-  menuManager: {fileID: 1570458635}
-  pressAnyButtonText: {fileID: 82369888}
-  blinkSpeed: 0
-  imageToHide: {fileID: 1369604657}
-  musicEvent:
-    Guid:
-      Data1: 65259277
-      Data2: 1338029631
-      Data3: -1160503930
-      Data4: -1372585847
-    Path: event:/MainMenu
-  actionEvent:
-    Guid:
-      Data1: 1898815322
-      Data2: 1304819373
-      Data3: 1887268287
-      Data4: -311691911
-    Path: event:/GLITCH
-  videoCanvas: {fileID: 1422853474}
-  videoPlayer: {fileID: 861892496}
-  nextScreenCanvas: {fileID: 1492936391}
-  fadeInImage: {fileID: 1546900185}
-  fadeDuration: 1
 --- !u!4 &592007799
 Transform:
   m_ObjectHideFlags: 0
@@ -864,8 +854,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4284177243
+  m_fontColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -953,7 +943,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &727311657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1104,8 +1094,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4284177243
+  m_fontColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1313,8 +1303,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4284177243
+  m_fontColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1810,11 +1800,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66664fab8d1a433498271dc9807edb36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIPulseOnBeat
-  targetImage: {fileID: 1369604660}
-  pulseScale: 1.1
-  pulseDuration: 0.1
-  fadeSpeed: 8
-  pulseColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1369604660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2273,9 +2258,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b54e8a73751a560448bc5f0413c643f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuManager
-  canvases:
-  - {fileID: 1492936391}
-  - {fileID: 1492936391}
 --- !u!4 &1570458636
 Transform:
   m_ObjectHideFlags: 0
@@ -2783,11 +2765,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66664fab8d1a433498271dc9807edb36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIPulseOnBeat
-  targetImage: {fileID: 1806840199}
-  pulseScale: 1.1
-  pulseDuration: 0.1
-  fadeSpeed: 8
-  pulseColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1907378404
 GameObject:
   m_ObjectHideFlags: 0
@@ -2800,6 +2777,7 @@ GameObject:
   - component: {fileID: 1907378408}
   - component: {fileID: 1907378407}
   - component: {fileID: 1907378406}
+  - component: {fileID: 1907378409}
   m_Layer: 5
   m_Name: PLAY
   m_TagString: Untagged
@@ -2871,10 +2849,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1570458635}
-        m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
-        m_MethodName: GoToScene
-        m_Mode: 5
+      - m_Target: {fileID: 1907378409}
+        m_TargetAssemblyTypeName: Buttons, Assembly-CSharp
+        m_MethodName: PlayGame
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2921,6 +2899,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1907378404}
   m_CullTransparentMesh: 1
+--- !u!114 &1907378409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1907378404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24c849d4398d41142bb36be66544035f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Buttons
 --- !u!1 &1910199100
 GameObject:
   m_ObjectHideFlags: 0

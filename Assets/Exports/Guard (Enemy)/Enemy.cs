@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; // Required for scene loading
 
 public class Enemy : MonoBehaviour
 {
@@ -128,5 +129,51 @@ public class Enemy : MonoBehaviour
         if (col) col.enabled = false;
 
         Destroy(gameObject, 3f); 
+        HandleDeathVisuals();
+
+        // Check if this specific enemy is a Boss
+        if (_bossBrain != null)
+        {
+            SceneManager.LoadScene("Cutscene04");
+
+
+        }
+
+        Destroy(gameObject, 3.1f); 
     }
+
+    private void LoadNextLevel()
+    {
+        // This loads the next scene in your Build Settings queue
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        
+        // Ensure the next index actually exists to avoid errors
+        if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(nextSceneIndex);
+        }
+    }
+
+    private void HandleDeathVisuals()
+    {
+        if (_animator) 
+        {
+            _animator.ResetTrigger("Attack");
+            _animator.ResetTrigger("GotHit");
+            _animator.Play("Die", 0, 0f); 
+        }
+
+        if (_guardBrain) _guardBrain.enabled = false;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.linearVelocity = Vector3.zero;
+        }
+
+        Collider col = GetComponent<Collider>();
+        if (col) col.enabled = false;
+    }
+
 }
