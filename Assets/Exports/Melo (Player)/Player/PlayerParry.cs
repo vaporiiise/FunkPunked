@@ -125,6 +125,8 @@ public class CinematicParry : MonoBehaviour
     public void TriggerSuccessfulParry(Animator enemyAnimator, Vector3 impactPoint) {
         _parryTimer = 0;
         if (_audioManager != null) _audioManager.PlaySound("parry");
+        
+        if (playerHealth != null) playerHealth.RestoreHealth(20f);
 
         var impulse = GetComponent<CinemachineImpulseSource>();
         if (impulse) impulse.GenerateImpulseAt(impactPoint, Vector3.one * 0.3f); 

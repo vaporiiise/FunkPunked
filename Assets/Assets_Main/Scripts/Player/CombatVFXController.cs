@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class CombatVFXController : MonoBehaviour
 {
+    [Header("References")]
+    [Tooltip("The script that handles parrying logic")]
+    public CinematicParry parryScript;
+
     [Header("Basic Attack (Alternating)")]
     public GameObject basicVFX_1;
     public GameObject basicVFX_2;
@@ -22,9 +26,18 @@ public class CombatVFXController : MonoBehaviour
     public GameObject verticalVFX;
     public Transform verticalSpawnPoint;
 
+    void Awake()
+    {
+        // Automatically try to find the parry script if it wasn't assigned in inspector
+        if (parryScript == null)
+        {
+            parryScript = GetComponent<CinematicParry>();
+        }
+    }
+
     void Start()
     {
-        // Ensure it starts off
+        // Ensure fever VFX starts off
         if (feverVFXObject != null)
             feverVFXObject.SetActive(false);
     }
@@ -39,14 +52,21 @@ public class CombatVFXController : MonoBehaviour
         if (feverVFXObject == null) return;
 
         // Sync the object's active state directly with the fever boolean
-        if (feverVFXObject.activeSelf != PlayerCombo.isFeverActive)
+        // We also check if parrying here to hide Fever VFX during parry sequences
+        bool shouldBeActive = PlayerCombo.isFeverActive;
+        
+        if (parryScript != null && parryScript.IsParrying)
+            shouldBeActive = false;
+
+        if (feverVFXObject.activeSelf != shouldBeActive)
         {
-            feverVFXObject.SetActive(PlayerCombo.isFeverActive);
+            feverVFXObject.SetActive(shouldBeActive);
         }
     }
 
     public void PlayBasicAttack()
     {
+        // Block logic is now handled inside SpawnVFX, but we keep the Fever check for safety
         if (PlayerCombo.isFeverActive) return; 
 
         SpawnVFX(_useFirstBasic ? basicVFX_1 : basicVFX_2, handTransform);
@@ -68,6 +88,13 @@ public class CombatVFXController : MonoBehaviour
 
     private void SpawnVFX(GameObject prefab, Transform target)
     {
+        // --- THE PARRY CHECK ---
+        // If the parry script says we are parrying or in a cinematic, stop here.
+        if (parryScript != null && parryScript.IsParrying)
+        {
+            return;
+        }
+
         if (prefab != null && target != null)
         {
             Instantiate(prefab, target.position, target.rotation);

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections; // Required for Coroutines
 
 public class EnemyAttack : MonoBehaviour
 {
@@ -6,6 +7,10 @@ public class EnemyAttack : MonoBehaviour
     public GameObject attackHitbox;
     public float knockbackForce = 15f;
     public Renderer enemyRenderer; 
+
+    [Header("Hit VFX")]
+    public GameObject hitVFXPrefab; // Assign your Spark/Slash VFX here
+    public float vfxDelay = 0.05f;
 
     [HideInInspector] public bool isAttacking = false; 
     private bool _isParryable = false;
@@ -36,8 +41,32 @@ public class EnemyAttack : MonoBehaviour
 
             if (health != null && !health.IsInvulnerable) {
                 _hasDealtDamageThisSwing = true;
+                
+                // 1. Calculate the Hit Point
+                // Finds the point on Melo's collider closest to our hitbox center
+                Vector3 hitPoint = other.ClosestPoint(transform.position);
+
+                // 2. Spawn VFX with Delay
+                StartCoroutine(SpawnDelayedVFX(hitPoint));
+
+                // 3. Deal Damage
                 health.TakeDamage(15f);
             }
+        }
+    }
+
+    // Coroutine to handle the 0.05s delay
+    private IEnumerator SpawnDelayedVFX(Vector3 position)
+    {
+        yield return new WaitForSeconds(vfxDelay);
+        
+        if (hitVFXPrefab != null)
+        {
+            // Spawn the VFX at the impact point
+            GameObject vfx = Instantiate(hitVFXPrefab, position, Quaternion.identity);
+            
+            // Clean up VFX after 2 seconds (adjust as needed)
+            Destroy(vfx, 2f); 
         }
     }
 
@@ -51,12 +80,10 @@ public class EnemyAttack : MonoBehaviour
 
         if (_rb != null) {
             _rb.isKinematic = false;
-            // Guards fly back further than the Boss
             float force = (GetComponentInParent<EnemyAI>() != null) ? 20f : knockbackForce;
             _rb.AddForce(-transform.forward * force, ForceMode.Impulse);
         }
 
-        // Notify the relevant Brain
         BossAI boss = GetComponentInParent<BossAI>();
         if (boss != null) boss.ResumeAI(); 
 

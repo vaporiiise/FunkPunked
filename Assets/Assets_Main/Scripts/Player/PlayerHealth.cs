@@ -140,6 +140,18 @@ public class PlayerHealth : MonoBehaviour
 
         if (deathCanvas != null) StartCoroutine(FadeInDeathUI());
     }
+    
+    public void RestoreHealth(float amount)
+    {
+        if (_isDead) return;
+
+        _currentHealth += amount;
+        _currentHealth = Mathf.Min(_currentHealth, maxHealth); // Clamp to max health
+        UpdateUI();
+    
+        // Optional: Add a small green flash or VFX here if you want
+        Debug.Log("Health Restored: " + amount);
+    }
 
     private IEnumerator FadeInDeathUI() 
     {
