@@ -273,10 +273,10 @@ public class BossAI : MonoBehaviour
 
         // --- 1/3 CHANCE TO FLINCH & IDLE ---
         // Random.Range(0, 3) returns 0, 1, or 2. 
-        if (Random.Range(0, 3) == 0) 
+        if (Random.Range(0, 4) == 0) 
         {
             // Trigger the same 2-second lock as the parry
-            ForceParryStagger(2.0f); 
+            ForceParryStagger(1.3f); 
             return; // Skip the rest so he doesn't jump away while idling
         }
 

@@ -70,7 +70,7 @@ public class EnemyAttack : MonoBehaviour
         
             // This triggers your SpawnDelayedVFX and damage
             StartCoroutine(SpawnDelayedVFX(hitPoint));
-            health.TakeDamage(15f);
+            health.TakeDamage(25f);
         
             if (attackHitbox) attackHitbox.SetActive(false);
         }

@@ -3302,7 +3302,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 711725139}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00015934987, y: 0.99983525, z: -0.0110850325, w: 0.0143728545}
+  m_LocalRotation: {x: 0.00015935535, y: 0.99983525, z: -0.011085383, w: 0.0143728545}
   m_LocalPosition: {x: -1.0366392, y: 1.7498229, z: 17.19749}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8729,11 +8729,15 @@ PrefabInstance:
       objectReference: {fileID: 87743330}
     - target: {fileID: 2765371440585821422, guid: b04bfc175231dae4eab8ee9c0b5846a6, type: 3}
       propertyPath: postAttackRest
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2765371440585821422, guid: b04bfc175231dae4eab8ee9c0b5846a6, type: 3}
       propertyPath: closeAttackRange
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2765371440585821422, guid: b04bfc175231dae4eab8ee9c0b5846a6, type: 3}
+      propertyPath: hitsToTriggerReset
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3714727236160248525, guid: b04bfc175231dae4eab8ee9c0b5846a6, type: 3}
       propertyPath: m_LinearDamping
@@ -8865,7 +8869,7 @@ PrefabInstance:
       objectReference: {fileID: 181068580}
     - target: {fileID: 7315654341551168319, guid: b04bfc175231dae4eab8ee9c0b5846a6, type: 3}
       propertyPath: stabilityPerHit
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7315654341551168319, guid: b04bfc175231dae4eab8ee9c0b5846a6, type: 3}
       propertyPath: stabilitySlice1
@@ -10817,7 +10821,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2095006329}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00015934926, y: 0.99983525, z: -0.011084992, w: 0.014372854}
+  m_LocalRotation: {x: 0.00015935539, y: 0.99983525, z: -0.0110853845, w: 0.014372854}
   m_LocalPosition: {x: -1.0366392, y: 1.7498229, z: 17.19749}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
