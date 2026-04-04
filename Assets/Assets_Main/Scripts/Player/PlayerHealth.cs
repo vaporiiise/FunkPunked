@@ -36,6 +36,10 @@ public class PlayerHealth : MonoBehaviour
 
     private Coroutine _pendingDamageCoroutine;
     private Coroutine _hurtOverlayCoroutine;
+    
+    [Header("Advanced I-Frames")]
+    [SerializeField] private float postHitInvulnDuration = 0.4f; // Safety window after getting hit
+    private bool _isPostHitInvulnerable = false;
 
     void Start() 
     {
@@ -93,19 +97,18 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(float amount) 
     {
-        if (_isDead || _isFlinching || IsInvulnerable) return;
+        // Check ALL invulnerability states
+        if (_isDead || _isFlinching || IsInvulnerable || _isPostHitInvulnerable || _playerController.IsInvulnerable()) 
+            return;
 
         _currentHealth -= amount;
         _currentHealth = Mathf.Max(_currentHealth, 0);
         UpdateUI();
 
-        // Play visuals
         TriggerHurtEffects();
-        
+    
         if (HitstopManager.Instance != null)
-        {
             HitstopManager.Instance.ExecuteHitstop(false);
-        }
 
         if (_currentHealth <= 0) 
         {
@@ -113,6 +116,7 @@ public class PlayerHealth : MonoBehaviour
             return;
         }
 
+        // Force Melo back and cancel her current actions
         if (_playerController != null) 
         {
             _playerController.ForceCancelAttack();
@@ -121,6 +125,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (_animHandler != null) _animHandler.PlayGotHit();
 
+        // Start the combined Recovery and Post-Hit Safety window
         StartCoroutine(RecoveryRoutine());
     }
 
@@ -174,19 +179,24 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator RecoveryRoutine() 
     {
         _isFlinching = true;
+        _isPostHitInvulnerable = true; // Use this to block further damage
         IsInvulnerable = true;
 
-        // 1. HARD LOCK: The only time Melo is actually stuck
+        // 1. HARD LOCK: The time Melo is stuck in the 'Hurt' animation
         yield return new WaitForSeconds(0.15f); 
 
-        // 2. THE RESET: Force Melo back to her Locomotion state immediately
+        // 2. THE RESET: Allow player to move again
         if (_playerController != null) 
         {
             _playerController.EndHurtLock(); 
         }
-
-        // 3. CLEANUP
         _isFlinching = false;
+
+        // 3. GRACE PERIOD: Melo can move, but still can't be damaged for a split second
+        // This prevents a single hitbox that stays active too long from hitting twice.
+        yield return new WaitForSeconds(postHitInvulnDuration);
+
+        _isPostHitInvulnerable = false;
         IsInvulnerable = false;
     }
 

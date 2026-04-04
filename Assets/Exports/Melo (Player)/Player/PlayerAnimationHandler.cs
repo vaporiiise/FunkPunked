@@ -21,4 +21,7 @@ public class PlayerAnimationHandler : MonoBehaviour
     public void PlayDashForward() => animator.CrossFadeInFixedTime("DashForward", 0.05f);
     
     public void PlayDeath() => animator.CrossFadeInFixedTime("Death", 0.05f);
+    
+    public void PlayDodge() => animator.CrossFadeInFixedTime("Dodge", 0.05f);
+
 }

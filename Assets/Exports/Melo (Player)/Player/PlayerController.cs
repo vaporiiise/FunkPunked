@@ -18,13 +18,21 @@ public class PlayerController : MonoBehaviour
     public LayerMask enemyLayer;
     public float rotationSmoothing = 15f;
 
-    [Header("Dash Settings")]
+    [Header("Dash & Dodge Settings")]
+    public float dodgeDistanceMultiplier = 1.4f;
     public float dashSpeed = 20f;
     public float dashDuration = 0.2f;
     public float dashCooldown = 0.5f;
-    private bool isDashing;
-    private float lastDashTime;
-
+    public float dodgeRadius = 4f; // Radius to detect enemy for a dodge
+    private bool isDashing;        
+    private float lastDashTime;    
+    private bool isInvulnerable;   
+    
+    [Header("Perfect Dodge Settings")]
+    public float dodgeSlowMoScale = 0.2f; 
+    public float dodgeSlowMoDuration = 0.5f; // Real-world seconds
+    private bool _hasTriggeredSlowMo = false;
+    
     [Header("Combo & Combat")]
     public int maxComboStep = 6;
     public float comboResetTime = 1.0f;
@@ -33,7 +41,7 @@ public class PlayerController : MonoBehaviour
     private bool canMoveCancel; 
     private float lastAttackEndTime; 
     private bool _isParryLocked;
-    private float currentDamageMultiplier = 1f; // RESTORED
+    private float currentDamageMultiplier = 1f; 
 
     [Header("Combat Assets")]
     public GameObject attackHitbox;
@@ -43,7 +51,11 @@ public class PlayerController : MonoBehaviour
     private CinematicParry parryScript;
     private PlayerCombo comboScript;
     private PlayerControls controls;
-    private bool _isActionLocked; // RESTORED
+    private bool _isActionLocked; 
+    
+    public bool IsInvulnerable() => isInvulnerable;
+    
+    private Coroutine activeDashCoroutine; 
 
     private void Awake()
     {
@@ -60,15 +72,52 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnEnable() => controls.Player.Enable();
-    private void OnDisable() { if(controls != null) controls.Player.Disable(); }
+    private void OnDisable() 
+    { 
+        if(controls != null) controls.Player.Disable(); 
+        CleanupDashState(); // Safety reset if script is disabled during dash
+    }
 
     private void Update()
     {
         ApplyGravity();
         HandleMovement();
         CheckComboExpiration();
-    
-        // (Soft-Lock block has been removed from here)
+
+        // ADD THIS: Soft-Lock Tracking during Attack
+        if (isAttacking && !isDashing)
+        {
+            SoftLockTracking();
+        }
+    }
+
+    private void SoftLockTracking()
+    {
+        Collider[] enemies = Physics.OverlapSphere(transform.position, lockOnRange, enemyLayer);
+        Transform target = null;
+        float closestDist = Mathf.Infinity;
+
+        foreach (var enemy in enemies)
+        {
+            float dist = Vector3.Distance(transform.position, enemy.transform.position);
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                target = enemy.transform;
+            }
+        }
+
+        if (target != null)
+        {
+            Vector3 dir = (target.position - transform.position).normalized;
+            dir.y = 0;
+            if (dir != Vector3.zero)
+            {
+                // Use rotationSmoothing to make the turn feel natural but firm
+                Quaternion targetRot = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSmoothing * Time.deltaTime);
+            }
+        }
     }
 
     private void CheckComboExpiration()
@@ -101,7 +150,7 @@ public class PlayerController : MonoBehaviour
             direction.y = 0; 
             if (direction != Vector3.zero)
             {
-                transform.rotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSmoothing * Time.deltaTime);
             }
         }
     }
@@ -124,7 +173,6 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement() 
     {
-        // If we are in SoftLock and moving, EndHurtLock() is called in Update
         if (animationHandler.IsFlinching() || _isParryLocked || isDashing || _isActionLocked) return;
 
         if (canMoveCancel && moveInput.sqrMagnitude > 0.01f) 
@@ -147,8 +195,6 @@ public class PlayerController : MonoBehaviour
     
         animationHandler.UpdateMovement(moveInput.magnitude);
     }
-    
-    
 
     public void OnAttackFinished() 
     {
@@ -165,7 +211,6 @@ public class PlayerController : MonoBehaviour
     public void AddForceBackwardsLight() => StartCoroutine(LungeRoutine(-transform.forward, 8f, 0.1f));
     public void AddForceBackwards() => StartCoroutine(LungeRoutine(-transform.forward, 12f, 0.12f));
     
-
     private IEnumerator LungeRoutine(Vector3 direction, float speed, float duration)
     {
         float elapsed = 0;
@@ -184,39 +229,150 @@ public class PlayerController : MonoBehaviour
         controller.Move(verticalVelocity * Time.deltaTime); 
     }
 
-    private void StartDash() { if (isDashing || Time.time < lastDashTime + dashCooldown || _isParryLocked || animationHandler.IsFlinching() || _isActionLocked) return; StartCoroutine(DashRoutine()); }
-    private IEnumerator DashRoutine() 
+    private void StartDash() 
     { 
-        isDashing = true; 
-        lastDashTime = Time.time; 
-        Vector3 dDir = (moveInput.sqrMagnitude > 0.01f) ? (Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * new Vector3(moveInput.x, 0, moveInput.y)).normalized : transform.forward; 
-        animationHandler.PlayDashForward(); 
-        float t = 0; 
-        while (t < dashDuration) 
-        { 
-            controller.Move(dDir * dashSpeed * Time.deltaTime); 
-            t += Time.deltaTime; 
-            yield return null; 
-        } 
-        isDashing = false; 
+        // If we are already dashing, ignore
+        if (isDashing || activeDashCoroutine != null) return;
+
+        // Standard guards
+        if (Time.time < lastDashTime + dashCooldown || _isParryLocked || animationHandler.IsFlinching() || _isActionLocked) 
+            return; 
+
+        // --- THE FIX: KILL THE ATTACK STATE ---
+        // If Melo was attacking, we force it to stop so isAttacking doesn't stay 'true'
+        if (isAttacking) 
+        {
+            isAttacking = false;
+            canMoveCancel = false;
+            DisableHitbox(); // Turn off sword hits/trails immediately
+        }
+
+        activeDashCoroutine = StartCoroutine(DashRoutine()); 
     }
 
-    // --- RESTORED METHODS FOR PLAYERCOMBO & OTHER SCRIPTS ---
+    private IEnumerator DashRoutine() 
+{ 
+    isDashing = true; 
+    lastDashTime = Time.time; 
+    _hasTriggeredSlowMo = false;
+
+    // 1. DETECTION
+    Collider[] enemies = Physics.OverlapSphere(transform.position, dodgeRadius, enemyLayer);
+    bool nearEnemy = enemies.Length > 0;
+    Transform targetEnemy = nearEnemy ? enemies[0].transform : null;
+
+    // 2. PRE-CALCULATE VALUES (Fixes the Null/Missing Variable error)
+    float currentSpeed = nearEnemy ? (dashSpeed * dodgeDistanceMultiplier) : dashSpeed;
+    Vector3 dashDir;
+
+    if (moveInput.sqrMagnitude > 0.01f) {
+        dashDir = (Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * new Vector3(moveInput.x, 0, moveInput.y)).normalized;
+    } else if (nearEnemy && targetEnemy != null) {
+        dashDir = (transform.position - targetEnemy.position).normalized;
+        dashDir.y = 0;
+        if (dashDir == Vector3.zero) dashDir = -transform.forward;
+    } else {
+        dashDir = transform.forward;
+    }
+
+    // 3. IMMEDIATE ANIMATION & I-FRAMES
+    if (nearEnemy) {
+        isInvulnerable = true; 
+        animationHandler.PlayDodge(); 
+
+        if (targetEnemy != null) {
+            EnemyAttack ea = targetEnemy.GetComponentInChildren<EnemyAttack>();
+            Animator enemyAnim = targetEnemy.GetComponentInParent<Animator>();
+            // Perfect Dodge Check
+            if (ea != null && (ea.isAttacking || (enemyAnim != null && enemyAnim.GetCurrentAnimatorStateInfo(0).IsTag("Attack")))) {
+                StartCoroutine(PerfectDodgeSlowMo());
+            }
+        }
+    } else {
+        animationHandler.PlayDashForward();
+    }
+
+    // 4. THE "BURST" (Frame 0 Movement)
+    // We move immediately on this frame so the player doesn't feel a 1-frame delay
+    controller.Move(dashDir * currentSpeed * Time.unscaledDeltaTime);
+
+    yield return null; // Sync frame for Animator
+    
+    // 5. MOVEMENT LOOP
+    float t = 0; 
+    while (t < dashDuration) 
+    { 
+        if (!controller.enabled) break;
+
+        // Use unscaledDeltaTime so Melo stays fast during slow-mo
+        controller.Move(dashDir * currentSpeed * Time.unscaledDeltaTime); 
+        
+        // ROTATION LOGIC
+        if (nearEnemy && moveInput.sqrMagnitude < 0.01f && targetEnemy != null) {
+            Vector3 lookDir = (targetEnemy.position - transform.position).normalized;
+            lookDir.y = 0;
+            if (lookDir != Vector3.zero)
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir), 20f * Time.unscaledDeltaTime);
+        } else if (dashDir != Vector3.zero) {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dashDir), 15f * Time.unscaledDeltaTime);
+        }
+
+        t += Time.unscaledDeltaTime; 
+        yield return null; 
+    } 
+
+    CleanupDashState();
+}
+
+    private IEnumerator PerfectDodgeSlowMo()
+    {
+        if (_hasTriggeredSlowMo) yield break;
+        _hasTriggeredSlowMo = true;
+
+        Time.timeScale = dodgeSlowMoScale;
+        Time.fixedDeltaTime = 0.02f * Time.timeScale; 
+
+        yield return new WaitForSecondsRealtime(dodgeSlowMoDuration);
+
+        Time.timeScale = 1.0f;
+        Time.fixedDeltaTime = 0.02f;
+    }
+
+    private void CleanupDashState()
+    {
+        isDashing = false; 
+        isInvulnerable = false; 
+        isAttacking = false;   // ADD THIS: Ensure no ghost attacks remain
+        activeDashCoroutine = null;
+    
+        // Safety: Reset Time Scale
+        if (Time.timeScale != 1.0f) {
+            Time.timeScale = 1.0f;
+            Time.fixedDeltaTime = 0.02f;
+        }
+
+        _isActionLocked = false; 
+
+        if (animationHandler != null) {
+            animationHandler.UpdateMovement(moveInput.magnitude);
+        }
+    }
+
     public void SetDamageMultiplier(float m) => currentDamageMultiplier = m;
 
-    public void SetActionLock(bool locked) 
+    public void SetActionLock(bool locked) 
     {
         _isActionLocked = locked;
         if (locked) {
             Rigidbody rb = GetComponent<Rigidbody>();
-            if (rb) rb.linearVelocity = Vector3.zero; 
+            if (rb) rb.linearVelocity = Vector3.zero; 
         }
     }
 
     private bool _isQuickTurning = false;
     public void QuickTurn180()
     {
-        if (!_isQuickTurning) StartCoroutine(DampedRotationRoutine(0.15f)); 
+        if (!_isQuickTurning) StartCoroutine(DampedRotationRoutine(0.15f)); 
     }
 
     private IEnumerator DampedRotationRoutine(float duration)
@@ -231,42 +387,29 @@ public class PlayerController : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
-        transform.rotation = targetRot; 
+        transform.rotation = targetRot; 
         _isQuickTurning = false;
     }
 
-    // --- UTILITY & ANIMATION HANDLERS ---
     public void EnableHitbox() { if(attackHitbox) attackHitbox.SetActive(true); if(attackTrail) attackTrail.emitting = true; }
     public void DisableHitbox() { if(attackHitbox) attackHitbox.SetActive(false); if(attackTrail) attackTrail.emitting = false; }
     public void OnAnimationReset() => ResetToLocomotion();
     public void OpenComboWindow() => animationHandler.SetComboWindow(true);
     public void CloseComboWindow() => animationHandler.SetComboWindow(false);
-
-    public void StartParryLock() 
-    { 
-        // Force reset attack variables so movement isn't blocked
-        isAttacking = false; 
-        canMoveCancel = true; 
-        
-        _isParryLocked = true; 
-        StopAllCoroutines(); 
-        _isQuickTurning = false;
-        DisableHitbox();
-    }
     
-    public bool _isSoftLock = false; 
+    public bool _isSoftLock = false; 
 
     public void EnableSoftLock() => _isSoftLock = true;
     public void EndParryLock() => _isParryLocked = false;
 
-    public void ResetToLocomotion() 
-    { 
-        isAttacking = false; 
-        _isParryLocked = false; 
+    public void ResetToLocomotion() 
+    { 
+        isAttacking = false; 
+        _isParryLocked = false; 
         canMoveCancel = false;
         comboStep = 0;
-        DisableHitbox(); 
-        animationHandler.PlayMove(); 
+        DisableHitbox(); 
+        animationHandler.PlayMove(); 
     }
 
     public void CancelAnimationOnly()
@@ -274,38 +417,50 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
         canMoveCancel = false;
         DisableHitbox();
-        animationHandler.PlayMove(); 
+        animationHandler.PlayMove(); 
     }
 
     public void ForceCancelAttack()
     {
         isAttacking = false;
         isDashing = false;
+        isInvulnerable = false; 
         _isParryLocked = false;
         canMoveCancel = false;
         comboStep = 0;
+        activeDashCoroutine = null; 
         DisableHitbox();
+    
         if (comboScript != null) comboScript.ResetFeverOnHit();
         if (parryScript != null) parryScript.AbortParry();
     }
+
+    public void StartParryLock() 
+    { 
+        isAttacking = false; 
+        canMoveCancel = true; 
+        isInvulnerable = false; 
+        _isParryLocked = true; 
     
-    public void StartHurtLock() 
-    { 
-        _isActionLocked = true; 
-        _isSoftLock = false; 
+        StopAllCoroutines(); 
+        CleanupDashState();  
+    }
+    
+    public void StartHurtLock() 
+    { 
+        _isActionLocked = true; 
+        _isSoftLock = false; 
     }
 
-    public void EndHurtLock() 
-    { 
-        // Reset all combat and movement locks
-        _isActionLocked = false; 
-        isAttacking = false;   // Ensure "Zombie" attack is dead
-        canMoveCancel = false; // Reset the cancel flag
+    public void EndHurtLock() 
+    { 
+        _isActionLocked = false; 
+        isAttacking = false;   
+        canMoveCancel = false; 
     
-        // Force the animator to blend back to walking/idle
-        if (animationHandler != null) 
+        if (animationHandler != null) 
         {
-            animationHandler.PlayMove(); 
+            animationHandler.PlayMove(); 
         }
     }
 }

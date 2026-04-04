@@ -21,11 +21,15 @@ public class PlayerCombo : MonoBehaviour
     public LayerMask feverMask; 
     private LayerMask _originalMask;
     private Camera _mainCam;
+
+    // --- Added for Boss Control ---
+    [Header("Boss Settings")]
+    public string bossTag = "Enemy"; 
+    // ------------------------------
     
     void Start() {
         _mainCam = Camera.main;
         if (playerController == null) playerController = GetComponent<PlayerController>();
-        
         if (feverUIWindow) feverUIWindow.SetActive(false);
     }
 
@@ -45,6 +49,9 @@ public class PlayerCombo : MonoBehaviour
             if (feverCoroutine != null) StopCoroutine(feverCoroutine);
             isFeverActive = false;
             
+            // Safety: Ensure boss is unfrozen if fever is interrupted
+            SetBossFrozen(false);
+
             if (faceCamera) faceCamera.gameObject.SetActive(false);
             if (feverUIWindow) feverUIWindow.SetActive(false);
             if (playerController) {
@@ -60,10 +67,12 @@ public class PlayerCombo : MonoBehaviour
     private IEnumerator ActivateFeverMode() {
         isFeverActive = true;
 
+        // 1. Freeze the Boss immediately
+        SetBossFrozen(true);
+
         if (feverUIWindow) feverUIWindow.SetActive(true);
         
         if (playerController) {
-
             playerController.SetActionLock(true); 
             playerController.SetDamageMultiplier(2f);
 
@@ -85,8 +94,8 @@ public class PlayerCombo : MonoBehaviour
         }
 
         if (faceCamera) faceCamera.gameObject.SetActive(true);
-    
 
+        // Sequence Duration (3 seconds)
         yield return new WaitForSecondsRealtime(3f);
 
         if (faceCamera) faceCamera.gameObject.SetActive(false);
@@ -102,12 +111,34 @@ public class PlayerCombo : MonoBehaviour
     
         if (health) health.IsInvulnerable = false;
 
-        yield return new WaitForSecondsRealtime(20f);
+        // 2. Wait the additional +1 second before unfreezing boss
+        yield return new WaitForSecondsRealtime(1f);
+        SetBossFrozen(false);
+
+        // Continue the 20s fever duration (minus the 4s already spent)
+        yield return new WaitForSecondsRealtime(19f);
 
         isFeverActive = false;
-        if (playerController) playerController.SetDamageMultiplier(2f);
+        if (playerController) playerController.SetDamageMultiplier(1f); // Reset to 1f
         currentCombo = 0;
         UpdateUI();
+    }
+
+    private void SetBossFrozen(bool freeze) {
+        GameObject boss = GameObject.FindGameObjectWithTag(bossTag);
+        if (boss != null) {
+            // Option A: If the boss uses a NavMeshAgent
+            UnityEngine.AI.NavMeshAgent agent = boss.GetComponent<UnityEngine.AI.NavMeshAgent>();
+            if (agent != null) agent.isStopped = freeze;
+
+            // Option B: Disable the Boss AI script (Replace 'BossAI' with your actual script name)
+            // BossAI ai = boss.GetComponent<BossAI>();
+            // if (ai != null) ai.enabled = !freeze;
+
+            // Option C: Pause Animator
+            Animator bossAnim = boss.GetComponentInChildren<Animator>();
+            if (bossAnim != null) bossAnim.speed = freeze ? 0 : 1;
+        }
     }
 
     private void UpdateUI() { 

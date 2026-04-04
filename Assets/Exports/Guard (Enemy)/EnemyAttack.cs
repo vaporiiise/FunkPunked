@@ -35,23 +35,44 @@ public class EnemyAttack : MonoBehaviour
 
         if (((1 << other.gameObject.layer) & playerLayer) != 0) {
             PlayerHealth health = other.GetComponentInParent<PlayerHealth>();
-            Enemy enemyManager = GetComponentInParent<Enemy>();
-            
-            if (enemyManager != null) enemyManager.ResetStabilityOnPlayerHit(); 
-
-            if (health != null && !health.IsInvulnerable) {
-                _hasDealtDamageThisSwing = true;
-                
-                // 1. Calculate the Hit Point
-                // Finds the point on Melo's collider closest to our hitbox center
-                Vector3 hitPoint = other.ClosestPoint(transform.position);
-
-                // 2. Spawn VFX with Delay
-                StartCoroutine(SpawnDelayedVFX(hitPoint));
-
-                // 3. Deal Damage
-                health.TakeDamage(15f);
+            PlayerController pc = other.GetComponentInParent<PlayerController>();
+        
+            if (health != null && pc != null) {
+                // Start the Coyote Time check
+                StartCoroutine(CoyoteTimeDamageCheck(health, pc, other));
             }
+        }
+    }
+
+    private IEnumerator CoyoteTimeDamageCheck(PlayerHealth health, PlayerController pc, Collider other)
+    {
+        float gracePeriod = 0.05f; // 3-4 frames of "Coyote Time"
+        float elapsed = 0f;
+
+        while (elapsed < gracePeriod)
+        {
+            // If Melo dodges at ANY point during these 3 frames, CANCEL the damage
+            if (pc.IsInvulnerable()) 
+            {
+                Debug.Log("Coyote Dodge Saved You!");
+                yield break; 
+            }
+        
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        // After the grace period, if she's STILL not dodging, she takes the hit
+        if (!health.IsInvulnerable && !pc.IsInvulnerable())
+        {
+            _hasDealtDamageThisSwing = true;
+            Vector3 hitPoint = other.ClosestPoint(transform.position);
+        
+            // This triggers your SpawnDelayedVFX and damage
+            StartCoroutine(SpawnDelayedVFX(hitPoint));
+            health.TakeDamage(15f);
+        
+            if (attackHitbox) attackHitbox.SetActive(false);
         }
     }
 
