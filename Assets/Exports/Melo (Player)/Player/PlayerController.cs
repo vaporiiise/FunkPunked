@@ -189,7 +189,7 @@ public class PlayerController : MonoBehaviour
         Vector3 move = Quaternion.Euler(0, cameraTransform.eulerAngles.y, 0) * new Vector3(moveInput.x, 0, moveInput.y);
         if (move.sqrMagnitude > 0.01f) 
         {
-            controller.Move(move.normalized * moveSpeed * Time.deltaTime);
+            controller.Move(move.normalized * moveSpeed * Time.unscaledDeltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(move.normalized), 12f * Time.deltaTime);
         }
     
@@ -216,8 +216,9 @@ public class PlayerController : MonoBehaviour
         float elapsed = 0;
         while (elapsed < duration)
         {
-            controller.Move(direction.normalized * speed * Time.deltaTime);
-            elapsed += Time.deltaTime;
+            // Changed to unscaledDeltaTime so the "oomph" of the attack stays fast
+            controller.Move(direction.normalized * speed * Time.unscaledDeltaTime);
+            elapsed += Time.unscaledDeltaTime;
             yield return null;
         }
     }
@@ -254,14 +255,15 @@ public class PlayerController : MonoBehaviour
 { 
     isDashing = true; 
     lastDashTime = Time.time; 
-    _hasTriggeredSlowMo = false;
+    // REMOVED: _hasTriggeredSlowMo = false; 
+    // (We move this to the coroutine itself so it doesn't reset halfway)
 
     // 1. DETECTION
     Collider[] enemies = Physics.OverlapSphere(transform.position, dodgeRadius, enemyLayer);
     bool nearEnemy = enemies.Length > 0;
     Transform targetEnemy = nearEnemy ? enemies[0].transform : null;
 
-    // 2. PRE-CALCULATE VALUES (Fixes the Null/Missing Variable error)
+    // 2. PRE-CALCULATE VALUES
     float currentSpeed = nearEnemy ? (dashSpeed * dodgeDistanceMultiplier) : dashSpeed;
     Vector3 dashDir;
 
@@ -275,7 +277,7 @@ public class PlayerController : MonoBehaviour
         dashDir = transform.forward;
     }
 
-    // 3. IMMEDIATE ANIMATION & I-FRAMES
+    // 3. IMPROVED TRIGGER (EASIER TO HIT)
     if (nearEnemy) {
         isInvulnerable = true; 
         animationHandler.PlayDodge(); 
@@ -283,8 +285,16 @@ public class PlayerController : MonoBehaviour
         if (targetEnemy != null) {
             EnemyAttack ea = targetEnemy.GetComponentInChildren<EnemyAttack>();
             Animator enemyAnim = targetEnemy.GetComponentInParent<Animator>();
-            // Perfect Dodge Check
-            if (ea != null && (ea.isAttacking || (enemyAnim != null && enemyAnim.GetCurrentAnimatorStateInfo(0).IsTag("Attack")))) {
+
+            // The "Forgiving" Check:
+            // Checks if enemy is attacking OR in an animation tagged "Attack" 
+            // (even if the hitbox isn't out yet!)
+            bool enemyIsAttacking = (ea != null && ea.isAttacking);
+            bool enemyInAnimation = (enemyAnim != null && 
+                                    enemyAnim.GetCurrentAnimatorStateInfo(0).IsTag("Attack") && 
+                                    enemyAnim.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.7f);
+
+            if (enemyIsAttacking || enemyInAnimation) {
                 StartCoroutine(PerfectDodgeSlowMo());
             }
         }
@@ -292,13 +302,7 @@ public class PlayerController : MonoBehaviour
         animationHandler.PlayDashForward();
     }
 
-    // 4. THE "BURST" (Frame 0 Movement)
-    // We move immediately on this frame so the player doesn't feel a 1-frame delay
-    controller.Move(dashDir * currentSpeed * Time.unscaledDeltaTime);
-
-    yield return null; // Sync frame for Animator
-    
-    // 5. MOVEMENT LOOP
+    // 4. MOVEMENT LOOP (NOW USING UNSCALED TIME)
     float t = 0; 
     while (t < dashDuration) 
     { 
@@ -307,7 +311,7 @@ public class PlayerController : MonoBehaviour
         // Use unscaledDeltaTime so Melo stays fast during slow-mo
         controller.Move(dashDir * currentSpeed * Time.unscaledDeltaTime); 
         
-        // ROTATION LOGIC
+        // ROTATION LOGIC (Also Unscaled)
         if (nearEnemy && moveInput.sqrMagnitude < 0.01f && targetEnemy != null) {
             Vector3 lookDir = (targetEnemy.position - transform.position).normalized;
             lookDir.y = 0;
@@ -329,24 +333,31 @@ public class PlayerController : MonoBehaviour
         if (_hasTriggeredSlowMo) yield break;
         _hasTriggeredSlowMo = true;
 
+        // Trigger Slow-Mo
         Time.timeScale = dodgeSlowMoScale;
         Time.fixedDeltaTime = 0.02f * Time.timeScale; 
 
+        // Wait for the duration in REAL time
+        // This allows the player to move and attack at "normal" speed relative to the world
         yield return new WaitForSecondsRealtime(dodgeSlowMoDuration);
 
+        // Reset Time
         Time.timeScale = 1.0f;
         Time.fixedDeltaTime = 0.02f;
+        _hasTriggeredSlowMo = false; 
     }
 
     private void CleanupDashState()
     {
+        // --- CRITICAL SAFETY ---
+        isInvulnerable = false; // COLLISION BACK ON
         isDashing = false; 
-        isInvulnerable = false; 
-        isAttacking = false;   // ADD THIS: Ensure no ghost attacks remain
         activeDashCoroutine = null;
     
-        // Safety: Reset Time Scale
-        if (Time.timeScale != 1.0f) {
+        // Check if we are in the middle of a reward slow-mo
+        // If NOT, we reset time immediately. If YES, the other coroutine handles it.
+        if (!_hasTriggeredSlowMo) 
+        {
             Time.timeScale = 1.0f;
             Time.fixedDeltaTime = 0.02f;
         }

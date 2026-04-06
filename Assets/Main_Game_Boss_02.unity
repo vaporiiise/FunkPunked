@@ -11283,6 +11283,18 @@ PrefabInstance:
       propertyPath: mainVcam
       value: 
       objectReference: {fileID: 711725146}
+    - target: {fileID: 2283742040268785664, guid: 0d1a75f5d27a2174ead8f8ec09909e80, type: 3}
+      propertyPath: zoomAmount
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2283742040268785664, guid: 0d1a75f5d27a2174ead8f8ec09909e80, type: 3}
+      propertyPath: _inCinematic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2635678640759294495, guid: 0d1a75f5d27a2174ead8f8ec09909e80, type: 3}
+      propertyPath: m_UpdateMode
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4412943516198937952, guid: 0d1a75f5d27a2174ead8f8ec09909e80, type: 3}
       propertyPath: deathCanvas
       value: 
@@ -11309,7 +11321,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7444206742820238275, guid: 0d1a75f5d27a2174ead8f8ec09909e80, type: 3}
       propertyPath: dashDuration
-      value: 0.2
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 7444206742820238275, guid: 0d1a75f5d27a2174ead8f8ec09909e80, type: 3}
       propertyPath: cameraTransform
@@ -11321,11 +11333,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7444206742820238275, guid: 0d1a75f5d27a2174ead8f8ec09909e80, type: 3}
       propertyPath: dodgeSlowMoDuration
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7444206742820238275, guid: 0d1a75f5d27a2174ead8f8ec09909e80, type: 3}
       propertyPath: dodgeDistanceMultiplier
-      value: 1.2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7697637867369441765, guid: 0d1a75f5d27a2174ead8f8ec09909e80, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11371,6 +11383,10 @@ PrefabInstance:
       propertyPath: parryScript
       value: 
       objectReference: {fileID: 1898248490}
+    - target: {fileID: 8389435223313882803, guid: 0d1a75f5d27a2174ead8f8ec09909e80, type: 3}
+      propertyPath: m_UpdateMode
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
