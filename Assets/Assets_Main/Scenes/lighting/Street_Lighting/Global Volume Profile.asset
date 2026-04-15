@@ -58,13 +58,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5485954d14dfb9a4c8ead8edb0ded5b1, type: 3}
   m_Name: LiftGammaGain
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.LiftGammaGain
-  active: 1
+  active: 0
   lift:
     m_OverrideState: 1
-    m_Value: {x: 0.8102772, y: 0.8806678, z: 1, w: 0}
+    m_Value: {x: 0.94546795, y: 0.9535579, z: 1, w: 0}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.74407524, z: 0.48990095, w: 0}
+    m_Value: {x: 1, y: 0.9505368, z: 0.924995, w: 0}
   gain:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 1, w: 0}
@@ -120,16 +120,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 558a8e2b6826cf840aae193990ba9f2e, type: 3}
   m_Name: ShadowsMidtonesHighlights
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.ShadowsMidtonesHighlights
-  active: 1
+  active: 0
   shadows:
     m_OverrideState: 1
-    m_Value: {x: 0.85148954, y: 0.8836146, z: 1, w: 0}
+    m_Value: {x: 0.98193866, y: 1, z: 0.9426669, w: 0}
   midtones:
     m_OverrideState: 1
     m_Value: {x: 0.9792963, y: 0.98744214, z: 1, w: 0}
   highlights:
     m_OverrideState: 0
-    m_Value: {x: 1, y: 1, z: 1, w: 0}
+    m_Value: {x: 0.97777516, y: 0.9011924, z: 1, w: 0}
   shadowsStart:
     m_OverrideState: 0
     m_Value: 0
