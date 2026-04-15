@@ -21,7 +21,7 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.275
+    m_Value: 0.286
   smoothness:
     m_OverrideState: 1
     m_Value: 0.294
@@ -61,10 +61,10 @@ MonoBehaviour:
   active: 0
   lift:
     m_OverrideState: 1
-    m_Value: {x: 0.94546795, y: 0.9535579, z: 1, w: 0}
+    m_Value: {x: 0.99526614, y: 0.9965888, z: 1, w: 0}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.9505368, z: 0.924995, w: 0}
+    m_Value: {x: 0.99941325, y: 1, z: 0.9927226, w: 0}
   gain:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 1, w: 0}
@@ -122,14 +122,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.ShadowsMidtonesHighlights
   active: 0
   shadows:
-    m_OverrideState: 1
-    m_Value: {x: 0.98193866, y: 1, z: 0.9426669, w: 0}
+    m_OverrideState: 0
+    m_Value: {x: 0.8575002, y: 0.88963723, z: 1, w: 0}
   midtones:
     m_OverrideState: 1
-    m_Value: {x: 0.9792963, y: 0.98744214, z: 1, w: 0}
+    m_Value: {x: 1, y: 0.9227579, z: 0.6640712, w: -0.17587939}
   highlights:
     m_OverrideState: 0
-    m_Value: {x: 0.97777516, y: 0.9011924, z: 1, w: 0}
+    m_Value: {x: 0.91728485, y: 1, z: 0.911992, w: 0}
   shadowsStart:
     m_OverrideState: 0
     m_Value: 0
@@ -172,7 +172,7 @@ MonoBehaviour:
     m_Value: 65472
   tint:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_Value: {r: 0.754717, g: 0.5598086, b: 0.35955858, a: 1}
   highQualityFiltering:
     m_OverrideState: 1
     m_Value: 0
